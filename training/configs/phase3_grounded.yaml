@@ -1,0 +1,25 @@
+model: /Users/jiehan/models/Qwen3-4B-mlx-4bit-phase3-wrapper
+train: true
+data: /Users/jiehan/datasets/cybersec-phase3-grounded
+fine_tune_type: lora
+mask_prompt: true
+num_layers: 4
+batch_size: 1
+grad_accumulation_steps: 4
+iters: 200
+learning_rate: 0.0000005
+max_seq_length: 1536
+grad_checkpoint: true
+adapter_path: /Users/jiehan/models/qwen-cyber-adapter-phase3-grounded
+resume_adapter_file: /Users/jiehan/models/qwen-cyber-adapter-identity-v1-best75/adapters.safetensors
+save_every: 25
+steps_per_report: 5
+steps_per_eval: 25
+val_batches: 40
+test: true
+test_batches: 60
+seed: 20260820
+lora_parameters:
+  rank: 8
+  scale: 20.0
+  dropout: 0.0

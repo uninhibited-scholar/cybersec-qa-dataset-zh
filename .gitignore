@@ -5,3 +5,8 @@ __pycache__/
 .DS_Store
 cleaned/
 !scripts/check_dataset.py
+!training/**/*.py
+training/**/*.safetensors
+training/**/*.gguf
+training/**/api-token
+training/**/.env
