@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.uninhibited-scholar.cyber-api-tunnel</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/bin/ssh</string>
+    <string>-N</string>
+    <string>-o</string>
+    <string>BatchMode=yes</string>
+    <string>-o</string>
+    <string>ExitOnForwardFailure=yes</string>
+    <string>-o</string>
+    <string>ServerAliveInterval=30</string>
+    <string>-o</string>
+    <string>ServerAliveCountMax=3</string>
+    <string>-o</string>
+    <string>HostKeyAlias=192.168.2.68</string>
+    <string>-o</string>
+    <string>ProxyCommand=/opt/homebrew/opt/tailscale/bin/tailscale --socket=/Users/zhujiehan/.config/tailscale-cyber/tailscaled.sock nc %h %p</string>
+    <string>-L</string>
+    <string>127.0.0.1:18764:127.0.0.1:18766</string>
+    <string>jiehan@100.93.176.125</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>ThrottleInterval</key>
+  <integer>10</integer>
+  <key>StandardOutPath</key>
+  <string>/Users/zhujiehan/.config/tailscale-cyber/tunnel.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/zhujiehan/.config/tailscale-cyber/tunnel.err.log</string>
+</dict>
+</plist>
