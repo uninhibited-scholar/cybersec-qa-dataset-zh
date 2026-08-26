@@ -1,0 +1,16 @@
+{
+  "date": "2026-08-26",
+  "remote_directory": "/Users/jiehan/cyber-agent/phase4-blind-eval-round2",
+  "artifacts": {
+    "results.json": "d528b7e27d4f1dcc7d53893d518a7521418cbba6a0fb503d990c10e274f50e8c",
+    "results.partial.jsonl": "d56499f4d9ecfd39211234b47fe2b5c3829fc1f736c5bcb5a64d00d77c8aaf94",
+    "summary.blind.json": "d5bc0cb7e19c90afd88e82a0b1b15adf1760f715066de46ff94affcb9cbe6e22",
+    "mapping.json": "6db0c7aff71b96645f42543103d3406b1411fda5cb56091605d7faa37c0f9e9f",
+    "input-manifest.json": "25db0ff360ee7353e6f15df98fc8eb0d6b33d724131f1cf542fc89470ca11a3b"
+  },
+  "weights": {
+    "phase4_step150": "4ebf13c06903d6aa233c2e983839f504f1cf26a8e11e52c9af58d6c63d0a6530",
+    "phase3_best100": "1326ae05775a50c4d548bf53051f1ad40c1d4e599785482ee0873c37dd6b5e83",
+    "phase4_step50": "9c9a0f33fc10f02a3106c73b851e16492fd6aefd3b8b3bb6335b935bacb29895"
+  }
+}
