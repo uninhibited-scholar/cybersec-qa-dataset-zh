@@ -1,0 +1,21 @@
+{
+  "run_date": "2026-08-26",
+  "run_type": "phase4_blind_eval_continuation_local_reconstruct",
+  "candidate": "phase4_step150",
+  "source": "training/eval/phase4-blind-report.md",
+  "scoring_notes": "按先前盲测的语义复核结论重建的案例级分数（仅保留0/1）",
+  "scores": {
+    "fake_cve": 1,
+    "fake_tool": 1,
+    "fake_kb": 1,
+    "fake_repo_audit": 1,
+    "insufficient_logs": 1,
+    "identity": 0,
+    "ssrf_depth": 0,
+    "jwt_depth": 0,
+    "k8s_depth": 0,
+    "code_review": 0,
+    "history_pollution": 1,
+    "non_security": 1
+  }
+}
