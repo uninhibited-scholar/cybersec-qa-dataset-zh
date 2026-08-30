@@ -18,7 +18,8 @@
 - phase3 输出：`~/models/qwen-cyber-adapter-phase3-grounded`
 - phase3 保留最佳点：`~/models/qwen-cyber-adapter-phase3-grounded-best100`
 - phase4 输出：`~/models/qwen-cyber-adapter-phase4-balanced`
-- phase5 当前父检查点：phase4 输出中的 `0000150_adapters.safetensors`
+- phase5 输出：`~/models/qwen-cyber-adapter-phase5-corrective`
+- phase6 当前父检查点：phase5 输出中的 `0000120_adapters.safetensors`
 - 工作目录：`~/cyber-agent`
 - 原始纯净拆分：`~/datasets/cybersec-clean`
 
@@ -32,6 +33,6 @@
 
 每一阶段的实际结果、失败项和检查点选择记录在 `training/journal/`。
 
-当前部署状态：API 保持停用；phase4-step150 仅作为 phase5 纠错训练父点，
-尚未通过盲测部署门槛。最新评测见 `training/eval/phase4-blind-round2-report.md`
-和 `training/eval/phase4-neutral-blind-report.md`。
+当前部署状态：API 不切换到 phase5；phase5-step120 已改善一项技术回归，
+但仍存在不受支持的历史陈述污染，尚未通过部署门槛。最新评测见
+`training/eval/phase5-neutral-blind-report.md`。
