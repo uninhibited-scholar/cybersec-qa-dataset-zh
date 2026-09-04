@@ -21,6 +21,9 @@
 - phase5 输出：`~/models/qwen-cyber-adapter-phase5-corrective`
 - phase6 输出：`~/models/qwen-cyber-adapter-phase6-provenance`
 - phase6 评测候选：`0000060_adapters.safetensors`（负向实验，不部署）
+- phase7 输出：`~/models/qwen-cyber-adapter-phase7-provenance-refine`
+- phase7 评测候选：`0000080_adapters.safetensors`、`0000220_adapters.safetensors`（负向实验，不部署）
+- 当前在线适配器：`~/models/qwen-cyber-adapter-phase5-best120`（指向 phase5 step 120）
 - 工作目录：`~/cyber-agent`
 - 原始纯净拆分：`~/datasets/cybersec-clean`
 
@@ -34,6 +37,8 @@
 
 每一阶段的实际结果、失败项和检查点选择记录在 `training/journal/`。
 
-当前部署状态：phase6 未通过直连和 DeepSeek Harness 测试，不部署；
-phase5-step120 仍是较强对照点，但也未通过部署门槛。最新评测见
-`training/eval/phase6-blind-and-harness-report.md`。
+当前部署状态：phase6 与 phase7 均未通过裸权重盲评门槛，不部署；
+在线 API 暂时使用相对更稳的 phase5-step120，并由句段级证据守门、
+工具调用协议转换和 LaunchAgent 提供运行时兜底。它适合继续测试，仍不代表
+已达到最终生产质量。最新评测见
+`training/eval/phase7-completion-and-api-report-2026-09-04.md`。

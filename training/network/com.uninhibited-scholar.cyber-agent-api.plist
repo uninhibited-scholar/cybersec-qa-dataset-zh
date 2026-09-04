@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.uninhibited-scholar.cyber-agent-api</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/jiehan/venvs/agents-a1/bin/python</string>
+    <string>/Users/jiehan/cyber-agent/api_server_identity.py</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>CYBER_MODEL_PATH</key>
+    <string>/Users/jiehan/models/Qwen3-4B-mlx-4bit-phase3-wrapper</string>
+    <key>CYBER_ADAPTER_PATH</key>
+    <string>/Users/jiehan/models/qwen-cyber-adapter-phase5-best120</string>
+    <key>CYBER_API_HOST</key>
+    <string>0.0.0.0</string>
+    <key>CYBER_API_PORT</key>
+    <string>18765</string>
+  </dict>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>ProcessType</key>
+  <string>Background</string>
+  <key>ThrottleInterval</key>
+  <integer>5</integer>
+  <key>StandardOutPath</key>
+  <string>/Users/jiehan/Library/Logs/cyber-agent-api.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/jiehan/Library/Logs/cyber-agent-api.err.log</string>
+</dict>
+</plist>
