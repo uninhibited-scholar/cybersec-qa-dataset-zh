@@ -60,6 +60,19 @@ The direct evidence route passed its separate 6/6 hallucination checks.
 Passing this small API regression means the measured integration failures are
 contained. It does not mean the 4B model has reached frontier-model expertise.
 
+## DeepSeek Harness browser test
+
+The MacBook tunnel was corrected from the stale remote port 18766 to the active
+Mac mini port 18765. The stopped `dsh web` backend was restarted, and a fresh
+browser session completed two end-to-end prompts:
+
+- unsupported target-safety claim: returned `【未知】` in about 0.2 seconds;
+- ordinary four-part log analysis: returned visible `已知事实 / 合理推断 / 未知 /
+  下一步验证` sections in about 27 seconds without raw tool parameters.
+
+The second answer still treated three 401 responses as possible brute force too
+readily. This is a calibration weakness for Phase 8, not an integration failure.
+
 ## Next phase gate
 
 Do not resume from Phase 7 merely because step 80 had the lowest validation loss.

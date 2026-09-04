@@ -31,6 +31,9 @@ base-model or LoRA weights.
 7. The API now runs as the per-user LaunchAgent
    `com.uninhibited-scholar.cyber-agent-api`, using the tracked plist under
    `training/network/`.
+8. The MacBook tunnel now forwards `127.0.0.1:18764` to Mac mini port 18765,
+   and `dsh web` has its own tracked KeepAlive LaunchAgent so the browser client
+   does not outlive its backend.
 
 ## Recovery
 

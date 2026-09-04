@@ -21,7 +21,7 @@
     <string>-o</string>
     <string>ProxyCommand=/opt/homebrew/opt/tailscale/bin/tailscale --socket=/Users/zhujiehan/.config/tailscale-cyber/tailscaled.sock nc %h %p</string>
     <string>-L</string>
-    <string>127.0.0.1:18764:127.0.0.1:18766</string>
+    <string>127.0.0.1:18764:127.0.0.1:18765</string>
     <string>jiehan@100.93.176.125</string>
   </array>
   <key>RunAtLoad</key>
