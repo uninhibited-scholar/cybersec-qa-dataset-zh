@@ -13,7 +13,7 @@ CASES = [
 ]
 root = Path('/Users/jiehan/cyber-agent')
 with (root/('phase9-chat-control-'+time.strftime('%Y%m%d-%H%M%S')+'.jsonl')).open('x') as f:
- for label, adapter in [('base',''),('phase5','/Users/jiehan/models/qwen-cyber-adapter-phase5-best120')]:
+ for label, adapter in [('base',''),(os.environ.get('CANDIDATE_LABEL','phase5'),os.environ.get('CANDIDATE_ADAPTER','/Users/jiehan/models/qwen-cyber-adapter-phase5-best120'))]:
     env = dict(os.environ, CYBER_MODEL_PATH='/Users/jiehan/models/Qwen3-4B-mlx-4bit', CYBER_ADAPTER_PATH=adapter)
     p = subprocess.Popen(['/Users/jiehan/venvs/agents-a1/bin/python','-u',str(root/'chat_worker_v2.py')], env=env,
                          stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True)
