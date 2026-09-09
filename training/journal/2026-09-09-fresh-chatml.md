@@ -36,3 +36,12 @@ overfitting. No serving adapter change; API health remained OK.
 Next: broader unseen basic-task validation and investigate local base arithmetic
 under controlled decoding before expanding to original domain dataset. Do not
 claim this 48-example pilot is a completed specialist training run.
+
+## Expanded holdout completed
+
+Ran12 new basic tasks on base and Phase9,24 outputs total. Candidate corrected
+one unsupported-refund label but produced empty translation; integer-only
+format failures persist in both. No domain expansion launched because basic
+gate failed. See training/eval/phase9-expanded-report.md for full accounting
+and distinction between exact-match and semantic results. Preserve holdout
+outside future training. No service or connection changes.
