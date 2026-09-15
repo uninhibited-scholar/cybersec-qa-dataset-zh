@@ -1,0 +1,8 @@
+model: /Users/jiehan/models/Qwen3-4B-official-chatml-phase10
+data: /Users/jiehan/datasets/cybersec-phase13-grounded-repair
+train: false
+test: true
+adapter_path: /Users/jiehan/models/phase13-grounded-repair-20260916
+test_batches: 15
+max_seq_length: 2048
+seed: 20260916
