@@ -1,0 +1,25 @@
+model: /Users/jiehan/models/Qwen3-4B-official-chatml-phase10
+train: true
+data: /Users/jiehan/datasets/cybersec-phase12-repair
+fine_tune_type: lora
+mask_prompt: true
+num_layers: 4
+batch_size: 1
+grad_accumulation_steps: 4
+iters: 240
+learning_rate: 1.0e-7
+max_seq_length: 2048
+grad_checkpoint: true
+adapter_path: /Users/jiehan/models/phase12-repair-20260915
+resume_adapter_file: /Users/jiehan/models/phase10-clean-chatml-20260913/adapters.safetensors
+save_every: 40
+steps_per_report: 10
+steps_per_eval: 40
+val_batches: 20
+test: true
+test_batches: 20
+seed: 20260915
+lora_parameters:
+  rank: 8
+  scale: 20.0
+  dropout: 0.0
