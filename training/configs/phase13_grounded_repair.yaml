@@ -1,0 +1,15 @@
+model: /Users/jiehan/models/Qwen3-4B-official-chatml-phase10
+adapter_path: /Users/jiehan/models/phase10-clean-chatml-20260913
+data: /Users/jiehan/datasets/cybersec-phase13-grounded-repair
+train: true
+fine_tune_type: lora
+iters: 180
+batch_size: 1
+learning_rate: 5e-8
+max_seq_length: 2048
+val_batches: 16
+test_batches: 20
+steps_per_report: 10
+steps_per_eval: 40
+save_every: 40
+output_dir: /Users/jiehan/models/phase13-grounded-repair-20260916
