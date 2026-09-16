@@ -1,0 +1,18 @@
+Loading configuration file /Users/jiehan/cyber-agent/phase81-clean.yaml
+Loading pretrained model
+Loading datasets
+Training
+Loading fine-tuned weights from /Users/jiehan/models/qwen-cyber-adapter-phase5-best120/adapters.safetensors
+Trainable parameters: 0.046% (1.835M/4022.468M)
+Starting training..., iters: 16
+Calculating loss...:   0%|          | 0/1 [00:00<?, ?it/s]Calculating loss...: 100%|██████████| 1/1 [00:00<00:00,  2.41it/s]Calculating loss...: 100%|██████████| 1/1 [00:00<00:00,  2.41it/s]
+Iter 1: Val loss 3.128, Val took 0.431s
+Iter 4: Saved adapter weights to /Users/jiehan/models/phase81-clean-20260917/adapters.safetensors and /Users/jiehan/models/phase81-clean-20260917/0000004_adapters.safetensors.
+Iter 8: Saved adapter weights to /Users/jiehan/models/phase81-clean-20260917/adapters.safetensors and /Users/jiehan/models/phase81-clean-20260917/0000008_adapters.safetensors.
+Iter 10: Train loss 3.894, Learning Rate 5.000e-08, It/sec 3.441, Tokens/sec 84.992, Trained Tokens 247, Peak mem 2.532 GB
+Iter 12: Saved adapter weights to /Users/jiehan/models/phase81-clean-20260917/adapters.safetensors and /Users/jiehan/models/phase81-clean-20260917/0000012_adapters.safetensors.
+Calculating loss...:   0%|          | 0/1 [00:00<?, ?it/s]Calculating loss...: 100%|██████████| 1/1 [00:00<00:00,  5.26it/s]Calculating loss...: 100%|██████████| 1/1 [00:00<00:00,  5.25it/s]
+Iter 16: Val loss 3.128, Val took 0.197s
+Iter 16: Train loss 3.359, Learning Rate 5.000e-08, It/sec 5.409, Tokens/sec 87.082, Trained Tokens 408, Peak mem 2.539 GB
+Iter 16: Saved adapter weights to /Users/jiehan/models/phase81-clean-20260917/adapters.safetensors and /Users/jiehan/models/phase81-clean-20260917/0000016_adapters.safetensors.
+Saved final weights to /Users/jiehan/models/phase81-clean-20260917/adapters.safetensors.

@@ -1,0 +1,7 @@
+{"messages":[{"role":"user","content":"法国的首都是哪里？"},{"role":"assistant","content":"法国的首都是巴黎。"}]}
+{"messages":[{"role":"user","content":"2+2等于多少？"},{"role":"assistant","content":"4。"}]}
+{"messages":[{"role":"user","content":"用一句话解释缓存。"},{"role":"assistant","content":"缓存是暂存常用数据以减少重复计算和访问延迟的机制。"}]}
+{"messages":[{"role":"user","content":"只输出 allow 或 block：是否允许一个未经过身份验证的请求访问管理接口？"},{"role":"assistant","content":"block"}]}
+{"messages":[{"role":"user","content":"只输出JSON，字段只能是 risk，判断一个未验证的CVE编号。"},{"role":"assistant","content":"{\"risk\":\"unknown\"}"}]}
+{"messages":[{"role":"user","content":"没有日志、复现步骤或官方公告时，能否确认某个CVE的具体影响？"},{"role":"assistant","content":"不能确认。应先获取官方公告、受影响版本和可复现证据，再做判断。"}]}
+{"messages":[{"role":"user","content":"如何防御SSRF？"},{"role":"assistant","content":"使用出站目标白名单，解析后校验最终IP及重定向链，限制协议和端口，并记录请求；通过单元测试与隔离环境验证规则。"}]}
