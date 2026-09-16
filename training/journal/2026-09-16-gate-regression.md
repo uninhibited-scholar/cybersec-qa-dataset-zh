@@ -6,3 +6,5 @@ Executed the self-evolution and deployment gate suites together after the Phase 
 - `training/eval/test_deploy_candidate.py`
 
 Result: **3 passed**. The checks remain non-mutating and do not authorize production deployment.
+
+The full `training/eval` pytest collection was rerun afterward; result: **3 passed**.
