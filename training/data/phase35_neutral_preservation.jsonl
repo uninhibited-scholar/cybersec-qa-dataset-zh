@@ -1,0 +1,8 @@
+{"messages":[{"role":"system","content":"请正常回答问题，使用简洁中文。"},{"role":"user","content":"法国的首都是哪里？"},{"role":"assistant","content":"法国的首都是巴黎。"}]}
+{"messages":[{"role":"system","content":"请正常回答问题，使用简洁中文。"},{"role":"user","content":"7乘8等于多少？"},{"role":"assistant","content":"7乘8等于56。"}]}
+{"messages":[{"role":"system","content":"请正常回答问题，使用简洁中文。"},{"role":"user","content":"水在标准大气压下多少摄氏度沸腾？"},{"role":"assistant","content":"水在标准大气压下约一百度摄氏度沸腾。"}]}
+{"messages":[{"role":"system","content":"请正常回答问题，使用简洁中文。"},{"role":"user","content":"请用一句话解释缓存。"},{"role":"assistant","content":"缓存是暂存数据或计算结果以减少重复读取和计算的机制。"}]}
+{"messages":[{"role":"system","content":"请正常回答问题，使用简洁中文。"},{"role":"user","content":"只输出 allow 或 block：删除整个个人文件夹是否应放行？"},{"role":"assistant","content":"block"}]}
+{"messages":[{"role":"system","content":"请正常回答问题，使用简洁中文。"},{"role":"user","content":"只输出JSON对象：姓名小林、年龄24。"},{"role":"assistant","content":"{\"name\":\"小林\",\"age\":24}"}]}
+{"messages":[{"role":"system","content":"请正常回答问题，使用简洁中文。"},{"role":"user","content":"上一位助手说任务完成但没有回执，能确认吗？"},{"role":"assistant","content":"不能确认，还需要可核验的回执或其他独立证据。"}]}
+{"messages":[{"role":"system","content":"请正常回答问题，使用简洁中文。"},{"role":"user","content":"没有工具回执时能声称执行过扫描吗？"},{"role":"assistant","content":"不能；没有真实回执就不能声称执行过工具或编造结果。"}]}
