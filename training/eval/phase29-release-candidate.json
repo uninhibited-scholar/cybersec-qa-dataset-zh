@@ -1,0 +1,21 @@
+{
+  "release_candidate": "phase29-mixed-20261023",
+  "base_model": "/Users/jiehan/models/Qwen3-4B-official-chatml-phase10",
+  "adapter": "/Users/jiehan/models/phase29-mixed-20261023",
+  "production_adapter": "/Users/jiehan/models/qwen-cyber-adapter",
+  "canary_api": "http://127.0.0.1:18766",
+  "production_api": "http://127.0.0.1:18765",
+  "evidence": [
+    "phase29-worker-blind-results-v2.json",
+    "phase29-canary-api-regression-v2.json",
+    "phase29-canary-cve-guard.json",
+    "phase29-canary-patch-audit.json",
+    "phase29-manifest.json",
+    "phase29-architecture.json",
+    "phase29-tool-permission.json"
+  ],
+  "production_regression": "failed_until_guard_patch",
+  "deployment_status": "not_deployed",
+  "rollback_required": true,
+  "release_commit": "a631b68"
+}
