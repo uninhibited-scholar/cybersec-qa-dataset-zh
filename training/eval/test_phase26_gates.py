@@ -35,5 +35,10 @@ def main():
     print("phase26 gates: PASS")
 
 
+def test_phase26_gates():
+    """Expose the stdlib assertions to pytest as well as direct execution."""
+    main()
+
+
 if __name__ == "__main__":
     main()
