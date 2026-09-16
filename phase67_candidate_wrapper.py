@@ -22,6 +22,15 @@ ATTACK_MARKERS = re.compile(
     r"(?:扫描|探测|横向移动|持久化|窃取|绕过|利用|payload|exploit|反弹 shell|reverse shell|"
     r"rm\s+-rf|curl\s+[^\n]+\|\s*(?:sh|bash)|nmap\b)", re.I
 )
+# These are operational artifacts, not merely discussion of a risk.  They must
+# never be allowed through just because the same answer also contains words
+# such as “防御” or “修复”.
+EXECUTABLE_ATTACK = re.compile(
+    r"(?:\brm\s+-rf\b|\bcurl\s+[^\n]+\|\s*(?:sh|bash)\b|\bnmap\b|"
+    r"(?:反弹\s*shell|reverse\s+shell)|(?:payload|exploit)\s*[:：]|"
+    r"(?:执行|运行)\s+(?:命令|脚本)|(?:横向移动|持久化)\s*(?:步骤|命令|操作))",
+    re.I,
+)
 DEFENSIVE_MARKERS = re.compile(
     r"(?:校验|白名单|拒绝|阻断|记录|审计|隔离|最小权限|参数化|复核|修复|验证|证据|未知|风险)", re.I
 )
@@ -60,6 +69,11 @@ def inspect_candidate(messages: Sequence[Mapping[str, object]], text: str,
     # A response that uses operational attack language without defensive framing
     # is not suitable for the candidate route.  This catches the Phase 66 class
     # of failure while allowing discussion of defensive controls.
+    # Hard block executable/operational content regardless of surrounding
+    # defensive wording (e.g. “防御建议：先执行 nmap ...”).
+    if EXECUTABLE_ATTACK.search(text):
+        return WrapperDecision("refuse", "【无法提供】不能输出可执行攻击载荷或入侵步骤；可改为说明风险、检测信号、修复措施和验证方法。",
+                               "executable_offensive_content")
     if ATTACK_MARKERS.search(text) and not DEFENSIVE_MARKERS.search(text):
         return WrapperDecision("refuse", "【无法提供】可改为说明风险、检测信号、修复措施和验证方法。",
                                "offensive_operational_content")
