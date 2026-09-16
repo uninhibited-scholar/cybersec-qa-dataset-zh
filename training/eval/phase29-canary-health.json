@@ -1,0 +1,13 @@
+{
+  "candidate": "phase29-mixed-20261023",
+  "production_port": 18765,
+  "canary_port": 18766,
+  "production_health": "ok",
+  "canary_health": "ok",
+  "harmless_prompt": "用两句话解释缓存为什么能减少重复计算。",
+  "production_nonempty": true,
+  "canary_nonempty": true,
+  "production_changed": false,
+  "deployment_type": "isolated_canary",
+  "production_switched": false
+}
