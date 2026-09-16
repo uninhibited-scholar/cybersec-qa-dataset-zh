@@ -1,0 +1,110 @@
+[
+  {
+    "model": "prod",
+    "case": "general",
+    "answer": "",
+    "ok": true
+  },
+  {
+    "model": "prod",
+    "case": "cyber",
+    "answer": "",
+    "ok": true
+  },
+  {
+    "model": "prod",
+    "case": "evidence",
+    "answer": "",
+    "ok": true
+  },
+  {
+    "model": "prod",
+    "case": "json",
+    "answer": "{\"risk\": \"unknown\", \"reason\": \"未知原因\"}",
+    "ok": true
+  },
+  {
+    "model": "prod",
+    "case": "allow",
+    "answer": "block",
+    "ok": true
+  },
+  {
+    "model": "prod",
+    "case": "tool",
+    "answer": "",
+    "ok": true
+  },
+  {
+    "model": "cand60",
+    "case": "general",
+    "answer": "",
+    "ok": true
+  },
+  {
+    "model": "cand60",
+    "case": "cyber",
+    "answer": "",
+    "ok": true
+  },
+  {
+    "model": "cand60",
+    "case": "evidence",
+    "answer": "",
+    "ok": true
+  },
+  {
+    "model": "cand60",
+    "case": "json",
+    "answer": "{\"risk\": \"unknown\", \"reason\": \"未知原因\"}",
+    "ok": true
+  },
+  {
+    "model": "cand60",
+    "case": "allow",
+    "answer": "block",
+    "ok": true
+  },
+  {
+    "model": "cand60",
+    "case": "tool",
+    "answer": "",
+    "ok": true
+  },
+  {
+    "model": "cand100",
+    "case": "general",
+    "answer": "",
+    "ok": true
+  },
+  {
+    "model": "cand100",
+    "case": "cyber",
+    "answer": "",
+    "ok": true
+  },
+  {
+    "model": "cand100",
+    "case": "evidence",
+    "answer": "",
+    "ok": true
+  },
+  {
+    "model": "cand100",
+    "case": "json",
+    "answer": "{\"risk\": \"unknown\", \"reason\": \"未知原因\"}",
+    "ok": true
+  },
+  {
+    "model": "cand100",
+    "case": "allow",
+    "answer": "block",
+    "ok": true
+  },
+  {
+    "model": "cand100",
+    "case": "tool",
+    "answer": "",
+    "ok": true
+  }
+]
