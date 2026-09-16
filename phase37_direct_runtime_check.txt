@@ -1,0 +1,5 @@
+Phase37 direct worker check 2026-09-16
+- France: substantive answer, no empty response.
+- SQL defense: substantive structured answer.
+- Identity: identifies local Mac mini cybersecurity model and Harness boundary.
+- Test used standalone worker with Phase37 adapter; production API untouched.
