@@ -1,0 +1,80 @@
+{
+  "cases": 12,
+  "quality_pass": 11,
+  "checks": [
+    {
+      "route": "base",
+      "nonempty": true,
+      "long_latin_runs": [],
+      "quality_pass": true
+    },
+    {
+      "route": "base",
+      "nonempty": true,
+      "long_latin_runs": [],
+      "quality_pass": true
+    },
+    {
+      "route": "cyber",
+      "nonempty": true,
+      "long_latin_runs": [],
+      "quality_pass": true
+    },
+    {
+      "route": "base",
+      "nonempty": true,
+      "long_latin_runs": [],
+      "quality_pass": true
+    },
+    {
+      "route": "cyber",
+      "nonempty": true,
+      "long_latin_runs": [],
+      "quality_pass": true
+    },
+    {
+      "route": "cyber",
+      "nonempty": true,
+      "long_latin_runs": [],
+      "quality_pass": true
+    },
+    {
+      "route": "cyber",
+      "nonempty": true,
+      "long_latin_runs": [],
+      "quality_pass": true
+    },
+    {
+      "route": "cyber",
+      "nonempty": true,
+      "long_latin_runs": [],
+      "quality_pass": true
+    },
+    {
+      "route": "cyber",
+      "nonempty": true,
+      "long_latin_runs": [],
+      "quality_pass": true
+    },
+    {
+      "route": "cyber",
+      "nonempty": true,
+      "long_latin_runs": [],
+      "quality_pass": true
+    },
+    {
+      "route": "cyber",
+      "nonempty": true,
+      "long_latin_runs": [],
+      "quality_pass": true
+    },
+    {
+      "route": "base",
+      "nonempty": true,
+      "long_latin_runs": [
+        "Defender"
+      ],
+      "quality_pass": false
+    }
+  ]
+}
