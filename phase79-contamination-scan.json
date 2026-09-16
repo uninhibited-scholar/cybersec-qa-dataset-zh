@@ -1,0 +1,9 @@
+{
+  "phase": 79,
+  "scanned_files": 6,
+  "training_set_hits": [],
+  "training_set_clean": true,
+  "candidate_output_contamination": "observed_in_phase78_regression",
+  "recommendation": "keep contaminated traces out of training; add canary prompt and reject output containing known private/project literals",
+  "production_touched": false
+}
