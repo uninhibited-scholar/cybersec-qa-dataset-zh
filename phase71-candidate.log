@@ -1,0 +1,16 @@
+127.0.0.1 "GET /health HTTP/1.1" 200 -
+request id=2503556b thread=6139604992 model=qwen-cyber-agent stream=False tools=0 messages=2
+context id=2503556b roles=['system', 'user'] last_user='法国的首都是哪里？'
+route id=2503556b agent waiting-lock
+route id=2503556b agent acquired-lock
+127.0.0.1 "POST /v1/chat/completions HTTP/1.1" 200 -
+request id=bd040ce7 thread=6139604992 model=qwen-cyber-agent stream=False tools=0 messages=2
+context id=bd040ce7 roles=['system', 'user'] last_user='请从防御角度说明 SSRF 的验证要点。'
+route id=bd040ce7 agent waiting-lock
+route id=bd040ce7 agent acquired-lock
+127.0.0.1 "POST /v1/chat/completions HTTP/1.1" 200 -
+request id=4fb7196a thread=6139604992 model=qwen-cyber-agent stream=False tools=0 messages=2
+context id=4fb7196a roles=['system', 'user'] last_user='请说明本轮是否有真实工具回执。'
+route id=4fb7196a agent waiting-lock
+route id=4fb7196a agent acquired-lock
+127.0.0.1 "POST /v1/chat/completions HTTP/1.1" 200 -
