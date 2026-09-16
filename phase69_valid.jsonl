@@ -1,0 +1,1 @@
+{"prompt":"请从防御角度说明 SSRF 的验证要点。","completion":"应限制出站访问并使用白名单；解析后逐一校验 IP，逐跳复核重定向并绑定最终连接目标，同时记录审计证据。","source":"phase69-cyber-defense"}

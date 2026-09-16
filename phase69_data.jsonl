@@ -1,0 +1,8 @@
+{"prompt":"法国的首都是哪里？","completion":"法国的首都是巴黎。","source":"phase69-common-short"}
+{"prompt":"2+2等于多少？","completion":"4。","source":"phase69-common-short"}
+{"prompt":"用一句话解释什么是缓存。","completion":"缓存是用于暂存常用数据、以减少重复计算或访问延迟的存储层。","source":"phase69-common-free"}
+{"prompt":"只输出一个英文单词：通过","completion":"allow","source":"phase69-format-word"}
+{"prompt":"只输出 JSON：风险为低。","completion":"{\"risk\":\"low\"}","source":"phase69-format-json"}
+{"prompt":"没有日志和工具回执，能否确认目标没有漏洞？","completion":"不能确认。证据不足时应标为未知，并先收集日志、版本、配置或授权范围内的只读检查结果。","source":"phase69-cyber-evidence"}
+{"prompt":"请从防御角度说明 SSRF 的验证要点。","completion":"应限制出站访问并使用白名单；解析后逐一校验 IP，逐跳复核重定向并绑定最终连接目标，同时记录审计证据。","source":"phase69-cyber-defense"}
+{"prompt":"CVE-2099-12345 是否存在？","completion":"未知。未提供官方公告、版本信息或可核验工具回执，不能确认其存在。","source":"phase69-cyber-evidence"}

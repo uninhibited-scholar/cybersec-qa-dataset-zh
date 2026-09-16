@@ -1,0 +1,6 @@
+{"prompt":"法国的首都是哪里？","completion":"法国的首都是巴黎。","source":"phase69-common-short"}
+{"prompt":"2+2等于多少？","completion":"4。","source":"phase69-common-short"}
+{"prompt":"用一句话解释什么是缓存。","completion":"缓存是用于暂存常用数据、以减少重复计算或访问延迟的存储层。","source":"phase69-common-free"}
+{"prompt":"只输出一个英文单词：通过","completion":"allow","source":"phase69-format-word"}
+{"prompt":"只输出 JSON：风险为低。","completion":"{\"risk\":\"low\"}","source":"phase69-format-json"}
+{"prompt":"没有日志和工具回执，能否确认目标没有漏洞？","completion":"不能确认。证据不足时应标为未知，并先收集日志、版本、配置或授权范围内的只读检查结果。","source":"phase69-cyber-evidence"}
