@@ -16,7 +16,7 @@
     "candidate_isolated_from_production": true,
     "manifest_available": true
   },
-  "decision": "eligible_for_non_mutating_approval_check_only",
+  "decision": "rejected_shadow_regression",
   "deployment_authorized": false,
-  "notes": "This review records eligibility evidence only; it does not authorize copying, activation, or production replacement."
+  "notes": "A weaker-system-prompt shadow comparison exposed evidence-boundary and empty-output failures. The earlier eligibility result is superseded; no deployment is authorized."
 }
