@@ -3,11 +3,11 @@
 import json, subprocess, time
 from pathlib import Path
 
-REMOTE = 'jiehan@192.168.31.212'
+REMOTE = __import__('os').environ.get('CYBER_REMOTE', 'jiehan@192.168.31.212')
 PY = '/Users/jiehan/venvs/agents-a1/bin/python'
 WORKER = '/Users/jiehan/cyber-agent/chat_worker_v2.py'
 MODEL = '/Users/jiehan/models/Qwen3-4B-official-chatml-phase10'
-ADAPTER = '/Users/jiehan/models/phase19-recovery-20260922'
+ADAPTER = __import__('os').environ.get('CYBER_ADAPTER', '/Users/jiehan/models/phase19-recovery-20260922')
 SYSTEM = ('你是本地网安特化分析模块。涉及具体漏洞、CVE、KB、当前环境或外部检索时，'
           '只依据已提供的证据；没有证据就明确说无法核验并停止。普通知识问题可以直接回答，'
           '但不得声称使用了未连接的工具或来源。')
