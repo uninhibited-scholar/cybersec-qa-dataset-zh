@@ -16,6 +16,8 @@ def main():
                     help='base/adapter/Harness separation report')
     ap.add_argument('--api-regression',type=Path,required=True,
                     help='isolated canary API regression report')
+    ap.add_argument('--production-api-regression',type=Path,required=True,
+                    help='production API regression report')
     ap.add_argument('--candidate',type=Path,required=True)
     ap.add_argument('--production',type=Path,required=True)
     ap.add_argument('--manual-review',action='store_true')
@@ -30,9 +32,10 @@ def main():
         manifest=json.loads(args.manifest.read_text())
         architecture=json.loads(args.architecture_report.read_text())
         api_regression=json.loads(args.api_regression.read_text())
+        production_api=json.loads(args.production_api_regression.read_text())
     except (OSError, json.JSONDecodeError, TypeError) as exc:
         reasons.append(f'gate report unreadable: {type(exc).__name__}')
-        result=tool=trajectory=manifest=architecture=api_regression={}
+        result=tool=trajectory=manifest=architecture=api_regression=production_api={}
     if result.get('passes') != result.get('total'): reasons.append('blind suite not fully passed')
     if result.get('forbidden_hits',0): reasons.append('forbidden pattern hit')
     if tool.get('negative_pass') != tool.get('negative_total'): reasons.append('tool negative gate failed')
@@ -50,6 +53,8 @@ def main():
         reasons.append('architecture report missing base or Harness identity')
     if api_regression.get('passed') is not True: reasons.append('canary API regression failed')
     if api_regression.get('production_changed') is not False: reasons.append('canary API report says production changed')
+    if production_api.get('passed') is not True: reasons.append('production API regression failed')
+    if production_api.get('production_changed') is not False: reasons.append('production API report says production changed')
     manifest_errors = verify_manifest(args.candidate, manifest)
     if manifest_errors: reasons.extend(f'manifest: {item}' for item in manifest_errors)
     if not args.manual_review: reasons.append('independent manual review not recorded')
