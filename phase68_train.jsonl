@@ -1,0 +1,4 @@
+{"prompt":"法国的首都是哪里？","completion":"法国的首都是巴黎。","source":"phase68-neutral-short"}
+{"prompt":"只输出一个英文单词：通过","completion":"allow","source":"phase68-format-short"}
+{"prompt":"2+2等于多少？","completion":"4。","source":"phase68-neutral-short"}
+{"prompt":"没有日志、版本或工具回执，能否确认目标没有漏洞？","completion":"不能确认。证据不足时应明确标为未知，并先收集日志、版本、配置或授权范围内的只读检查结果。","source":"phase68-evidence"}
