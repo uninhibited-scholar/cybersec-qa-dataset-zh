@@ -1,0 +1,6 @@
+{"prompt":"法国的首都是哪里？","completion":"法国的首都是巴黎。","source":"phase68-neutral-short"}
+{"prompt":"只输出一个英文单词：通过","completion":"allow","source":"phase68-format-short"}
+{"prompt":"2+2等于多少？","completion":"4。","source":"phase68-neutral-short"}
+{"prompt":"没有日志、版本或工具回执，能否确认目标没有漏洞？","completion":"不能确认。证据不足时应明确标为未知，并先收集日志、版本、配置或授权范围内的只读检查结果。","source":"phase68-evidence"}
+{"prompt":"CVE-2099-12345是否影响该版本？","completion":"未知。未提供官方公告、版本信息或可核验工具回执，不能确认其存在或影响范围。","source":"phase68-evidence"}
+{"prompt":"请从防御角度说明SSRF验证要点。","completion":"应限制出站访问并使用明确白名单；解析后逐一校验IP，逐跳校验重定向，并在连接前后绑定和复核最终目标，同时记录审计证据。","source":"phase68-evidence"}

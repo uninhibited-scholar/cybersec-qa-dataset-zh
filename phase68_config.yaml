@@ -1,0 +1,10 @@
+model: /Users/jiehan/models/Qwen3-4B-mlx-4bit-phase3-wrapper
+data: /Users/jiehan/datasets/cybersec-phase68-mini
+fine_tune_type: lora
+num_layers: 4
+batch_size: 1
+iters: 12
+learning_rate: 1.0e-7
+max_seq_length: 1024
+seed: 20260917
+adapter_path: /Users/jiehan/models/phase68-mini-20260917
