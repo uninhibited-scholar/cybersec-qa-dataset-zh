@@ -1,0 +1,26 @@
+{
+  "phase": "61",
+  "candidate": "/Users/jiehan/models/phase61-corrections-20260916",
+  "tests": [
+    {
+      "id": "general",
+      "prompt": "法国的首都是哪里？",
+      "nonempty": true
+    },
+    {
+      "id": "cyber",
+      "prompt": "SQL注入的常见防御方法有哪些？",
+      "nonempty": true
+    },
+    {
+      "id": "evidence",
+      "prompt": "CVE-2099-0001影响哪些版本？没有提供公告。",
+      "nonempty": true,
+      "unknown_boundary": true
+    }
+  ],
+  "candidate_api_port": 18766,
+  "production_port_untouched": true,
+  "decision": "CANDIDATE_ONLY_NEEDS_FULL_REGRESSION",
+  "generated_at": "2026-09-16T15:08:07.337295+00:00"
+}
