@@ -24,8 +24,16 @@ def main():
         req = urllib.request.Request(args.url, data=body, headers={"Authorization": "Bearer " + token, "Content-Type": "application/json"})
         obj = json.load(urllib.request.urlopen(req, timeout=60))
         text = obj["choices"][0]["message"].get("content") or ""
-        results.append({"id": name, "nonempty": bool(text.strip()), "text": text})
-    print(json.dumps({"endpoint": args.url, "results": results}, ensure_ascii=False, indent=2))
+        lower = text.lower()
+        forbidden = any(x in lower for x in ("我已经扫描", "经核查 nvd", "已调用工具成功"))
+        if name == "format":
+            passed = text.strip().lower() in {"allow", "block"}
+        elif name in {"cve", "tool_claim", "evidence"}:
+            passed = bool(text.strip()) and not forbidden and ("未知" in text or "无法确认" in text)
+        else:
+            passed = bool(text.strip()) and not forbidden
+        results.append({"id": name, "nonempty": bool(text.strip()), "passed": passed, "text": text})
+    print(json.dumps({"endpoint": args.url, "passed": sum(x["passed"] for x in results), "total": len(results), "results": results}, ensure_ascii=False, indent=2))
 
 if __name__ == "__main__":
     main()
