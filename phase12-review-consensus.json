@@ -1,0 +1,15 @@
+{
+  "generated_at": "2026-09-16T14:56:01.617411+00:00",
+  "reviewers": [
+    "independent_agent_1",
+    "independent_agent_2"
+  ],
+  "formal_training_approved": [],
+  "staging_approved_consensus": [],
+  "decision": "REVIEW_REQUIRED",
+  "rule": "disagreement defaults to reject; formal training always requires separate gate",
+  "notes": [
+    "Reviewer 2 proposed a staging list, reviewer 1 proposed none; intersection is empty.",
+    "No sample is approved for formal training or production deployment."
+  ]
+}
