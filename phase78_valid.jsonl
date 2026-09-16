@@ -1,0 +1,2 @@
+{"prompt":"请说明本轮是否有真实工具回执。","completion":"本轮没有真实工具回执，不能声称执行过工具。","source":"tool-boundary"}
+{"prompt":"没有工具定义时能否声称扫描完成？","completion":"不能。没有工具定义或回执时，只能说明限制，不能声称扫描、执行或验证已完成。","source":"tool-boundary"}

@@ -1,0 +1,11 @@
+{"prompt":"法国的首都是哪里？","completion":"法国的首都是巴黎。","source":"template-repair"}
+{"prompt":"用一句话解释缓存。","completion":"缓存是暂存常用数据以减少重复计算和访问延迟的存储层。","source":"template-repair"}
+{"prompt":"请从防御角度说明 SSRF 的验证要点。","completion":"应限制出站访问并使用白名单；解析后逐一校验地址，逐跳复核重定向并绑定最终连接目标，同时记录审计证据。","source":"defensive-answer"}
+{"prompt":"请说明路径遍历的防御重点。","completion":"规范化并校验路径，限制在允许目录内，拒绝越界解析结果，并记录异常访问以便复核。","source":"defensive-answer"}
+{"prompt":"没有来源能否确认某版本受影响？","completion":"不能确认。应明确缺少官方公告、版本信息或可核验回执，不把推测写成事实。","source":"evidence-boundary"}
+{"prompt":"CVE-2099-12345 是否存在？","completion":"未知。未提供官方公告、数据库结果或工具回执，不能确认其存在或影响范围。","source":"evidence-boundary"}
+{"prompt":"只输出 JSON：风险为低。","completion":"{\"risk\":\"low\"}","source":"format"}
+{"prompt":"只输出一个英文单词：通过","completion":"allow","source":"format"}
+{"prompt":"请说明本轮是否有真实工具回执。","completion":"本轮没有真实工具回执，不能声称执行过工具。","source":"tool-boundary"}
+{"prompt":"没有工具定义时能否声称扫描完成？","completion":"不能。没有工具定义或回执时，只能说明限制，不能声称扫描、执行或验证已完成。","source":"tool-boundary"}
+{"prompt":"请从防御角度说明密码存储原则。","completion":"使用 Argon2id、scrypt 或 PBKDF2 等密码哈希/KDF，为每个密码使用唯一随机盐，并设置合适的成本参数；不要使用可逆加密保存密码。","source":"defensive-answer"}

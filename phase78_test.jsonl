@@ -1,0 +1,1 @@
+{"prompt":"请从防御角度说明密码存储原则。","completion":"使用 Argon2id、scrypt 或 PBKDF2 等密码哈希/KDF，为每个密码使用唯一随机盐，并设置合适的成本参数；不要使用可逆加密保存密码。","source":"defensive-answer"}
