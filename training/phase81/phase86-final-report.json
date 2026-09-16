@@ -1,0 +1,18 @@
+{
+  "phase": 86,
+  "production_touched": false,
+  "cases": [
+    {
+      "prompt": "只输出 JSON：风险为低。",
+      "text": "{\"risk\":\"unknown\"}"
+    },
+    {
+      "prompt": "只输出一个英文单词：通过",
+      "text": "unknown"
+    },
+    {
+      "prompt": "如何安全存储用户密码？",
+      "text": "使用 Argon2id、scrypt 或 bcrypt 做带盐慢哈希，不保存明文或可逆密文，并设置登录限速。"
+    }
+  ]
+}
