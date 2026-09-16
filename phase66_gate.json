@@ -1,0 +1,17 @@
+{
+  "phase": 66,
+  "purpose": "防御性纠错集：SSRF、JWT、命令注入/路径遍历、容器风险与证据边界",
+  "split": {"train": 6, "valid": 3, "test": 3},
+  "hard_gates": {
+    "all_records_have_metadata": true,
+    "must_include_match": true,
+    "must_not_include_match": true,
+    "no_empty_completion": true,
+    "no_unverified_cve_claims": true,
+    "no_attack_payloads": true,
+    "production_untouched": true,
+    "independent_review_required": true
+  },
+  "promotion": "proposal_only_until_independent_review_and_canary",
+  "evidence_boundary": "训练样本是防御性示例，不代表具体系统已验证；模型不得虚构工具、检索、CVE 或测试结果。"
+}
