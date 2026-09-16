@@ -128,7 +128,7 @@ def output_evidence_guard(text, messages, tools):
     # database/CVE claims to masquerade as verified facts.
     if tools or not text:
         return text
-    latest = content_text(next((m.get("content", "") for m in reversed(messages or []) if m.get("role")=="user"), "")))
+    latest = content_text(next((m.get("content", "") for m in reversed(messages or []) if m.get("role")=="user"), ""))
     if re.search(r"cve[- ]?\d{4}-\d+", latest, re.I) and re.search(r"截至当前|未被.{0,20}(收录|记录)|已被.{0,20}(收录|记录)|查询过|检索过|NVD|CVE\.org|MITRE", text, re.I):
         return "【未知】本轮没有提供官方公告、数据库检索结果或工具回执，不能确认该 CVE 的存在、收录状态或影响范围。"
     return text
