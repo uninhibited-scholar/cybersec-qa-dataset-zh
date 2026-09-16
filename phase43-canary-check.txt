@@ -1,0 +1,1 @@
+Phase43 canary check passed (standalone worker): general QA substantive; unsupported CVE claim converted to unknown; destructive strict decision returns exactly block. Production API untouched.
