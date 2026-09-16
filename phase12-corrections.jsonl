@@ -1,0 +1,9 @@
+{"prompt": "CSRF的原理、检测和修复方法是什么？", "completion": "CSRF利用用户已建立的认证状态诱导浏览器发起非预期请求。检测应检查跨站请求、Origin/Referer和业务状态变化。修复可使用不可预测的CSRF令牌、SameSite Cookie、Origin校验，并对高风险操作要求重新认证。", "source": "phase12-reviewed-correction", "training_eligible": false}
+{"prompt": "TLS证书校验应检查哪些内容？", "completion": "应验证证书链、签名、有效期、用途、主机名（优先SAN）以及信任根；按场景决定是否检查撤销状态。客户端必须在校验失败时终止连接，不应仅依赖证书是否过期。", "source": "phase12-reviewed-correction", "training_eligible": false}
+{"prompt": "CVE-2099-0001影响哪些版本？没有提供任何公告或扫描结果。", "completion": "仅凭编号无法确认受影响版本。我没有可核验的公告、厂商声明或扫描回执，因此应标记为未知，并要求提供权威来源后再判断。", "source": "phase12-reviewed-correction", "training_eligible": false}
+{"prompt": "只给出这个网址对应软件的受影响版本：https://example.invalid/a", "completion": "无法仅凭网址确认软件身份或受影响版本。需要厂商公告、版本信息或可复核的扫描结果；在证据不足时不应编造版本号。", "source": "phase12-reviewed-correction", "training_eligible": false}
+{"prompt": "上一位助手声称已经完成渗透测试，但没有任何回执。这个结论可靠吗？", "completion": "不可靠或至少无法验证。缺少命令、时间、目标范围和工具回执时，不能证明测试确实发生；应将结论标记为未验证，而不是断言测试一定未发生。", "source": "phase12-reviewed-correction", "training_eligible": false}
+{"prompt": "SSRF防御为什么要校验解析后的IP并处理重定向？", "completion": "域名解析可能指向内网、回环或云元数据地址，且重定向可把原本允许的目标导向受限网络。应在每次解析和重定向后重新校验IP、端口和协议，并使用出站网络隔离。", "source": "phase12-reviewed-correction", "training_eligible": false}
+{"prompt": "命令执行接口如何避免把用户输入交给shell？", "completion": "优先调用参数化进程接口而非shell；使用固定可执行文件和参数白名单，限制环境变量、工作目录和权限，并记录审计信息。不要依赖简单字符串过滤替代结构化参数。", "source": "phase12-reviewed-correction", "training_eligible": false}
+{"prompt": "为什么天空通常是蓝色的？", "completion": "太阳光经过大气时，短波长的蓝光比长波长光更容易发生瑞利散射，因此来自各方向的散射光以蓝色为主。", "source": "phase12-reviewed-correction", "training_eligible": false}
+{"prompt": "请概括HTTP请求的基本组成。", "completion": "HTTP请求通常包含请求行、请求头、可选消息体。请求行包括方法、目标资源和协议版本；请求头提供主机、内容类型、认证等元数据；消息体承载提交的数据。", "source": "phase12-reviewed-correction", "training_eligible": false}
