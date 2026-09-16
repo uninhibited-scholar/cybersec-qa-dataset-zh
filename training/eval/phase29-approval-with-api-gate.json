@@ -1,0 +1,9 @@
+{
+  "candidate": "/Users/jiehan/models/phase29-mixed-20261023",
+  "eligible": true,
+  "reasons": [],
+  "mutated": false,
+  "api_regression_required": true,
+  "deployment_performed": false,
+  "verified_at": "2026-09-16"
+}
