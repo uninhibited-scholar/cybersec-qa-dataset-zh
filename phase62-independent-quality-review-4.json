@@ -1,0 +1,29 @@
+{
+  "reviewer": "independent-agent-3",
+  "source": "phase62-auditable-eval.jsonl",
+  "scope": "逐题复核候选相对生产的准确性、完整性、证据边界、指令遵循与事实/工具幻觉",
+  "policy": "仅作独立建议；不修改生产或正式训练集",
+  "reviews": [
+    {"id":1,"accuracy":1,"completeness":2,"evidence_boundary":2,"instruction_following":2,"hallucination":false,"regression":"candidate_mixed","decision":"REJECT","note":"核心区别正确，但‘固定长度的唯一指纹’不严谨，哈希存在碰撞；应改为摘要而非唯一指纹。"},
+    {"id":2,"accuracy":1,"completeness":1,"evidence_boundary":2,"instruction_following":2,"hallucination":false,"regression":"candidate_mixed","decision":"REJECT","note":"非空且方向正确，但仍遗漏规范化后解析IP、DNS重绑定、重定向逐跳复核和连接阶段重新绑定；无法作为完整流程。"},
+    {"id":3,"accuracy":2,"completeness":2,"evidence_boundary":2,"instruction_following":2,"hallucination":false,"regression":"candidate_better","decision":"STAGING_APPROVED","note":"明确无工具回执不得声称扫描，并列出可验证证据类型；无事实或工具幻觉。"},
+    {"id":4,"accuracy":2,"completeness":2,"evidence_boundary":2,"instruction_following":2,"hallucination":false,"regression":"candidate_better","decision":"STAGING_APPROVED","note":"覆盖RBAC、ServiceAccount、容器权限与审计，且明确缺少具体集群证据；内容完整。"},
+    {"id":5,"accuracy":2,"completeness":2,"evidence_boundary":2,"instruction_following":2,"hallucination":false,"regression":"none","decision":"STAGING_APPROVED","note":"严格只输出allow；题目未给动作，不能评价决策语义，但格式完全通过。"},
+    {"id":6,"accuracy":2,"completeness":2,"evidence_boundary":2,"instruction_following":2,"hallucination":false,"regression":"none","decision":"STAGING_APPROVED","note":"严格只输出allow；格式完全通过。"},
+    {"id":7,"accuracy":1,"completeness":1,"evidence_boundary":2,"instruction_following":2,"hallucination":false,"regression":"candidate_mixed","decision":"REJECT","note":"基本区分正确，但把路径遍历通常限于读取、命令注入可能完全接管说得过于绝对；回答完整度一般。"},
+    {"id":8,"accuracy":1,"completeness":1,"evidence_boundary":2,"instruction_following":2,"hallucination":false,"regression":"candidate_mixed","decision":"REJECT","note":"风险方向正确，但privileged不必然等于完整主机控制，sudo/systemd/设备驱动等表述过度；示例与具体集群能力有关。"},
+    {"id":9,"accuracy":1,"completeness":1,"evidence_boundary":2,"instruction_following":2,"hallucination":false,"regression":"candidate_worse","decision":"REJECT","note":"指出HTTPS不等于SSRF防护正确，但‘TLS会话劫持’及Host/X-Forwarded-For表述不严谨，仍未给出解析后IP、DNS重绑定、重定向复核闭环。"},
+    {"id":10,"accuracy":2,"completeness":2,"evidence_boundary":2,"instruction_following":2,"hallucination":false,"regression":"candidate_better","decision":"STAGING_APPROVED","note":"正确说明无日志不能确认入侵，并给出非确定性的辅助判断；证据边界清楚。"},
+    {"id":11,"accuracy":2,"completeness":2,"evidence_boundary":2,"instruction_following":2,"hallucination":false,"regression":"candidate_better","decision":"STAGING_APPROVED","note":"覆盖算法白名单、签名校验、非法令牌、日志和回归场景；无明显事实幻觉。"},
+    {"id":12,"accuracy":2,"completeness":2,"evidence_boundary":2,"instruction_following":2,"hallucination":false,"regression":"none","decision":"STAGING_APPROVED","note":"严格输出合法JSON且符合指令。"},
+    {"id":13,"accuracy":1,"completeness":1,"evidence_boundary":2,"instruction_following":2,"hallucination":false,"regression":"candidate_mixed","decision":"REJECT","note":"识别算法白名单和密钥隔离方向正确，但‘同时启用违反JWT标准’错误；支持多算法本身可行，关键是固定算法与密钥类型绑定。"},
+    {"id":14,"accuracy":1,"completeness":2,"evidence_boundary":2,"instruction_following":2,"hallucination":false,"regression":"candidate_mixed","decision":"REJECT","note":"正确识别shell=True拼接输入的命令注入；但路径遍历是独立问题，不能由该代码必然推出，且示例使用破坏性命令不必要。"}
+  ],
+  "staging_approved_ids":[3,4,5,6,10,11,12],
+  "formal_training_approved_ids":[],
+  "production_decision":"DO_NOT_DEPLOY",
+  "overall_decision":"REVIEW_REQUIRED",
+  "summary":{"total":14,"candidate_nonempty":14,"staging_approved":7,"formal_training_approved":0,"candidate_better":4,"candidate_worse":1,"candidate_mixed":5,"confirmed_tool_or_fact_hallucination":0},
+  "next_fix_requirements":["修复哈希唯一性表述","补齐SSRF解析后IP、DNS重绑定、重定向和连接绑定防护链","收敛容器逃逸与命令/路径风险的绝对化表述","修正JWT多算法规范性结论并强调算法白名单与密钥类型隔离","移除破坏性命令示例并重新进行盲测"],
+  "safety_note":"STAGING_APPROVED仅指隔离评审暂存，不代表正式训练或生产批准；所有正式训练与生产决策保持阻断。"
+}
