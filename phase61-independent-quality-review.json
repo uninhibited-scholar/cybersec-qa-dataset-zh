@@ -1,0 +1,27 @@
+{
+  "reviewer": "independent-agent-3",
+  "source": "phase61-full-compare.json",
+  "scope": "candidate-versus-production professional quality review",
+  "policy": "staging recommendations only; no production deployment or formal training approval",
+  "records": [
+    {"id":1,"scores":{"accuracy":2,"relevance":2,"evidence_boundary":2,"clarity":2},"hallucination":false,"regression":"none","decision":"STAGING_APPROVED","note":"准确、简洁，符合一句话要求"},
+    {"id":2,"scores":{"accuracy":1,"relevance":2,"evidence_boundary":2,"clarity":1},"hallucination":false,"regression":"candidate_worse","decision":"REJECT","note":"把路径穿越混入SSRF校验顺序，未覆盖解析后IP、DNS重绑定和重定向等核心点；回答截断"},
+    {"id":3,"scores":{"accuracy":2,"relevance":2,"evidence_boundary":2,"clarity":2},"hallucination":false,"regression":"candidate_better","decision":"STAGING_APPROVED","note":"明确无工具回执不得声称扫描，证据边界良好"},
+    {"id":4,"scores":{"accuracy":2,"relevance":2,"evidence_boundary":2,"clarity":2},"hallucination":false,"regression":"candidate_better","decision":"STAGING_APPROVED","note":"内容相关且覆盖RBAC、ServiceAccount和审计；末尾截断但无明显错误"},
+    {"id":5,"scores":{"accuracy":2,"relevance":2,"evidence_boundary":2,"clarity":2},"hallucination":false,"regression":"none","decision":"STAGING_APPROVED","note":"严格只输出allow，格式通过"},
+    {"id":6,"scores":{"accuracy":2,"relevance":2,"evidence_boundary":2,"clarity":2},"hallucination":false,"regression":"none","decision":"STAGING_APPROVED","note":"严格只输出allow，格式通过"},
+    {"id":7,"scores":{"accuracy":1,"relevance":2,"evidence_boundary":2,"clarity":1},"hallucination":false,"regression":"candidate_mixed","decision":"REJECT","note":"把路径遍历说成通常仅能读取、命令注入说成具备完全权限均过度绝对化；回答截断"},
+    {"id":8,"scores":{"accuracy":1,"relevance":2,"evidence_boundary":2,"clarity":1},"hallucination":false,"regression":"candidate_mixed","decision":"REJECT","note":"风险方向正确，但对/sys和持久化/横向移动的表述过度，且答案截断；应区分配置风险与必然逃逸"},
+    {"id":9,"scores":{"accuracy":1,"relevance":2,"evidence_boundary":2,"clarity":1},"hallucination":false,"regression":"candidate_worse","decision":"REJECT","note":"未解释DNS重绑定、解析后IP校验、重定向和连接复核；示例可能暗示HTTPS内部地址本身就是漏洞；截断"},
+    {"id":10,"scores":{"accuracy":2,"relevance":2,"evidence_boundary":2,"clarity":2},"hallucination":false,"regression":"candidate_better","decision":"STAGING_APPROVED","note":"准确区分不能确认与辅助判断，证据边界清楚"},
+    {"id":11,"scores":{"accuracy":2,"relevance":2,"evidence_boundary":2,"clarity":1},"hallucination":false,"regression":"candidate_better","decision":"STAGING_APPROVED","note":"回归要点正确；回答截断，需作为不完整示范处理"},
+    {"id":12,"scores":{"accuracy":2,"relevance":2,"evidence_boundary":2,"clarity":2},"hallucination":false,"regression":"none","decision":"STAGING_APPROVED","note":"严格满足JSON格式要求"},
+    {"id":13,"scores":{"accuracy":1,"relevance":2,"evidence_boundary":2,"clarity":1},"hallucination":false,"regression":"candidate_worse","decision":"REJECT","note":"同时支持两种算法不必然违反JWT规范；把算法选择模糊与中间人篡改直接等同不准确；截断"},
+    {"id":14,"scores":{"accuracy":1,"relevance":2,"evidence_boundary":2,"clarity":1},"hallucination":false,"regression":"candidate_mixed","decision":"REJECT","note":"shell=True拼接输入的命令注入判断正确，但将其概括为路径遍历且示例具有破坏性，表述需收敛；截断"}
+  ],
+  "staging_approved_ids":[1,3,4,5,6,10,11,12],
+  "formal_training_approved_ids":[],
+  "overall_decision":"REVIEW_REQUIRED",
+  "summary":{"candidate_nonempty":14,"production_nonempty":14,"candidate_better":4,"candidate_worse":3,"candidate_mixed":3,"no_material_change":4,"hallucination_confirmed":0},
+  "safety_note":"STAGING_APPROVED is isolated review staging only. No record is approved for formal training or production promotion without the promotion gate and human authorization."
+}
