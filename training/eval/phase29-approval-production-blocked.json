@@ -1,0 +1,8 @@
+{
+  "candidate": "/Users/jiehan/models/phase29-mixed-20261023",
+  "eligible": false,
+  "reasons": ["production API regression failed"],
+  "mutated": false,
+  "verified_at": "2026-09-16",
+  "deployment_performed": false
+}
