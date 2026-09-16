@@ -12,7 +12,7 @@ from mlx_lm.sample_utils import make_sampler
 BASE = os.environ['CYBER_MODEL_PATH']
 ADAPTER = os.environ.get('CYBER_ADAPTER_PATH') or None
 SYSTEM_CFG = json.loads(Path('/Users/jiehan/cyber-agent/qwen3-official-tokenizer-config.json').read_text())
-SECURITY = re.compile(r'网安|网络安全|漏洞|CVE|\bKB[- ]?\d|SSRF|URL抓取|URL 获取|127\.0\.0\.1|localhost|Host头|Host 头|HTTPS|JWT|Kubernetes|命令注入|越权|SQL|XSS|工具回执|当前环境|扫描|攻击|防御|审计|你是什么模型|你是谁|自我介绍|介绍你自己|能力和限制|功能和限制', re.I)
+SECURITY = re.compile(r'网安|网络安全|漏洞|CVE|\bKB[- ]?\d|SSRF|URL抓取|URL 获取|127\.0\.0\.1|localhost|Host头|Host 头|HTTPS|JWT|Kubernetes|命令注入|越权|SQL|XSS|工具回执|当前环境|扫描|攻击|防御|审计|你是什么模型|你是谁|自我介绍|介绍你自己|能力和限制|功能和限制|功能介绍|介绍.*功能', re.I)
 SSRF = re.compile(r'SSRF|URL抓取|URL 获取|127\.0\.0\.1|localhost|Host头|Host 头|DNS rebinding|DNS 重绑定', re.I)
 SSRF_KB = ('已提供的本地知识条目 KB-SSRF-001（仅为防御性检查清单，不能证明具体环境已验证）：\n'
            '解析后检查所有 IPv4/IPv6，拒绝回环、私网、链路本地、多播、保留和 IPv4-mapped 地址；\n'
@@ -57,7 +57,7 @@ def main():
             req=json.loads(raw); msgs=req.get('messages') or []
             user='\n'.join(m.get('content','') for m in msgs if m.get('role')=='user')
             use_cyber=bool(SECURITY.search(user)) or any(m.get('role') in {'tool','function'} for m in msgs)
-            identity_request=bool(re.search(r'你是什么模型|你是谁|自我介绍|介绍你自己|能力和限制|功能和限制', user, re.I))
+            identity_request=bool(re.search(r'你是什么模型|你是谁|自我介绍|介绍你自己|能力和限制|功能和限制|功能介绍|介绍.*功能', user, re.I))
             if identity_request:
                 print(json.dumps({'ok':True,'route':'cyber','answer':'我是运行在本地的网安特化分析模块，基于 Qwen 基座与独立网安适配器构建。我能分析你提供的文本、代码和工具回执，解释风险并提出防御建议；我不会联网检索、执行扫描或声称使用未提供回执的工具。'},ensure_ascii=False),flush=True)
                 continue
