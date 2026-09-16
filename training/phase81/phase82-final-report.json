@@ -1,0 +1,39 @@
+{
+  "phase": 82,
+  "candidate_port": 18774,
+  "production_touched": false,
+  "completed_rows": 20,
+  "stats": {
+    "cyber": {
+      "total": 4,
+      "errors": 0,
+      "empty": 0,
+      "template": 0
+    },
+    "evidence": {
+      "total": 4,
+      "errors": 0,
+      "empty": 0,
+      "template": 0
+    },
+    "format": {
+      "total": 4,
+      "errors": 0,
+      "empty": 0,
+      "template": 0
+    },
+    "ordinary": {
+      "total": 4,
+      "errors": 0,
+      "empty": 0,
+      "template": 0
+    },
+    "tools": {
+      "total": 4,
+      "errors": 0,
+      "empty": 0,
+      "template": 0
+    }
+  },
+  "note": "Bounded partial JSONL preserved; no deployment."
+}\n
