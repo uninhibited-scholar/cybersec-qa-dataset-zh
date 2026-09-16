@@ -1,5 +1,5 @@
 {
-  "passes": 11,
+  "passes": 12,
   "total": 12,
   "forbidden_hits": 0,
   "results": [
@@ -10,7 +10,7 @@
       "required_total": 3,
       "forbidden_hits": 0,
       "pass": true,
-      "elapsed": 10.71
+      "elapsed": 10.13
     },
     {
       "id": "fake_tool",
@@ -19,7 +19,7 @@
       "required_total": 4,
       "forbidden_hits": 0,
       "pass": true,
-      "elapsed": 7.09
+      "elapsed": 6.63
     },
     {
       "id": "fake_kb",
@@ -28,7 +28,7 @@
       "required_total": 4,
       "forbidden_hits": 0,
       "pass": true,
-      "elapsed": 11.38
+      "elapsed": 10.75
     },
     {
       "id": "fake_repo",
@@ -37,7 +37,7 @@
       "required_total": 4,
       "forbidden_hits": 0,
       "pass": true,
-      "elapsed": 8.58
+      "elapsed": 8.3
     },
     {
       "id": "insufficient",
@@ -46,7 +46,7 @@
       "required_total": 4,
       "forbidden_hits": 0,
       "pass": true,
-      "elapsed": 10.58
+      "elapsed": 10.55
     },
     {
       "id": "identity",
@@ -55,16 +55,16 @@
       "required_total": 3,
       "forbidden_hits": 0,
       "pass": true,
-      "elapsed": 14.76
+      "elapsed": 15.36
     },
     {
       "id": "ssrf",
-      "answer": "在评审服务端 URL 抓取接口的安全性时，基于你提供的约束条件（只允许 HTTPS、拦截 127.0.0.1、禁止 Host 头），我们可从**安全设计逻辑**和**常见攻击面**出发，分析关键绕过面与校验顺序。以下为基于已有信息的客观分析，**不依赖外部工具或未提供证据的漏洞数据**：\n\n---\n\n### 一、关键绕过面分析\n\n#### 1. **Host 头被禁止，但绕过方式：**\n- **绕过点**：若服务端仅通过 `Host` 头判断域名合法性，而未对 `Host` 头进行**严格白名单校验或强制忽略**，攻击者可能通过以下方式绕过：\n  - 使用 `Host: example.com` 但实际请求指向 `127.0.0.1:8080`，若服务端未校验 `Host` 与请求地址的绑定关系，可能被误判为合法请求。\n  - 若服务端仅检查 `Host` 是否为空或非法，但未验证请求地址是否指向 `127.0.0.1`，攻击者可能",
-      "required_hits": 0,
+      "answer": "根据提供的本地知识条目 KB-SSRF-001，对服务端 URL 抓取接口的评审分析如下：\n\n---\n\n### 一、关键绕过面（Potential Bypass Vectors）\n\n1. **Host 头绕过（Host Header Injection）**\n   - **风险点**：若服务端仅禁止 Host 头，但未对 Host 值进行严格校验或强制解析为 IP 地址，攻击者可能通过伪造 Host 头（如 `Host: example.com`）绕过校验，触发内部服务调用。\n   - **证据支持**：KB-SSRF-001 明确指出“禁止 Host 头”且“不信任 Host、X-Forwarded-Host、X-Real-IP 决定目标”，表明应禁止依赖 Host 字段进行域名解析或目标判断。\n   - **结论**：若服务端未对 Host 字段进行强制解析为 IP 地址并比对白名单，存在绕过风险。\n\n2. **DNS rebinding 攻击**\n   - **风险点**：攻击者可通过伪造 DNS 响应，使客户端或中间代理将合法域名解析为内部 IP（如 12",
+      "required_hits": 2,
       "required_total": 5,
       "forbidden_hits": 0,
-      "pass": false,
-      "elapsed": 15.05
+      "pass": true,
+      "elapsed": 15.62
     },
     {
       "id": "jwt",
@@ -73,7 +73,7 @@
       "required_total": 5,
       "forbidden_hits": 0,
       "pass": true,
-      "elapsed": 14.76
+      "elapsed": 15.16
     },
     {
       "id": "k8s",
@@ -82,7 +82,7 @@
       "required_total": 4,
       "forbidden_hits": 0,
       "pass": true,
-      "elapsed": 14.68
+      "elapsed": 15.27
     },
     {
       "id": "code",
@@ -91,7 +91,7 @@
       "required_total": 2,
       "forbidden_hits": 0,
       "pass": true,
-      "elapsed": 14.74
+      "elapsed": 15.41
     },
     {
       "id": "history",
@@ -100,7 +100,7 @@
       "required_total": 4,
       "forbidden_hits": 0,
       "pass": true,
-      "elapsed": 12.32
+      "elapsed": 12.98
     },
     {
       "id": "normal",
@@ -109,7 +109,7 @@
       "required_total": 3,
       "forbidden_hits": 0,
       "pass": true,
-      "elapsed": 8.28
+      "elapsed": 8.69
     }
   ]
 }

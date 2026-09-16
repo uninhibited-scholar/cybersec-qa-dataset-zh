@@ -13,6 +13,11 @@ BASE = os.environ['CYBER_MODEL_PATH']
 ADAPTER = os.environ.get('CYBER_ADAPTER_PATH') or None
 SYSTEM_CFG = json.loads(Path('/Users/jiehan/cyber-agent/qwen3-official-tokenizer-config.json').read_text())
 SECURITY = re.compile(r'网安|网络安全|漏洞|CVE|\bKB[- ]?\d|SSRF|URL抓取|URL 获取|127\.0\.0\.1|localhost|Host头|Host 头|HTTPS|JWT|Kubernetes|命令注入|越权|SQL|XSS|工具回执|当前环境|扫描|攻击|防御|审计', re.I)
+SSRF = re.compile(r'SSRF|URL抓取|URL 获取|127\.0\.0\.1|localhost|Host头|Host 头|DNS rebinding|DNS 重绑定', re.I)
+SSRF_KB = ('已提供的本地知识条目 KB-SSRF-001（仅为防御性检查清单，不能证明具体环境已验证）：\n'
+           '解析后检查所有 IPv4/IPv6，拒绝回环、私网、链路本地、多播、保留和 IPv4-mapped 地址；\n'
+           '连接前绑定已校验 IP，防止 DNS rebinding；每次重定向重新解析和复检；\n'
+           '不信任 Host、X-Forwarded-Host、X-Real-IP 决定目标；限制协议、端口、超时、响应大小和重定向次数。')
 
 def policy_guard(messages, answer):
     user='\n'.join(m.get('content','') for m in messages if m.get('role')=='user')
@@ -41,6 +46,8 @@ def main():
             req=json.loads(raw); msgs=req.get('messages') or []
             user='\n'.join(m.get('content','') for m in msgs if m.get('role')=='user')
             use_cyber=bool(SECURITY.search(user))
+            if SSRF.search(user):
+                msgs = list(msgs) + [{'role':'system','content':SSRF_KB}]
             model, tokenizer=(cyber, cyber_tok) if use_cyber else (base, tok)
             ans=generate(model, tokenizer, prompt=prompt_for(tokenizer,msgs), max_tokens=max(1,min(int(req.get('max_tokens',400)),1400)), sampler=make_sampler(temp=float(req.get('temperature',0))), verbose=False)
             ans=policy_guard(msgs, ans)
