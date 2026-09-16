@@ -37,8 +37,15 @@
       "actual": "accept",
       "reason": "ok",
       "passed": true
+    },
+    {
+      "name": "ordinary-knowledge-fixture",
+      "expected": "accept",
+      "actual": "accept",
+      "reason": "ok",
+      "passed": true
     }
   ],
-  "passed": 5,
-  "total": 5
+  "passed": 6,
+  "total": 6
 }
