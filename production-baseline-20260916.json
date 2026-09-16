@@ -1,0 +1,8 @@
+{
+  "timestamp": "2026-09-16T14:11:44.509218+00:00",
+  "base": "/Users/jiehan/models/Qwen3-4B-mlx-4bit-phase3-wrapper",
+  "adapter": "/Users/jiehan/models/qwen-cyber-adapter-phase5-best120",
+  "adapter_tree_sha256": "0649c10b48df57c43d5e0228ba13eaf5e6f9a44ed2ee40e5fdc767b0e8e40eac",
+  "api_port": 18765,
+  "status": "production_baseline"
+}
