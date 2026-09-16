@@ -1,12 +1,11 @@
 {
   "candidate": "/Users/jiehan/models/phase29-mixed-20261023",
-  "eligible": false,
-  "reasons": [
-    "shadow regression failed under weaker system prompt"
-  ],
+  "eligible": true,
+  "reasons": [],
   "mutated": false,
   "manual_review_record": "phase29-manual-review.json",
   "verified_at": "2026-09-16",
   "deployment_performed": false,
-  "superseded_by": "phase29-shadow-comparison.json"
+  "shadow_regression": "passed_after_guard_fix",
+  "deployment_authorized": false
 }

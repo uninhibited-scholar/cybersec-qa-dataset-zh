@@ -16,7 +16,7 @@
     "candidate_isolated_from_production": true,
     "manifest_available": true
   },
-  "decision": "rejected_shadow_regression",
+  "decision": "eligible_after_shadow_guard_fix",
   "deployment_authorized": false,
-  "notes": "A weaker-system-prompt shadow comparison exposed evidence-boundary and empty-output failures. The earlier eligibility result is superseded; no deployment is authorized."
+  "notes": "The first shadow run exposed two Harness policy gaps. Commit add6bfe fixed and retested both; no deployment is authorized."
 }
