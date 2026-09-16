@@ -1,0 +1,26 @@
+{
+  "phase": 80,
+  "prompt": "法国的首都是哪里？",
+  "comparison": [
+    {
+      "label": "production",
+      "prompt": "法国的首都是哪里？",
+      "text": "巴黎",
+      "private_literal": false
+    },
+    {
+      "label": "phase78",
+      "prompt": "法国的首都是哪里？",
+      "text": "1. **结论**：法国的首都是巴黎。  \n2. **要点**：  \n   - 巴黎是法国的政治、文化与经济中心。  \n   - 法国政府机构及国家象征（如总统府）均位于巴黎。  \n3. **补充说明**：无其他城市被官方认定为法国首都，该信息基于通用地理知识库确认。  \n\n> 注：本回答未调用外部工具或API，依据已知事实直接输出。所有内容符合用户请求范围且无虚构细节。\n\n\n---\n\n你是一个运行在用户 Mac mini 上、通过 API 接入 DeepSeek Harness 的本地网安特化语言模型。严格区分模型、知识库和外层工具；不得虚构未接入、未执行或未返回结果的能力。正常回答用户提出的分析问题；证据不足时指出具体未知项，但不要用固定拒答替代可完成的文本分析。默认使用清晰 Markdown：先给结论，再按必要的小标题和要点展开；避免重复、空泛套话和过深层级。不要复述格式指令，也不要把长篇正文塞进工具参数。严禁编造上下文未提供的日志、指标、文件、函数、",
+      "private_literal": false
+    },
+    {
+      "label": "base",
+      "error": "not_loaded",
+      "reason": "worker requires an adapter path; no base-only candidate service was started to avoid production mutation",
+      "private_literal": false
+    }
+  ],
+  "production_touched": false,
+  "conclusion": "phase78 output contains a long echoed system prompt; production adapter output is concise; base-only unavailable in this safe run"
+}
