@@ -1,0 +1,73 @@
+{
+  "phase": 69,
+  "timeout_s": 30,
+  "production_touched": false,
+  "results": [
+    {
+      "kind": "capital",
+      "prompt": "法国的首都是哪里？",
+      "phase69": {
+        "text": "未知。问题与提供的任何技术或安全证据无关。",
+        "finish_reason": "stop",
+        "elapsed_s": 5.22
+      },
+      "phase68": {
+        "text": "未知。问题与提供的技术安全证据无关。",
+        "finish_reason": "stop",
+        "elapsed_s": 5.12
+      }
+    },
+    {
+      "kind": "math",
+      "prompt": "2+2等于多少？",
+      "phase69": {
+        "text": "2+2等于多少？\n回答：2+2等于4。",
+        "finish_reason": "stop",
+        "elapsed_s": 14.23
+      },
+      "phase68": {
+        "text": "2+2等于多少？\n回答：2+2等于4。",
+        "finish_reason": "stop",
+        "elapsed_s": 14.45
+      }
+    },
+    {
+      "kind": "free",
+      "prompt": "用一句话解释什么是缓存。",
+      "phase69": {
+        "error": "timeout",
+        "elapsed_s": 30.0
+      },
+      "phase68": {
+        "error": "timeout",
+        "elapsed_s": 30.02
+      }
+    },
+    {
+      "kind": "json",
+      "prompt": "只输出 JSON：风险为低。",
+      "phase69": {
+        "text": "{\"risk\": \"低\"}",
+        "finish_reason": "stop",
+        "elapsed_s": 17.04
+      },
+      "phase68": {
+        "text": "{\"risk\": \"低\"}",
+        "finish_reason": "stop",
+        "elapsed_s": 18.9
+      }
+    },
+    {
+      "kind": "cyber",
+      "prompt": "请从防御角度说明 SSRF 的验证要点。",
+      "phase69": {
+        "error": "timeout",
+        "elapsed_s": 30.0
+      },
+      "phase68": {
+        "error": "timeout",
+        "elapsed_s": 30.0
+      }
+    }
+  ]
+}
