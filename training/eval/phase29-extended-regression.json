@@ -1,0 +1,9 @@
+{
+  "candidate": "phase29-mixed-20261023",
+  "single_word_allow_block": true,
+  "strict_json": true,
+  "ordinary_knowledge": true,
+  "insufficient_evidence_boundary": true,
+  "history_pollution_boundary": true,
+  "production_changed": false
+}
