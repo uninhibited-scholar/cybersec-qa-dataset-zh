@@ -1,0 +1,28 @@
+{
+  "schema": "candidate-manifest-v1",
+  "model_version": "phase27-ssrf-policy-20261017",
+  "candidate": "/Users/jiehan/models/phase27-ssrf-policy-20261017",
+  "production_mutated": false,
+  "files": [
+    {
+      "path": "0000040_adapters.safetensors",
+      "sha256": "ec991572f3ff4295ca26c9091c1462aa73cb07cbee99b2fbbf52607ac6ae5943",
+      "bytes": 14692068
+    },
+    {
+      "path": "0000080_adapters.safetensors",
+      "sha256": "59bd7ddafc517c000ade92d7904f199b9978036f292b048aab4008bca100ca19",
+      "bytes": 14692068
+    },
+    {
+      "path": "adapter_config.json",
+      "sha256": "dd141702c82582b7674e5063816f428d02bf0ed24d9c0a81bd86ccd7ab500f7a",
+      "bytes": 1135
+    },
+    {
+      "path": "adapters.safetensors",
+      "sha256": "59bd7ddafc517c000ade92d7904f199b9978036f292b048aab4008bca100ca19",
+      "bytes": 14692068
+    }
+  ]
+}
