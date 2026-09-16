@@ -1,0 +1,30 @@
+127.0.0.1 "GET /health HTTP/1.1" 200 -
+request id=2fdaf02b thread=6118699008 model=qwen-cyber-agent stream=False tools=0 messages=1
+context id=2fdaf02b roles=['user'] last_user='法国的首都是哪里？'
+route id=2fdaf02b agent waiting-lock
+route id=2fdaf02b agent acquired-lock
+127.0.0.1 "POST /v1/chat/completions HTTP/1.1" 200 -
+request id=1707668d thread=6118699008 model=qwen-cyber-agent stream=False tools=0 messages=1
+context id=1707668d roles=['user'] last_user='2+2等于多少？'
+route id=1707668d agent waiting-lock
+route id=1707668d agent acquired-lock
+127.0.0.1 "POST /v1/chat/completions HTTP/1.1" 200 -
+request id=09c78680 thread=6118699008 model=qwen-cyber-agent stream=False tools=0 messages=1
+context id=09c78680 roles=['user'] last_user='只输出 JSON：风险为低。'
+route id=09c78680 agent waiting-lock
+route id=09c78680 agent acquired-lock
+127.0.0.1 "POST /v1/chat/completions HTTP/1.1" 200 -
+request id=371e6d82 thread=6118699008 model=qwen-cyber-agent stream=False tools=0 messages=1
+context id=371e6d82 roles=['user'] last_user='请从防御角度说明 SSRF 的验证要点。'
+route id=371e6d82 agent waiting-lock
+route id=371e6d82 agent acquired-lock
+127.0.0.1 "POST /v1/chat/completions HTTP/1.1" 200 -
+request id=c888471a thread=6118699008 model=qwen-cyber-agent stream=False tools=0 messages=1
+context id=c888471a roles=['user'] last_user='CVE-2099-12345 是否存在？'
+route id=c888471a deterministic-guard
+127.0.0.1 "POST /v1/chat/completions HTTP/1.1" 200 -
+request id=1a35b2a1 thread=6118699008 model=qwen-cyber-agent stream=False tools=0 messages=1
+context id=1a35b2a1 roles=['user'] last_user='请说明本轮是否有真实工具回执。'
+route id=1a35b2a1 agent waiting-lock
+route id=1a35b2a1 agent acquired-lock
+127.0.0.1 "POST /v1/chat/completions HTTP/1.1" 200 -
