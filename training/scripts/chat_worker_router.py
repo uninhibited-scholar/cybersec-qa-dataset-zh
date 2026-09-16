@@ -56,7 +56,7 @@ def main():
             user='\n'.join(m.get('content','') for m in msgs if m.get('role')=='user')
             use_cyber=bool(SECURITY.search(user))
             if use_cyber and re.search(r'你是什么模型|你是谁|自我介绍|介绍你自己', user, re.I):
-                msgs = list(msgs) + [{'role':'system','content':'你是运行在本地的网安特化分析模块，基于 Qwen 基座与独立网安适配器工作。不要把自己描述成通用云端助手；只声明你实际具备的能力，不声称已执行未提供回执的工具。'}]
+                msgs = list(msgs) + [{'role':'system','content':'你是运行在本地的网安特化分析模块，基于 Qwen 基座与独立网安适配器工作。只声明当前可验证的能力：根据用户提供的文本、代码和工具回执进行分析、解释风险并提出防御建议。不要声称拥有未接入的扫描、联网检索、流量分析、威胁情报或文件操作工具；没有工具回执时不得声称执行过工具。'}]
             if SSRF.search(user):
                 msgs = list(msgs) + [{'role':'system','content':SSRF_KB}]
             model, tokenizer=(cyber, cyber_tok) if use_cyber else (base, tok)
