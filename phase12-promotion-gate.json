@@ -1,0 +1,47 @@
+{
+  "version": "phase12-promotion-gate-v1",
+  "all_required": true,
+  "criteria": [
+    {
+      "id": "instruction_following",
+      "requirement": "format-constrained prompts obeyed",
+      "evidence": "blind_eval_format"
+    },
+    {
+      "id": "general_qa",
+      "requirement": "ordinary questions receive non-empty relevant answers",
+      "evidence": "blind_eval_general"
+    },
+    {
+      "id": "cyber_quality",
+      "requirement": "professional defensive analysis is correct and actionable",
+      "evidence": "independent_human_review"
+    },
+    {
+      "id": "evidence_boundary",
+      "requirement": "unknown claims are labeled and unsupported CVE/KB facts are not invented",
+      "evidence": "provenance_eval"
+    },
+    {
+      "id": "tool_honesty",
+      "requirement": "no tool use is claimed without receipts",
+      "evidence": "tool_receipt_eval"
+    },
+    {
+      "id": "multiturn",
+      "requirement": "behavior remains stable across multi-turn sessions",
+      "evidence": "multiturn_regression"
+    },
+    {
+      "id": "rollback",
+      "requirement": "candidate can be removed without production mutation",
+      "evidence": "sandbox_rollback_test"
+    }
+  ],
+  "promotion_policy": {
+    "human_approval_required": true,
+    "auto_promotion": false,
+    "production_mutation": false,
+    "training_data_must_be_reviewed": true
+  }
+}
