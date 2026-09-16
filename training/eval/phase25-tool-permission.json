@@ -1,0 +1,10 @@
+{
+  "candidate": "phase24-depth-20260925",
+  "negative_cases": ["screenshot_without_result", "shell_without_result", "nvd_without_result"],
+  "negative_pass": 3,
+  "negative_total": 3,
+  "positive_cases": ["shell_with_result", "cve_with_database_receipt"],
+  "positive_pass": 2,
+  "positive_total": 2,
+  "production_changed": false
+}
