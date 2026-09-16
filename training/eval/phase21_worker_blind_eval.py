@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Blind regression for the current isolated worker candidate."""
-import json, subprocess, time
+import json, os, subprocess, time
 from pathlib import Path
 
 REMOTE = __import__('os').environ.get('CYBER_REMOTE', 'jiehan@192.168.31.212')
@@ -29,9 +29,16 @@ CASES = [
 
 def ask(question):
     payload = json.dumps({'messages':[{'role':'system','content':SYSTEM},{'role':'user','content':question}], 'max_tokens':260, 'temperature':0}, ensure_ascii=False)
-    cmd = ['ssh','-o','ConnectTimeout=5',REMOTE,
-           f'CYBER_MODEL_PATH={MODEL} CYBER_ADAPTER_PATH={ADAPTER} {PY} {WORKER}']
-    p = subprocess.run(cmd, input=payload+'\n', text=True, capture_output=True, timeout=90)
+    if REMOTE == 'direct':
+        cmd = [PY, WORKER]
+        env = os.environ.copy()
+        env.update({'CYBER_MODEL_PATH': MODEL, 'CYBER_ADAPTER_PATH': ADAPTER})
+    else:
+        cmd = ['ssh','-o','ConnectTimeout=5',REMOTE,
+               f'CYBER_MODEL_PATH={MODEL} CYBER_ADAPTER_PATH={ADAPTER} {PY} {WORKER}']
+        env = None
+    p = subprocess.run(cmd, input=payload+'\n', text=True, capture_output=True,
+                       timeout=90, env=env)
     lines = [x for x in p.stdout.splitlines() if x.strip()]
     return json.loads(lines[-1])['answer'] if lines and lines[-1].startswith('{') else p.stderr[-500:]
 
