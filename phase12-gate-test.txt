@@ -1,0 +1,1 @@
+phase12 static gate test: 5/5 gates and 5/5 invariants passed
