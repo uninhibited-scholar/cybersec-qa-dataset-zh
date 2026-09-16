@@ -1,0 +1,24 @@
+model: /Users/jiehan/models/Qwen3-4B-mlx-4bit-phase3-wrapper
+train: true
+data: /Users/jiehan/datasets/cybersec-phase62-corrections
+fine_tune_type: lora
+mask_prompt: true
+num_layers: 4
+batch_size: 1
+grad_accumulation_steps: 2
+iters: 24
+learning_rate: 5.0e-8
+max_seq_length: 2048
+grad_checkpoint: true
+adapter_path: /Users/jiehan/models/phase62-corrections-20260916
+save_every: 6
+steps_per_report: 1
+steps_per_eval: 6
+val_batches: 2
+test: true
+test_batches: 2
+seed: 20260916
+lora_parameters:
+  rank: 8
+  scale: 20.0
+  dropout: 0.0
