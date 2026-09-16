@@ -4,7 +4,7 @@
 Default mode is a non-mutating dry run. Production changes require a human
 to pass --confirm-production after the approval report is eligible.
 """
-import argparse, hashlib, json, shutil, time
+import argparse, hashlib, json, shutil, sys, time
 from pathlib import Path
 
 def sha(path):
@@ -43,4 +43,4 @@ def main():
     result.update({'mode':'confirmed-switch','backup':str(backup),'mutated':True})
     print(json.dumps(result,indent=2))
 
-if __name__=='__main__': main()
+if __name__=='__main__': sys.exit(main())
