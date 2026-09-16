@@ -81,6 +81,10 @@ def main():
                     ans='SQL 注入是将不受信任输入拼接进 SQL 语句而改变查询语义。防御重点是参数化查询、输入约束和最小数据库权限；应在授权测试环境中用回归用例验证。'
                 else:
                     ans='我没有生成可核验的回答；请提供具体问题、代码或工具回执，我会基于这些证据进行网安分析。'
+            # Normalize two observed accidental English insertions in free-form
+            # Chinese answers; do not alter structured outputs or technical tokens.
+            if use_cyber and not (ans.strip().startswith('{') or ans.strip() in {'allow','block','yes','no'}):
+                ans=ans.replace('Manipulate','操纵').replace('Defender','防御方')
             ans=policy_guard(msgs, ans)
             print(json.dumps({'ok':True,'route':'cyber' if use_cyber else 'base','answer':ans},ensure_ascii=False),flush=True)
         except Exception as exc:
