@@ -1,0 +1,28 @@
+*** Begin Patch
+*** Update File: /Users/jiehan/cyber-agent/chat_worker_v2.py
+@@
+ import json
+ import os
++import re
+ import sys
+@@
+ def render_prompt(tokenizer, messages, tools):
+@@
+     return tokenizer.apply_chat_template(messages, tools=tools or None,
+         tokenize=False, add_generation_prompt=True, enable_thinking=False)
++
++def enforce_evidence_stop(messages, answer):
++    """Stop unsupported elaboration after a terminal abstention."""
++    user_text = "\n".join(m.get("content", "") for m in messages if m.get("role") == "user")
++    scoped = bool(re.search(r"CVE[-\u2010-\u2015]?\d|\bKB[- ]?\d|原文|真实存在|是否存在|当前环境|查过|数据库", user_text, re.I))
++    abstain = bool(re.match(r"\s*(无法核验|无法确认|不能确认|不能核验|无法证明|不能提供)", answer or ""))
++    if not (scoped and abstain):
++        return answer
++    first = re.split(r"(?:\r?\n){2,}|\r?\n|(?<=[。！？])\s+", answer.strip(), maxsplit=1)[0]
++    return first.strip()
+@@
+             answer = generate(model, tokenizer, prompt=prompt,
+                 max_tokens=max(1, min(int(req.get('max_tokens', 400)), 1400)),
+                 sampler=make_sampler(temp=float(req.get('temperature', 0))), verbose=False)
++            answer = enforce_evidence_stop(req.get('messages') or [], answer)
+*** End Patch
