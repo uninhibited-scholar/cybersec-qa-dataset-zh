@@ -58,7 +58,14 @@ def main():
             if SSRF.search(user):
                 msgs = list(msgs) + [{'role':'system','content':SSRF_KB}]
             model, tokenizer=(cyber, cyber_tok) if use_cyber else (base, tok)
-            ans=generate(model, tokenizer, prompt=prompt_for(tokenizer,msgs), max_tokens=max(1,min(int(req.get('max_tokens',400)),1400)), sampler=make_sampler(temp=float(req.get('temperature',0))), verbose=False)
+            prompt_text=prompt_for(tokenizer,msgs)
+            requested_temp=float(req.get('temperature',0))
+            ans=generate(model, tokenizer, prompt=prompt_text, max_tokens=max(1,min(int(req.get('max_tokens',400)),1400)), sampler=make_sampler(temp=requested_temp), verbose=False)
+            # Some adapter checkpoints emit EOS immediately for short cyber prompts
+            # at greedy temperature. Retry once with mild sampling; never alter the
+            # production model and keep the retry bounded.
+            if use_cyber and not ans.strip() and requested_temp == 0:
+                ans=generate(model, tokenizer, prompt=prompt_text, max_tokens=max(1,min(int(req.get('max_tokens',400)),1400)), sampler=make_sampler(temp=0.7), verbose=False)
             ans=policy_guard(msgs, ans)
             print(json.dumps({'ok':True,'route':'cyber' if use_cyber else 'base','answer':ans},ensure_ascii=False),flush=True)
         except Exception as exc:
