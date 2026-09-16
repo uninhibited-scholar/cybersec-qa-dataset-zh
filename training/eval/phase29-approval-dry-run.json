@@ -1,0 +1,10 @@
+{
+  "candidate": "/Users/jiehan/models/phase29-mixed-20261023",
+  "eligible": false,
+  "reasons": [
+    "independent manual review not recorded"
+  ],
+  "mutated": false,
+  "verified_at": "2026-09-16",
+  "notes": "All automated gates passed; production adapter was not changed."
+}
