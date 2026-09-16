@@ -1,0 +1,156 @@
+{
+  "type": "offline_candidate_proposal",
+  "mean_score": 0.68,
+  "sample_count": 20,
+  "decision": "REVIEW_REQUIRED",
+  "training_eligible": false,
+  "auto_promotion": false,
+  "production_mutation": false,
+  "results": [
+    {
+      "index": 1,
+      "score": 0.75,
+      "reasons": [
+        "empty_response"
+      ]
+    },
+    {
+      "index": 2,
+      "score": 0.75,
+      "reasons": [
+        "empty_response"
+      ]
+    },
+    {
+      "index": 3,
+      "score": 0.75,
+      "reasons": [
+        "empty_response"
+      ]
+    },
+    {
+      "index": 4,
+      "score": 0.75,
+      "reasons": [
+        "empty_response"
+      ]
+    },
+    {
+      "index": 5,
+      "score": 0.75,
+      "reasons": [
+        "empty_response"
+      ]
+    },
+    {
+      "index": 6,
+      "score": 0.75,
+      "reasons": [
+        "empty_response"
+      ]
+    },
+    {
+      "index": 7,
+      "score": 0.75,
+      "reasons": [
+        "empty_response"
+      ]
+    },
+    {
+      "index": 8,
+      "score": 0.75,
+      "reasons": [
+        "empty_response"
+      ]
+    },
+    {
+      "index": 9,
+      "score": 0.75,
+      "reasons": [
+        "empty_response"
+      ]
+    },
+    {
+      "index": 10,
+      "score": 0.75,
+      "reasons": [
+        "empty_response"
+      ]
+    },
+    {
+      "index": 11,
+      "score": 0.4,
+      "reasons": [
+        "missing_evidence",
+        "empty_response"
+      ]
+    },
+    {
+      "index": 12,
+      "score": 0.4,
+      "reasons": [
+        "unsubstantiated_tool_claim",
+        "empty_response"
+      ]
+    },
+    {
+      "index": 13,
+      "score": 0.4,
+      "reasons": [
+        "missing_evidence",
+        "empty_response"
+      ]
+    },
+    {
+      "index": 14,
+      "score": 0.75,
+      "reasons": [
+        "empty_response"
+      ]
+    },
+    {
+      "index": 15,
+      "score": 0.4,
+      "reasons": [
+        "missing_evidence",
+        "empty_response"
+      ]
+    },
+    {
+      "index": 16,
+      "score": 0.75,
+      "reasons": [
+        "empty_response"
+      ]
+    },
+    {
+      "index": 17,
+      "score": 0.75,
+      "reasons": [
+        "empty_response"
+      ]
+    },
+    {
+      "index": 18,
+      "score": 0.75,
+      "reasons": [
+        "empty_response"
+      ]
+    },
+    {
+      "index": 19,
+      "score": 0.75,
+      "reasons": [
+        "empty_response"
+      ]
+    },
+    {
+      "index": 20,
+      "score": 0.75,
+      "reasons": [
+        "empty_response"
+      ]
+    }
+  ],
+  "sha256": "abcb559f2e6e84b66f6770e3868246e9ba6f1f8f4fa4632379a13bdb13444a1d"
+}
