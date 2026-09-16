@@ -15,3 +15,5 @@
 批准器进一步加入生产 API 回归要求后，当前结果明确为 `eligible: false`（原因：生产 API 回归失败）。这阻止候选在生产端 guard 修复前被误部署。
 
 对生产脚本与 canary 副本做最小性审计：仅两处规则列表增加三个短语，模型路径、端口和权限均未变化；生产脚本仍未修改。审计结果已保存到 `phase29-canary-patch-audit.json`。
+
+运行态复核：生产与 canary 健康检查均为 `ok`，两个 API 进程和 MLX worker 均在运行，canary 最近日志无错误，`phase29-canary` tmux 会话存在。生产状态未改变。

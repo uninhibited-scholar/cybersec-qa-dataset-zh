@@ -1,0 +1,12 @@
+{
+  "production_port": 18765,
+  "canary_port": 18766,
+  "production_health": {"status": "ok", "model": "qwen-cyber-local"},
+  "canary_health": {"status": "ok", "model": "qwen-cyber-local"},
+  "production_api_process": true,
+  "canary_api_process": true,
+  "worker_process": true,
+  "canary_recent_errors": false,
+  "tmux_session": "phase29-canary",
+  "production_changed": false
+}
