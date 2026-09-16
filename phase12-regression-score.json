@@ -1,0 +1,17 @@
+{
+  "type": "offline_candidate_proposal",
+  "mean_score": 1.0,
+  "sample_count": 1,
+  "decision": "REVIEW_REQUIRED",
+  "training_eligible": false,
+  "auto_promotion": false,
+  "production_mutation": false,
+  "results": [
+    {
+      "index": 1,
+      "score": 1.0,
+      "reasons": []
+    }
+  ],
+  "sha256": "04c895f329c13739cc2d066164282e1559b47444436bad590653ed6d237cbeef"
+}
