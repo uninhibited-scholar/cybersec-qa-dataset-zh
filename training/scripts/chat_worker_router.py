@@ -22,7 +22,7 @@ SSRF_KB = ('已提供的本地知识条目 KB-SSRF-001（仅为防御性检查�
 def policy_guard(messages, answer):
     user='\n'.join(m.get('content','') for m in messages if m.get('role')=='user')
     has_tool_result=any(m.get('role') in {'tool','function'} for m in messages)
-    tool_request=bool(re.search(r'调用|执行.*命令|执行.*shell|运行.*shell|读取屏幕|截图|查询.*NVD|查询.*数据库|搜索.*网页|web_search|screenshot', user, re.I))
+    tool_request=bool(re.search(r'调用|执行.*命令|执行.*工具|执行.*shell|运行.*shell|扫描工具|读取屏幕|截图|查询.*NVD|查询.*数据库|搜索.*网页|web_search|screenshot', user, re.I))
     if tool_request and not has_tool_result:
         return '当前消息没有提供任何工具回执，因此我没有执行命令、读取屏幕或查询外部数据库，不能编造返回码、搜索结果或环境结论。'
     if re.search(r'上一轮|历史消息|历史记录|记为已确认', user) and re.search(r'CVE|NVD|漏洞|后门', user, re.I):
@@ -30,7 +30,10 @@ def policy_guard(messages, answer):
     if re.search(r'扫描工具|工具结果|返回码|调用.*工具|成功调用', user) and answer.strip() in {'无','没有','无。','没有。'}:
         return '本轮没有提供任何工具调用或返回回执，因此我不能声称调用过扫描工具，也不能列出命令、返回码或发现。'
     scoped=bool(re.search(r'CVE[-\u2010-\u2015]?\d|\bKB[- ]?\d|原文|真实存在|是否存在|当前环境|查过|数据库', user, re.I))
+    missing_source=bool(re.search(r'(没有|未|尚未|并无).{0,12}(公告|链接|证据|来源)', user, re.I))
     hit=re.search(r'(无法核验|无法确认|不能确认|不能核验|无法证明|不能提供)', answer or '')
+    if scoped and missing_source and not hit:
+        return '当前没有提供可核验的公告、链接或独立证据，无法确认该安全结论。'
     if scoped and hit:
         answer=answer[hit.start():]
         first=re.split(r'[。！？]',answer.strip(),maxsplit=1)[0]
