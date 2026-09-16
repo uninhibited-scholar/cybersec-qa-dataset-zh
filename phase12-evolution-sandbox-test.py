@@ -5,7 +5,8 @@ from pathlib import Path
 def main():
     with tempfile.TemporaryDirectory() as d:
         root = Path(d)
-        p = subprocess.run(["python3", "phase12-evolution-sandbox.py", "--root", str(root), "--candidate", "candidate"], capture_output=True, text=True, check=True)
+        script = str(Path(__file__).with_name("phase12_evolution_sandbox.py"))
+        p = subprocess.run(["python3", script, "--root", str(root), "--candidate", "candidate"], capture_output=True, text=True, check=True)
         report = json.loads(p.stdout)
         assert report["decision"] == "PROMOTION_BLOCKED"
         assert report["offline_only"] and report["rollback_available"]
