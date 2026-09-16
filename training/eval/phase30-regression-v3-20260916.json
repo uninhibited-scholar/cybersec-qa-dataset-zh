@@ -1,0 +1,8 @@
+{
+  "candidate": "/Users/jiehan/models/phase30-mixed-20260916",
+  "cases": 6,
+  "passed": 6,
+  "checks": ["short_cyber_answer", "strict_yes_no", "unsupported_cve_refusal", "history_boundary", "tool_negative_refusal", "bounded_identity"],
+  "production_changed": false,
+  "deployment_decision": "blocked_pending_full_blind_and_api_gate"
+}
