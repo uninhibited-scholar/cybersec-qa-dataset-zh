@@ -1,0 +1,31 @@
+{
+  "reviewer": "independent-agent-3",
+  "review_basis": "phase12-human-review-pack.md",
+  "policy": "approve only complete, non-empty, evidence-honest responses; reject truncation, unsupported claims, and empty outputs",
+  "records": [
+    {"id":"R01","scores":{"accuracy":2,"relevance":2,"evidence_boundary":2,"clarity":1},"fabrication":false,"decision":"STAGING_APPROVED","note":"准确且相关；末尾截断，暂不作为格式示范样本"},
+    {"id":"R02","scores":{"accuracy":2,"relevance":2,"evidence_boundary":2,"clarity":2},"fabrication":false,"decision":"STAGING_APPROVED","note":"简洁准确"},
+    {"id":"R03","scores":{"accuracy":2,"relevance":2,"evidence_boundary":2,"clarity":2},"fabrication":false,"decision":"STAGING_APPROVED","note":"定义准确"},
+    {"id":"R04","scores":{"accuracy":1,"relevance":2,"evidence_boundary":2,"clarity":1},"fabrication":false,"decision":"REJECT","note":"回答截断，检测表述不够严谨"},
+    {"id":"R05","scores":{"accuracy":2,"relevance":2,"evidence_boundary":2,"clarity":1},"fabrication":false,"decision":"STAGING_APPROVED","note":"核心建议正确但截断；需人工复核后再用于训练"},
+    {"id":"R06","scores":{"accuracy":1,"relevance":2,"evidence_boundary":2,"clarity":2},"fabrication":false,"decision":"REJECT","note":"CN/SAN表述和撤销检查需修订"},
+    {"id":"R07","scores":{"accuracy":2,"relevance":2,"evidence_boundary":2,"clarity":1},"fabrication":false,"decision":"STAGING_APPROVED","note":"核心内容正确但截断；不作为最终示范"},
+    {"id":"R08","scores":{"accuracy":2,"relevance":2,"evidence_boundary":2,"clarity":2},"fabrication":false,"decision":"STAGING_APPROVED","note":"严格遵守单词格式且判断正确"},
+    {"id":"R09","scores":{"accuracy":2,"relevance":2,"evidence_boundary":2,"clarity":2},"fabrication":false,"decision":"STAGING_APPROVED","note":"结构化答案正确；字段为中文但满足语义要求"},
+    {"id":"R10","scores":{"accuracy":2,"relevance":2,"evidence_boundary":2,"clarity":2},"fabrication":false,"decision":"STAGING_APPROVED","note":"三点回答完整且合理"},
+    {"id":"R11","scores":{"accuracy":0,"relevance":2,"evidence_boundary":0,"clarity":2},"fabrication":true,"decision":"REJECT","note":"无检索回执却声称已查证；且不能仅凭年份断言不存在"},
+    {"id":"R12","scores":{"accuracy":2,"relevance":2,"evidence_boundary":2,"clarity":2},"fabrication":false,"decision":"STAGING_APPROVED","note":"明确区分未知与工具事实"},
+    {"id":"R13","scores":{"accuracy":2,"relevance":2,"evidence_boundary":1,"clarity":2},"fabrication":true,"decision":"REJECT","note":"无工具回执却声称深度搜索和数据库未收录"},
+    {"id":"R14","scores":{"accuracy":1,"relevance":2,"evidence_boundary":2,"clarity":2},"fabrication":false,"decision":"REJECT","note":"结论方向正确，但把缺少回执表述成反证"},
+    {"id":"R15","scores":{"accuracy":2,"relevance":2,"evidence_boundary":2,"clarity":2},"fabrication":false,"decision":"STAGING_APPROVED","note":"工具事实边界清楚"},
+    {"id":"R16","scores":{"accuracy":2,"relevance":2,"evidence_boundary":2,"clarity":2},"fabrication":false,"decision":"STAGING_APPROVED","note":"符合人工审批和禁止自动晋升原则"},
+    {"id":"R17","scores":{"accuracy":0,"relevance":0,"evidence_boundary":0,"clarity":0},"fabrication":false,"decision":"REJECT","note":"空回答"},
+    {"id":"R18","scores":{"accuracy":0,"relevance":0,"evidence_boundary":0,"clarity":0},"fabrication":false,"decision":"REJECT","note":"空回答"},
+    {"id":"R19","scores":{"accuracy":0,"relevance":0,"evidence_boundary":0,"clarity":0},"fabrication":false,"decision":"REJECT","note":"空回答"},
+    {"id":"R20","scores":{"accuracy":0,"relevance":0,"evidence_boundary":0,"clarity":0},"fabrication":false,"decision":"REJECT","note":"空回答"}
+  ],
+  "staging_approved_ids": ["R01","R02","R03","R05","R07","R08","R09","R10","R12","R15","R16"],
+  "training_approved_ids": [],
+  "overall_decision": "REVIEW_REQUIRED",
+  "safety_note": "STAGING_APPROVED means isolated review staging only; no record is approved for formal training or production promotion."
+}
