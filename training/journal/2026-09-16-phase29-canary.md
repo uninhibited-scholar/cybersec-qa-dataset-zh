@@ -19,3 +19,5 @@
 运行态复核：生产与 canary 健康检查均为 `ok`，两个 API 进程和 MLX worker 均在运行，canary 最近日志无错误，`phase29-canary` tmux 会话存在。生产状态未改变。
 
 重启后的回归发现并修复了 canary 的 CVE 无来源规则；复测返回确定性的证据不足拒答。生产端口仍未修改。
+
+按 API 规定的 `user → tool` 顺序补做正向工具闭环，canary 正确复述所提供回执并声明“未由模型执行”；结果保存于 `phase29-canary-tool-positive-v2.json`。
