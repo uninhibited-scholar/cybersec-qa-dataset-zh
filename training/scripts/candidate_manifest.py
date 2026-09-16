@@ -50,8 +50,9 @@ def main() -> None:
     if not args.root.is_dir():
         raise SystemExit("candidate directory missing")
     if args.verify:
-        report = {"verified": not verify(args.root, json.loads(args.verify.read_text(encoding="utf-8"))),
-                  "errors": verify(args.root, json.loads(args.verify.read_text(encoding="utf-8"))),
+        errors = verify(args.root, json.loads(args.verify.read_text(encoding="utf-8")))
+        report = {"verified": not errors,
+                  "errors": errors,
                   "mutated": False}
     else:
         report = build(args.root, args.model_version)

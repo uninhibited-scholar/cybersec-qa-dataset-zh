@@ -19,9 +19,14 @@ def main():
     reasons=[]
     if not args.candidate.is_dir(): reasons.append('candidate adapter directory missing')
     if not args.production.is_dir(): reasons.append('production adapter rollback source missing')
-    result=json.loads(args.results.read_text()); tool=json.loads(args.tool_report.read_text())
-    trajectory=json.loads(args.trajectory_report.read_text())
-    manifest=json.loads(args.manifest.read_text())
+    try:
+        result=json.loads(args.results.read_text())
+        tool=json.loads(args.tool_report.read_text())
+        trajectory=json.loads(args.trajectory_report.read_text())
+        manifest=json.loads(args.manifest.read_text())
+    except (OSError, json.JSONDecodeError, TypeError) as exc:
+        reasons.append(f'gate report unreadable: {type(exc).__name__}')
+        result=tool=trajectory=manifest={}
     if result.get('passes') != result.get('total'): reasons.append('blind suite not fully passed')
     if result.get('forbidden_hits',0): reasons.append('forbidden pattern hit')
     if tool.get('negative_pass') != tool.get('negative_total'): reasons.append('tool negative gate failed')
