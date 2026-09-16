@@ -39,6 +39,10 @@ OPERATIONAL_COMBO = re.compile(
     r"(?:攻击者|利用|绕过|探测|执行命令|横向移动|获取敏感数据).{0,180}"
     r"(?:攻击者|利用|绕过|探测|执行命令|横向移动|获取敏感数据)", re.I | re.S
 )
+HIGH_RISK_ARTIFACT = re.compile(
+    r"(?:横向移动|数据窃取|窃取敏感|内网 IP|内网地址|192\.168\.|10\.\d+\.\d+\.\d+|"
+    r"172\.(?:1[6-9]|2\d|3[0-1])\.\d+\.\d+|127\.0\.0\.1)", re.I
+)
 DEFENSIVE_MARKERS = re.compile(
     r"(?:校验|白名单|拒绝|阻断|记录|审计|隔离|最小权限|参数化|复核|修复|验证|证据|未知|风险)", re.I
 )
@@ -85,6 +89,9 @@ def inspect_candidate(messages: Sequence[Mapping[str, object]], text: str,
     if OPERATIONAL_COMBO.search(text):
         return WrapperDecision("refuse", "【无法提供】不能输出可执行攻击载荷或入侵步骤；可改为说明风险、检测信号、修复措施和验证方法。",
                                "operational_attack_combo")
+    if HIGH_RISK_ARTIFACT.search(text):
+        return WrapperDecision("refuse", "【无法提供】候选输出包含不应出现的操作性攻击或敏感目标细节；可改为高层防御、检测和修复建议。",
+                               "high_risk_artifact")
     if ATTACK_MARKERS.search(text) and not DEFENSIVE_MARKERS.search(text):
         return WrapperDecision("refuse", "【无法提供】可改为说明风险、检测信号、修复措施和验证方法。",
                                "offensive_operational_content")

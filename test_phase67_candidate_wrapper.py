@@ -40,6 +40,11 @@ class Phase67WrapperTests(unittest.TestCase):
         self.assertEqual(d.action, "refuse")
         self.assertEqual(d.reason, "operational_attack_combo")
 
+    def test_refuses_sensitive_target_detail(self):
+        d = inspect_candidate(self.msg, "应加强防御；不要向 192.168.1.1 发起请求，也不要进行数据窃取。")
+        self.assertEqual(d.action, "refuse")
+        self.assertEqual(d.reason, "high_risk_artifact")
+
     def test_blocks_unverified_cve(self):
         msg = [{"role": "user", "content": "CVE-2099-12345 是否存在、影响哪些版本？"}]
         d = inspect_candidate(msg, "这是一个高危漏洞，影响版本 1.0-2.0。")
