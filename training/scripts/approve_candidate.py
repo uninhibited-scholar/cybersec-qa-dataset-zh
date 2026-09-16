@@ -2,6 +2,7 @@
 """Non-mutating deployment gate; a candidate can never self-approve."""
 import argparse, json
 from pathlib import Path
+from candidate_manifest import verify as verify_manifest
 
 def main():
     ap=argparse.ArgumentParser()
@@ -9,6 +10,8 @@ def main():
     ap.add_argument('--tool-report',type=Path,required=True)
     ap.add_argument('--trajectory-report',type=Path,required=True,
                     help='Phase 26 offline self-evolution gate report')
+    ap.add_argument('--manifest',type=Path,required=True,
+                    help='candidate-manifest.json for the evaluated candidate')
     ap.add_argument('--candidate',type=Path,required=True)
     ap.add_argument('--production',type=Path,required=True)
     ap.add_argument('--manual-review',action='store_true')
@@ -18,6 +21,7 @@ def main():
     if not args.production.is_dir(): reasons.append('production adapter rollback source missing')
     result=json.loads(args.results.read_text()); tool=json.loads(args.tool_report.read_text())
     trajectory=json.loads(args.trajectory_report.read_text())
+    manifest=json.loads(args.manifest.read_text())
     if result.get('passes') != result.get('total'): reasons.append('blind suite not fully passed')
     if result.get('forbidden_hits',0): reasons.append('forbidden pattern hit')
     if tool.get('negative_pass') != tool.get('negative_total'): reasons.append('tool negative gate failed')
@@ -27,6 +31,8 @@ def main():
     if trajectory.get('production_mutated') is not False: reasons.append('trajectory report says production mutated')
     if trajectory.get('deployment_attempted') is not False: reasons.append('trajectory report attempted deployment')
     if trajectory.get('failures'): reasons.append('trajectory report contains failures')
+    manifest_errors = verify_manifest(args.candidate, manifest)
+    if manifest_errors: reasons.extend(f'manifest: {item}' for item in manifest_errors)
     if not args.manual_review: reasons.append('independent manual review not recorded')
     decision={'candidate':str(args.candidate),'eligible':not reasons,'reasons':reasons,'mutated':False}
     print(json.dumps(decision,ensure_ascii=False,indent=2))
