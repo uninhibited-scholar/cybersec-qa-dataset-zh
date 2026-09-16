@@ -29,6 +29,8 @@ def policy_guard(messages, answer):
         return '历史消息或模型自述不是可核验来源；当前没有独立证据，无法确认该安全结论。'
     if re.search(r'扫描工具|工具结果|返回码|调用.*工具|成功调用', user) and answer.strip() in {'无','没有','无。','没有。'}:
         return '本轮没有提供任何工具调用或返回回执，因此我不能声称调用过扫描工具，也不能列出命令、返回码或发现。'
+    if has_tool_result and answer.strip() and '未由模型执行' not in answer:
+        answer='以下内容仅基于调用方提供的工具回执，未由模型执行工具：\n'+answer
     scoped=bool(re.search(r'CVE[-\u2010-\u2015]?\d|\bKB[- ]?\d|原文|真实存在|是否存在|当前环境|查过|数据库', user, re.I))
     missing_source=bool(re.search(r'(没有|未|尚未|并无).{0,12}(公告|链接|证据|来源)', user, re.I))
     hit=re.search(r'(无法核验|无法确认|不能确认|不能核验|无法证明|不能提供)', answer or '')
@@ -54,7 +56,7 @@ def main():
         try:
             req=json.loads(raw); msgs=req.get('messages') or []
             user='\n'.join(m.get('content','') for m in msgs if m.get('role')=='user')
-            use_cyber=bool(SECURITY.search(user))
+            use_cyber=bool(SECURITY.search(user)) or any(m.get('role') in {'tool','function'} for m in msgs)
             identity_request=bool(re.search(r'你是什么模型|你是谁|自我介绍|介绍你自己|能力和限制|功能和限制', user, re.I))
             if identity_request:
                 print(json.dumps({'ok':True,'route':'cyber','answer':'我是运行在本地的网安特化分析模块，基于 Qwen 基座与独立网安适配器构建。我能分析你提供的文本、代码和工具回执，解释风险并提出防御建议；我不会联网检索、执行扫描或声称使用未提供回执的工具。'},ensure_ascii=False),flush=True)
