@@ -1,0 +1,19 @@
+{
+  "candidate": "/Users/jiehan/models/phase30-mixed-20260916",
+  "base_model": "/Users/jiehan/models/Qwen3-4B-official-chatml-phase10",
+  "adapter_sha256": "69e9b41b3b198a16e35a07f75a844e6338c237ec1df96989e94f59b4323e3bec",
+  "training_log": "/Users/jiehan/cyber-agent/phase30-mixed-20260916.log",
+  "blind_evidence": [
+    "phase30-blind-smoke-20260916.json",
+    "phase30-regression-v2-20260916.json",
+    "phase30-regression-v3-20260916.json"
+  ],
+  "status": "candidate_isolated",
+  "deployment_eligible": false,
+  "blocking_requirements": [
+    "complete blind evaluation",
+    "authenticated API regression",
+    "manual review of capability and provenance claims"
+  ],
+  "production_changed": false
+}
