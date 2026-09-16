@@ -1,0 +1,14 @@
+{
+  "production_base": {
+    "path": "/Users/jiehan/models/Qwen3-4B-mlx-4bit-phase3-wrapper",
+    "sha256": "c1aa3ad3d3d5eeea4c9993f2f9808ce4d61669d4a1e57eb1211db423b363928c"
+  },
+  "production_adapter": {
+    "path": "/Users/jiehan/models/qwen-cyber-adapter-phase5-best120/adapters.safetensors",
+    "sha256": "442b695dcf5b32bde5b156cea6748dc8835844b6c239c703f268b7156a0fcbda"
+  },
+  "candidate_adapter": {
+    "path": "/Users/jiehan/models/phase37-instruction-repair-20260916/adapters.safetensors",
+    "sha256": "067428e56315db87b967dcee8d8d798ec8c44854511d1c1a8a7c94f87007d36e"
+  }
+}
