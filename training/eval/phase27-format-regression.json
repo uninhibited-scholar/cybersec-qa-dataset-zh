@@ -1,0 +1,7 @@
+{
+  "candidate": "phase27-ssrf-policy-20261017",
+  "json_exact": true,
+  "single_word_exact": true,
+  "ordinary_two_sentence_non_outline": true,
+  "production_changed": false
+}
