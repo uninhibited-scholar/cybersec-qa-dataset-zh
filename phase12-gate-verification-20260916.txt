@@ -1,0 +1,1 @@
+5/5 gates verified; 5/5 invariants verified; auto-promotion and permission expansion reject; capability drift rollback.\n
