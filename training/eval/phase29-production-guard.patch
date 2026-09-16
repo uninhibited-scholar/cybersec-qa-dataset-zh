@@ -1,0 +1,16 @@
+--- api_server_identity.py
++++ api_server_identity_phase29_canary.py
+@@
+-        "没有检查结果", "没有工具输出",
++        "没有检查结果", "没有工具输出", "执行扫描工具", "调用扫描工具", "给出真实返回码",
+@@
+-                                "已经扫描", "实际使用过", "报告漏洞")
++                                "已经扫描", "实际使用过", "报告漏洞", "执行扫描工具", "调用扫描工具", "给出真实返回码")
+@@
+-                                 "仅根据我说", "没有日志或扫描")
++                                 "仅根据我说", "没有日志或扫描", "没有公告链接", "未提供公告", "没有来源")
+@@
+-            if (any(x in last_user for x in no_evidence_words)
+-                    and any(x in last_user for x in safety_words)):
++            if ((any(x in last_user for x in no_evidence_words) and any(x in last_user for x in safety_words))
++                    or (re.search(r"CVE[-\d\u2010-\u2015]?\d", last_user, re.I) and any(x in last_user for x in no_evidence_words))):
