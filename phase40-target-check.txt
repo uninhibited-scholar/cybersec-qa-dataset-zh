@@ -1,0 +1,1 @@
+Phase40 target check: password output explicitly rejects reversible/AES storage and recommends Argon2id/scrypt/PBKDF2 + unique salt; France general QA remains substantive. Candidate worker only; production untouched.
