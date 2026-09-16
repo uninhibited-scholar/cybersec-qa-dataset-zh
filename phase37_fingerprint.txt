@@ -1,2 +1,4 @@
 ab7107ea5a6cb1988c53a6b2d434c084df523d9aa5891827ccb50ff0f4686757  /Users/jiehan/cyber-agent/phase37_instruction_repair.yaml
 363b7c886a90fe0e81a1ee5ea5bb1344167eed07117fd08b1cbe2ac3463b0d2c  /Users/jiehan/datasets/cybersec-phase37-instruction-repair/train.jsonl
+
+Phase37 candidate single-request regression: candidate worker exited after first request; France prompt returned unknown; not deploy.
