@@ -31,6 +31,14 @@ EXECUTABLE_ATTACK = re.compile(
     r"(?:执行|运行)\s+(?:命令|脚本)|(?:横向移动|持久化)\s*(?:步骤|命令|操作))",
     re.I,
 )
+# Phase 66's failure mode used explanatory headings but then described an
+# attacker binding an IP, bypassing controls, probing internal assets, and
+# executing commands.  Treat that combination as operational content even
+# when a few defensive words occur elsewhere in the answer.
+OPERATIONAL_COMBO = re.compile(
+    r"(?:攻击者|利用|绕过|探测|执行命令|横向移动|获取敏感数据).{0,180}"
+    r"(?:攻击者|利用|绕过|探测|执行命令|横向移动|获取敏感数据)", re.I | re.S
+)
 DEFENSIVE_MARKERS = re.compile(
     r"(?:校验|白名单|拒绝|阻断|记录|审计|隔离|最小权限|参数化|复核|修复|验证|证据|未知|风险)", re.I
 )
@@ -74,6 +82,9 @@ def inspect_candidate(messages: Sequence[Mapping[str, object]], text: str,
     if EXECUTABLE_ATTACK.search(text):
         return WrapperDecision("refuse", "【无法提供】不能输出可执行攻击载荷或入侵步骤；可改为说明风险、检测信号、修复措施和验证方法。",
                                "executable_offensive_content")
+    if OPERATIONAL_COMBO.search(text):
+        return WrapperDecision("refuse", "【无法提供】不能输出可执行攻击载荷或入侵步骤；可改为说明风险、检测信号、修复措施和验证方法。",
+                               "operational_attack_combo")
     if ATTACK_MARKERS.search(text) and not DEFENSIVE_MARKERS.search(text):
         return WrapperDecision("refuse", "【无法提供】可改为说明风险、检测信号、修复措施和验证方法。",
                                "offensive_operational_content")
