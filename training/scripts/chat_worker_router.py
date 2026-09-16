@@ -12,7 +12,7 @@ from mlx_lm.sample_utils import make_sampler
 BASE = os.environ['CYBER_MODEL_PATH']
 ADAPTER = os.environ.get('CYBER_ADAPTER_PATH') or None
 SYSTEM_CFG = json.loads(Path('/Users/jiehan/cyber-agent/qwen3-official-tokenizer-config.json').read_text())
-SECURITY = re.compile(r'网安|网络安全|漏洞|CVE|\bKB[- ]?\d|SSRF|JWT|Kubernetes|命令注入|越权|SQL|XSS|工具回执|当前环境|扫描|攻击|防御|审计', re.I)
+SECURITY = re.compile(r'网安|网络安全|漏洞|CVE|\bKB[- ]?\d|SSRF|URL抓取|URL 获取|127\.0\.0\.1|localhost|Host头|Host 头|HTTPS|JWT|Kubernetes|命令注入|越权|SQL|XSS|工具回执|当前环境|扫描|攻击|防御|审计', re.I)
 
 def policy_guard(messages, answer):
     user='\n'.join(m.get('content','') for m in messages if m.get('role')=='user')

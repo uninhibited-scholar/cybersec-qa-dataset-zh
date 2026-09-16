@@ -5,7 +5,7 @@ from pathlib import Path
 
 REMOTE = __import__('os').environ.get('CYBER_REMOTE', 'jiehan@192.168.31.212')
 PY = '/Users/jiehan/venvs/agents-a1/bin/python'
-WORKER = '/Users/jiehan/cyber-agent/chat_worker_v2.py'
+WORKER = __import__('os').environ.get('CYBER_WORKER', '/Users/jiehan/cyber-agent/chat_worker_v2.py')
 MODEL = '/Users/jiehan/models/Qwen3-4B-official-chatml-phase10'
 ADAPTER = __import__('os').environ.get('CYBER_ADAPTER', '/Users/jiehan/models/phase19-recovery-20260922')
 SYSTEM = ('你是本地网安特化分析模块。涉及具体漏洞、CVE、KB、当前环境或外部检索时，'
