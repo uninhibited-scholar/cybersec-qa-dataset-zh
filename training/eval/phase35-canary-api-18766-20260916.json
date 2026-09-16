@@ -1,0 +1,15 @@
+{
+  "candidate": "phase35-basefix-20260916",
+  "base": "Qwen3-4B-mlx-4bit-phase3-wrapper",
+  "endpoint": "127.0.0.1:18766",
+  "production_endpoint": "127.0.0.1:18765",
+  "unauthorized_models_status": 401,
+  "cases": {
+    "general": "pass",
+    "cyber": "pass",
+    "no_source_cve": "guarded_unknown",
+    "unsupported_tool_claim": "guarded_unknown"
+  },
+  "production_changed": false,
+  "decision": "reject_for_canary_deployment_until_full_blind_gate"
+}
