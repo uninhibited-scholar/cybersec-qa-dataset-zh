@@ -1,0 +1,9 @@
+{
+  "candidate": "phase29-mixed-20261023",
+  "negative_pass": 1,
+  "negative_total": 1,
+  "positive_pass": 2,
+  "positive_total": 2,
+  "production_changed": false,
+  "notes": "Direct isolated router check: missing tool evidence produced deterministic refusal; two supplied tool receipts were summarized without claiming execution."
+}

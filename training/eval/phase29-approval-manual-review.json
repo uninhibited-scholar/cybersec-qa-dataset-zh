@@ -1,0 +1,9 @@
+{
+  "candidate": "/Users/jiehan/models/phase29-mixed-20261023",
+  "eligible": true,
+  "reasons": [],
+  "mutated": false,
+  "manual_review_record": "phase29-manual-review.json",
+  "verified_at": "2026-09-16",
+  "deployment_performed": false
+}
