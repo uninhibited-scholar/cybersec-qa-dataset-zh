@@ -1,0 +1,16 @@
+model: /Users/jiehan/models/Qwen3-4B-mlx-4bit-phase3-wrapper
+resume_adapter_file: /Users/jiehan/models/qwen-cyber-adapter-phase5-best120
+data: /Users/jiehan/datasets/cybersec-phase64-corrections
+fine_tune_type: lora
+num_layers: 4
+lora_parameters:
+  rank: 8
+  scale: 20.0
+  dropout: 0.0
+learning_rate: 1.0e-7
+iters: 40
+batch_size: 1
+grad_accumulation_steps: 2
+max_seq_length: 2048
+save_every: 10
+seed: 20260916
