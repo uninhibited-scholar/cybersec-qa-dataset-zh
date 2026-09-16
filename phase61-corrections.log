@@ -1,0 +1,45 @@
+Calling `python -m mlx_lm.lora...` directly is deprecated. Use `mlx_lm.lora...` or `python -m mlx_lm lora ...` instead.
+Loading configuration file /Users/jiehan/cyber-agent/phase61-corrections.yaml
+Loading pretrained model
+Loading datasets
+Training
+Trainable parameters: 0.046% (1.835M/4022.468M)
+Starting training..., iters: 20
+Calculating loss...:   0%|          | 0/2 [00:00<?, ?it/s]Calculating loss...:  50%|█████     | 1/2 [00:00<00:00,  3.43it/s]Calculating loss...: 100%|██████████| 2/2 [00:00<00:00,  2.96it/s]Calculating loss...: 100%|██████████| 2/2 [00:00<00:00,  3.02it/s]
+Iter 1: Val loss 5.267, Val took 0.680s
+Iter 1: Train loss 4.254, Learning Rate 1.000e-07, It/sec 1.955, Tokens/sec 117.311, Trained Tokens 60, Peak mem 2.605 GB
+Iter 2: Train loss 5.769, Learning Rate 1.000e-07, It/sec 2.777, Tokens/sec 102.767, Trained Tokens 97, Peak mem 2.605 GB
+Iter 3: Train loss 5.227, Learning Rate 1.000e-07, It/sec 2.847, Tokens/sec 125.250, Trained Tokens 141, Peak mem 2.605 GB
+Iter 4: Train loss 4.609, Learning Rate 1.000e-07, It/sec 2.755, Tokens/sec 132.243, Trained Tokens 189, Peak mem 2.605 GB
+Calculating loss...:   0%|          | 0/2 [00:00<?, ?it/s]Calculating loss...:  50%|█████     | 1/2 [00:00<00:00,  2.54it/s]Calculating loss...: 100%|██████████| 2/2 [00:00<00:00,  3.36it/s]Calculating loss...: 100%|██████████| 2/2 [00:00<00:00,  3.20it/s]
+Iter 5: Val loss 5.256, Val took 0.630s
+Iter 5: Train loss 5.377, Learning Rate 1.000e-07, It/sec 2.993, Tokens/sec 110.757, Trained Tokens 226, Peak mem 2.605 GB
+Iter 5: Saved adapter weights to /Users/jiehan/models/phase61-corrections-20260916/adapters.safetensors and /Users/jiehan/models/phase61-corrections-20260916/0000005_adapters.safetensors.
+Iter 6: Train loss 4.602, Learning Rate 1.000e-07, It/sec 2.916, Tokens/sec 139.961, Trained Tokens 274, Peak mem 2.605 GB
+Iter 7: Train loss 4.249, Learning Rate 1.000e-07, It/sec 1.897, Tokens/sec 113.821, Trained Tokens 334, Peak mem 2.626 GB
+Iter 8: Train loss 5.363, Learning Rate 1.000e-07, It/sec 2.857, Tokens/sec 105.701, Trained Tokens 371, Peak mem 2.626 GB
+Iter 9: Train loss 5.227, Learning Rate 1.000e-07, It/sec 2.866, Tokens/sec 126.084, Trained Tokens 415, Peak mem 2.626 GB
+Calculating loss...:   0%|          | 0/2 [00:00<?, ?it/s]Calculating loss...:  50%|█████     | 1/2 [00:00<00:00,  2.70it/s]Calculating loss...: 100%|██████████| 2/2 [00:00<00:00,  3.37it/s]Calculating loss...: 100%|██████████| 2/2 [00:00<00:00,  3.25it/s]
+Iter 10: Val loss 5.259, Val took 0.620s
+Iter 10: Train loss 5.757, Learning Rate 1.000e-07, It/sec 2.966, Tokens/sec 109.747, Trained Tokens 452, Peak mem 2.626 GB
+Iter 10: Saved adapter weights to /Users/jiehan/models/phase61-corrections-20260916/adapters.safetensors and /Users/jiehan/models/phase61-corrections-20260916/0000010_adapters.safetensors.
+Iter 11: Train loss 4.608, Learning Rate 1.000e-07, It/sec 2.901, Tokens/sec 139.231, Trained Tokens 500, Peak mem 2.626 GB
+Iter 12: Train loss 5.223, Learning Rate 1.000e-07, It/sec 2.859, Tokens/sec 125.808, Trained Tokens 544, Peak mem 2.626 GB
+Iter 13: Train loss 4.257, Learning Rate 1.000e-07, It/sec 1.936, Tokens/sec 116.140, Trained Tokens 604, Peak mem 2.626 GB
+Iter 14: Train loss 5.755, Learning Rate 1.000e-07, It/sec 2.861, Tokens/sec 105.849, Trained Tokens 641, Peak mem 2.626 GB
+Calculating loss...:   0%|          | 0/2 [00:00<?, ?it/s]Calculating loss...:  50%|█████     | 1/2 [00:00<00:00,  3.90it/s]Calculating loss...: 100%|██████████| 2/2 [00:00<00:00,  3.15it/s]Calculating loss...: 100%|██████████| 2/2 [00:00<00:00,  3.24it/s]
+Iter 15: Val loss 5.257, Val took 0.621s
+Iter 15: Train loss 5.361, Learning Rate 1.000e-07, It/sec 2.972, Tokens/sec 109.959, Trained Tokens 678, Peak mem 2.626 GB
+Iter 15: Saved adapter weights to /Users/jiehan/models/phase61-corrections-20260916/adapters.safetensors and /Users/jiehan/models/phase61-corrections-20260916/0000015_adapters.safetensors.
+Iter 16: Train loss 4.600, Learning Rate 1.000e-07, It/sec 2.910, Tokens/sec 139.658, Trained Tokens 726, Peak mem 2.626 GB
+Iter 17: Train loss 4.246, Learning Rate 1.000e-07, It/sec 1.956, Tokens/sec 117.370, Trained Tokens 786, Peak mem 2.626 GB
+Iter 18: Train loss 5.216, Learning Rate 1.000e-07, It/sec 2.883, Tokens/sec 126.864, Trained Tokens 830, Peak mem 2.626 GB
+Iter 19: Train loss 5.748, Learning Rate 1.000e-07, It/sec 2.898, Tokens/sec 107.240, Trained Tokens 867, Peak mem 2.626 GB
+Calculating loss...:   0%|          | 0/2 [00:00<?, ?it/s]Calculating loss...:  50%|█████     | 1/2 [00:00<00:00,  2.60it/s]Calculating loss...: 100%|██████████| 2/2 [00:00<00:00,  3.37it/s]Calculating loss...: 100%|██████████| 2/2 [00:00<00:00,  3.22it/s]
+Iter 20: Val loss 5.257, Val took 0.625s
+Iter 20: Train loss 5.361, Learning Rate 1.000e-07, It/sec 2.773, Tokens/sec 102.586, Trained Tokens 904, Peak mem 2.626 GB
+Iter 20: Saved adapter weights to /Users/jiehan/models/phase61-corrections-20260916/adapters.safetensors and /Users/jiehan/models/phase61-corrections-20260916/0000020_adapters.safetensors.
+Saved final weights to /Users/jiehan/models/phase61-corrections-20260916/adapters.safetensors.
+Testing
+Calculating loss...:   0%|          | 0/2 [00:00<?, ?it/s]Calculating loss...:  50%|█████     | 1/2 [00:00<00:00,  3.59it/s]Calculating loss...: 100%|██████████| 2/2 [00:00<00:00,  3.59it/s]Calculating loss...: 100%|██████████| 2/2 [00:00<00:00,  3.59it/s]
+Test loss 3.066, Test ppl 21.460.
