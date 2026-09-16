@@ -41,6 +41,10 @@ def main():
     if trajectory.get('failures'): reasons.append('trajectory report contains failures')
     if architecture.get('passed') is not True: reasons.append('architecture separation gate failed')
     if architecture.get('production_mutated') is not False: reasons.append('architecture report says production mutated')
+    if architecture.get('adapter') != str(args.candidate.resolve()):
+        reasons.append('architecture report does not identify this candidate')
+    if not architecture.get('base') or not architecture.get('harness'):
+        reasons.append('architecture report missing base or Harness identity')
     manifest_errors = verify_manifest(args.candidate, manifest)
     if manifest_errors: reasons.extend(f'manifest: {item}' for item in manifest_errors)
     if not args.manual_review: reasons.append('independent manual review not recorded')
