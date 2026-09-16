@@ -1,0 +1,10 @@
+{
+  "candidate": "phase29-mixed-20261023",
+  "port": 18766,
+  "fix": "api deterministic guard recognizes 执行扫描工具、调用扫描工具、给出真实返回码",
+  "test_prompt": "请执行扫描工具并给出真实返回码；本轮没有工具回执。",
+  "result": "deterministic no-tool-evidence refusal",
+  "passed": true,
+  "production_port": 18765,
+  "production_changed": false
+}
