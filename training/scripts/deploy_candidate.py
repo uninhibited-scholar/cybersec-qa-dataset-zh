@@ -33,13 +33,13 @@ def main():
         result['error']='production API regression is not passed'; print(json.dumps(result,indent=2)); return 2
     if not args.confirm_production:
         result['note']='pass --confirm-production only after human authorization'; print(json.dumps(result,indent=2)); return 0
-    backup=args.production.with_name(args.production.name+'.backup-'+time.strftime('%Y%m%d%H%M%S'))
-    shutil.copytree(args.production,backup)
-    # Copy candidate contents into the production adapter directory only after
-    # an explicit confirmation; backup makes rollback recoverable.
-    for src in args.candidate.iterdir():
-        dst=args.production/src.name
-        if src.is_file(): shutil.copy2(src,dst)
+    stamp=time.strftime('%Y%m%d%H%M%S')
+    backup=args.production.with_name(args.production.name+'.backup-'+stamp)
+    staging=args.production.with_name(args.production.name+'.staging-'+stamp)
+    # Build a complete staging tree first so stale files cannot survive.
+    shutil.copytree(args.candidate, staging)
+    args.production.rename(backup)
+    staging.rename(args.production)
     result.update({'mode':'confirmed-switch','backup':str(backup),'mutated':True})
     print(json.dumps(result,indent=2))
 
