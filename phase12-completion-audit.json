@@ -1,0 +1,43 @@
+{
+  "generated_at": "2026-09-16T14:11:13.783971+00:00",
+  "overall": "INCOMPLETE",
+  "items": [
+    {
+      "id": "instruction_following",
+      "status": "partial",
+      "evidence": "phase59/58 gates"
+    },
+    {
+      "id": "general_qa",
+      "status": "partial",
+      "evidence": "phase58 nonempty screen"
+    },
+    {
+      "id": "cyber_quality",
+      "status": "pending",
+      "evidence": "independent human review missing"
+    },
+    {
+      "id": "evidence_boundary",
+      "status": "partial",
+      "evidence": "phase59 gate; broader review missing"
+    },
+    {
+      "id": "tool_honesty",
+      "status": "partial",
+      "evidence": "phase59 gate; broader review missing"
+    },
+    {
+      "id": "multiturn",
+      "status": "pass",
+      "evidence": "phase57/59 multiturn regression"
+    },
+    {
+      "id": "rollback",
+      "status": "pass",
+      "evidence": "phase12 sandbox tests"
+    }
+  ],
+  "production_deployment": "BLOCKED",
+  "reason": "cyber_quality and independent professional evaluation remain pending"
+}
