@@ -1,0 +1,9 @@
+{
+  "candidates": [
+    {"id":"phase27-ssrf-policy-20261017","test_loss":4.349,"test_ppl":77.372,"blind_passes":12,"blind_total":12,"forbidden_hits":0,"decision":"retain"},
+    {"id":"phase28-format-20261022","test_loss":6.390,"test_ppl":596.086,"blind_passes":null,"blind_total":null,"forbidden_hits":null,"decision":"reject_capability_regression"},
+    {"id":"phase29-mixed-20261023","test_loss":4.517,"test_ppl":91.605,"blind_passes":12,"blind_total":12,"forbidden_hits":0,"extended_format":true,"decision":"best_candidate"}
+  ],
+  "production_candidate": "phase29-mixed-20261023",
+  "production_switched": false
+}
