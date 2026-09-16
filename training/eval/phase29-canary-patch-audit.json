@@ -1,0 +1,12 @@
+{
+  "production_sha256": "aead5246cf13ab041b1c99db907cb262bd5d9519bbdc00a22ea28040a21e9dfb",
+  "canary_sha256": "c32edf7188bd7b8f3512147d2f2f41826fa8fe0d6e2016b2dd62644513fbd07b",
+  "changed_rules": [
+    "evidence_absence recognizes 执行扫描工具、调用扫描工具、给出真实返回码",
+    "tool_claim_words recognizes 执行扫描工具、调用扫描工具、给出真实返回码"
+  ],
+  "model_paths_changed": false,
+  "port_or_permission_changed": false,
+  "production_modified": false,
+  "passed": true
+}

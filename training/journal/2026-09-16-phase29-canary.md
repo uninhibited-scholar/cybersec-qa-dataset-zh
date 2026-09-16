@@ -13,3 +13,5 @@
 批准器现已强制要求 canary API 回归报告。加入该必需闸门后，Phase29 重新检查返回 `eligible: true`、`mutated: false`；生产仍未切换。
 
 批准器进一步加入生产 API 回归要求后，当前结果明确为 `eligible: false`（原因：生产 API 回归失败）。这阻止候选在生产端 guard 修复前被误部署。
+
+对生产脚本与 canary 副本做最小性审计：仅两处规则列表增加三个短语，模型路径、端口和权限均未变化；生产脚本仍未修改。审计结果已保存到 `phase29-canary-patch-audit.json`。
