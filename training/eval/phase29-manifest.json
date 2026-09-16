@@ -1,0 +1,28 @@
+{
+  "schema": "candidate-manifest-v1",
+  "model_version": "phase29-mixed-20261023",
+  "candidate": "/Users/jiehan/models/phase29-mixed-20261023",
+  "production_mutated": false,
+  "files": [
+    {
+      "path": "0000040_adapters.safetensors",
+      "sha256": "284502ecf548a2a8b964e68ffe76f7e2ae4256dd6762f4c6f3fc3a14906d8d2c",
+      "bytes": 14692068
+    },
+    {
+      "path": "0000080_adapters.safetensors",
+      "sha256": "fc69a94a4d1df426bbdd54f14d245dd5ee25d645a4b44451ffbcf1de97e45fa7",
+      "bytes": 14692068
+    },
+    {
+      "path": "adapter_config.json",
+      "sha256": "688b0e70f8da434c9e9a3d4ea88352bdc2f0783b84efb8bca1e8e36b70895d07",
+      "bytes": 1136
+    },
+    {
+      "path": "adapters.safetensors",
+      "sha256": "fc69a94a4d1df426bbdd54f14d245dd5ee25d645a4b44451ffbcf1de97e45fa7",
+      "bytes": 14692068
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "failures": [],
+  "base": "/Users/jiehan/models/Qwen3-4B-official-chatml-phase10",
+  "adapter": "/Users/jiehan/models/phase29-mixed-20261023",
+  "harness": "/Users/jiehan/cyber-agent/chat_worker_router.py",
+  "production_mutated": false
+}
