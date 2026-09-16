@@ -6,4 +6,6 @@
 
 日志：`/Users/jiehan/cyber-agent/evals/phase29-blind/run.log`
 
-盲测结束后再读取结果并更新候选比较，不自动部署。
+盲测已完成：12/12 通过，禁止项命中 0。普通缓存问题能够正常回答；证据不足、虚构 CVE/KB/工具、历史污染等拒答边界通过；SSRF、JWT、Kubernetes 和代码审查题均产生了对应分析。结果已保存为 `training/eval/phase29-worker-blind-results.json`。
+
+这只是自动盲测，不等同于独立人工复核；候选仍不自动部署。
