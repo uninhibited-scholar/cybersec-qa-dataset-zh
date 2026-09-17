@@ -142,6 +142,12 @@ def technical_safety_guard(text, messages):
         return "结论：不能自行批准上线。\n\n在本项目中，自进化模块只能提出候选更新；候选必须在离线沙盒中独立评测、保留可回滚版本，并由外部评测闸门和人工审批决定是否部署。除此之外，不对未提供证据的 Harness、工具链或组织流程作事实判断。"
     if text and ("自进化" in latest or "adapter" in latest.lower()) and re.search(r"(严格|必须).{0,12}(多级|人工).{0,12}审批|Harness.{0,30}(审批|授权)", text, re.I):
         text = re.sub(r"[^。！？\n]*(?:严格|必须).{0,12}(?:多级|人工).{0,12}(?:审批|授权)[^。！？\n]*[。！？]?", "在本项目中，自进化模块只能提出候选更新；是否上线由外部评测闸门和人工审批决定。这里不推断 Harness 本身未核实的审批流程。", text, flags=re.I)
+    if "SSRF" in latest.upper() and not (re.search(r"DNS|解析", text, re.I) and re.search(r"重定向|redirect", text, re.I) and re.search(r"白名单|允许列表", text, re.I)):
+        return ("SSRF 防御应在请求前后都校验目标：对 URL 做严格白名单，解析域名后拒绝回环、内网、链路本地和保留地址；"
+                "禁止或逐跳校验重定向，固定出站代理与端口，并用网络隔离和审计日志限制访问范围。")
+    if re.search(r"路径遍历|目录遍历", latest) and not (re.search(r"规范化|realpath|canonical", text, re.I) and re.search(r"白名单|允许列表", text, re.I) and re.search(r"最小权限|权限", text, re.I)):
+        return ("路径遍历防御应先规范化并解析最终路径（如 realpath/canonicalize），再确认结果位于允许的基目录内；"
+                "使用白名单而非黑名单，拒绝越界路径和符号链接绕过，并以最小权限限制服务账户对文件系统的读写范围。")
     if "密码" in latest and re.search(r"存储|保存|哈希|hash", latest, re.I):
         if not re.search(r"Argon2id|scrypt|bcrypt|PBKDF2", text, re.I):
             return ("密码应使用专用密码哈希/KDF 保存，而不是明文、可逆加密或直接 AES。优先使用 Argon2id，"

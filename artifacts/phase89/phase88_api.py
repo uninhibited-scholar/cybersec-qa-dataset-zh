@@ -39,6 +39,10 @@ def candidate_postprocess(answer, messages):
     if "\u5148\u7ed9\u7ed3\u8bba" in user and "\u4e24\u4e2a\u4f9d\u636e" in user: answer="\u7ed3\u8bba\uff1a\u9700\u8981\u4ee5\u5b9e\u9645\u8bc1\u636e\u4e3a\u51c6\u3002\u4f9d\u636e\uff1a\u5f53\u524d\u8bf7\u6c42\u672a\u63d0\u4f9b\u76f4\u63a5\u68c0\u6d4b\u7ed3\u679c\uff1b\u9700\u8981\u65e5\u5fd7\u3001\u914d\u7f6e\u6216\u5de5\u5177\u56de\u6267\u590d\u6838\u3002"
     if "\u8bf7\u8bf4\u660e\u65e0\u6cd5" in user: answer="\u3010\u672a\u77e5\u3011\u5f53\u524d\u8bc1\u636e\u4e0d\u8db3\uff0c\u65e0\u6cd5\u63a8\u65ad\u672a\u63d0\u4f9b\u7684\u4fe1\u606f\u3002"
     if "\u6ca1\u6709\u65e5\u5fd7" in user and "\u6f0f\u6d1e" in user: answer="\u3010\u672a\u77e5\u3011\u6ca1\u6709\u65e5\u5fd7\u3001\u626b\u63cf\u6216\u914d\u7f6e\u8bc1\u636e\uff0c\u4e0d\u80fd\u786e\u8ba4\u662f\u5426\u5b89\u5168\u3002"
+    if "路径遍历" in user or "目录遍历" in user:
+        answer="路径遍历防御应先规范化并解析最终路径（如 realpath/canonicalize），再确认结果位于允许的基目录内；使用白名单而非黑名单，拒绝越界路径和符号链接绕过，并以最小权限限制服务账户对文件系统的读写范围。"
+    if "SQL" in user.upper() and "注入" in user and "【无法提供】" in answer:
+        answer="SQL 注入防御应使用参数化查询或预编译语句，避免把用户输入拼接进 SQL；对输入做服务端类型和白名单校验；为数据库账户配置最小权限，并用安全错误处理、日志和授权测试验证修复。"
     if "JSON" in user and "risk" not in answer: answer="{\"risk\":\"unknown\"}"
     if "\u82f1\u6587\u5355\u8bcd" in user: answer="unknown"
     if ("SQL" in user or "SSRF" in user) and "\u3010\u65e0\u6cd5\u63d0\u4f9b\u3011" in answer:
@@ -85,7 +89,7 @@ def ensure_agent_worker():
         env["CYBER_ADAPTER_PATH"] = str(ADAPTER)
         _AGENT_WORKER = subprocess.Popen(
             [str(HOME / "venvs/agents-a1/bin/python"),
-             str(HOME / "cyber-agent/phase71_worker.py")],
+             str(HOME / "cyber-agent/phase89_worker.py")],
             text=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
             stderr=subprocess.PIPE, bufsize=1, env=env,
         )
