@@ -1,0 +1,13 @@
+{
+  "candidate": "phase89-clean-retrain-20260917",
+  "production_mutated": false,
+  "behavioral_blind_gate": {"status": "pass", "cases": 20, "errors": 0, "empty": 0, "template_residue": 0, "dangerous_output": 0},
+  "semantic_regression": {"status": "pass", "core_cases": 5, "passed": 5},
+  "evidence_boundary": {"status": "pass", "basis": "serialized blind suite and targeted regression"},
+  "tool_honesty": {"status": "pass", "basis": "no-receipt capability cases"},
+  "rollback": {"status": "pass", "basis": "serialized canary restoration and Phase 12 sandbox"},
+  "memory_co_residency": {"status": "fail", "basis": "candidate plus production caused unsafe memory pressure"},
+  "independent_professional_review": {"status": "pending", "basis": "Phase 12 consensus requires review"},
+  "promotion": "BLOCKED_PENDING_INDEPENDENT_REVIEW_AND_EXPLICIT_HUMAN_APPROVAL",
+  "auto_promotion": false
+}
