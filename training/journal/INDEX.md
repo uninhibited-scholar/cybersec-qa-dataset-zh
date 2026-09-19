@@ -3,7 +3,7 @@
 ## Current status
 
 - Production (last verified 2026-09-19): Qwen3-4B phase3-wrapper base + `phase99-multiturn-candidate`; Mac mini API healthy on port 18765, unchanged.
-- Current evaluation track: Phase 107, with a local-only 320-case candidate suite (40 × 8 strata), separate answer keys, and two reference runtimes smoke-tested on the school A100 cluster.
+- Current evaluation track: Phase 107 v0.2, with a local-only 320-case suite (40 × 8 strata), separate answer keys, genuine structured multi-turn items, and two reference runtimes smoke-tested on the school A100 cluster.
 - Phase 107 rubric and matched inference protocol remain drafts; no Phase 107 prompt has been sent or scored. Do not use the suite until both are explicitly approved/frozen.
 - No Phase 107 training candidate exists yet. Historical Phase 31/33 candidate records remain archived below and are not the current evaluation target.
 
@@ -12,6 +12,7 @@
 - Phase 107 runtime readiness: `2026-09-19-phase107-runtime-readiness.md`.
 - Phase 107 static integrity recheck: `2026-09-19-phase107-static-recheck.md`.
 - Phase 107 comparison-protocol audit: `2026-09-19-phase107-protocol-audit.md`.
+- Phase 107 multi-turn schema correction: `2026-09-19-phase107-multiturn-schema.md`.
 - Phase 107 suite audit: `training/eval/phase107-private-suite-audit.md`.
 - Phase 107 scoring rubric draft: `training/eval/phase107-rubric-v0.1-draft.md`.
 - Phase 107 inference protocol draft: `training/eval/phase107-inference-protocol-v0.1-draft.md`.

@@ -33,6 +33,10 @@ def audit(path):
         by_category[case["category"]]["unique_cores"] = len({
             core(row["prompt"]) for row in cases if row["category"] == case["category"]
         })
+    multiturn_sequences = {
+        "\n".join(message["content"] for message in case.get("messages", []) if message.get("role") == "user").strip()
+        for case in cases if case.get("category") == "multiturn"
+    }
     return {
         "sha256": hashlib.sha256(raw).hexdigest(),
         "rows": len(cases),
@@ -41,6 +45,17 @@ def audit(path):
         "unique_normalized_cores": len(groups),
         "largest_duplicate_core_group": max(map(len, groups.values())),
         "category_counts": dict(sorted(by_category.items())),
+        "structured_multiturn_cases": sum(
+            case.get("category") == "multiturn"
+            and [m.get("role") for m in case.get("messages", [])] == ["user", "assistant", "user"]
+            for case in cases
+        ),
+        "unique_multiturn_user_sequences": len(multiturn_sequences),
+        "invalid_multiturn_cases": [
+            case.get("id") for case in cases
+            if case.get("category") == "multiturn"
+            and [m.get("role") for m in case.get("messages", [])] != ["user", "assistant", "user"]
+        ],
         "duplicate_core_groups": sum(len(v) > 1 for v in groups.values()),
         "note": "Normalization removes only known category wrappers and case-number prefixes; it is a targeted audit, not a general semantic-similarity proof.",
     }

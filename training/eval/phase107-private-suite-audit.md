@@ -2,7 +2,7 @@
 
 Date: 2026-09-19
 
-Status: private candidate set generated; rubric not frozen; no model scoring performed.
+Status: private candidate set v0.2 generated; rubric/protocol not frozen; no model scoring performed.
 
 ## Generation and integrity
 
@@ -12,8 +12,10 @@ Status: private candidate set generated; rubric not frozen; no model scoring per
 - Character 3/4/5-gram TF-IDF triage at the deliberately low 0.10 threshold flagged four pairs (maximum similarity 0.1237); each pair was manually inspected in the local private manifest. The flagged pairs are distinct decision contexts (including config metadata vs alert-rule metadata, SAML binding vs URL-fetch review, CSRF vs OAuth cookie behavior, and translation vs report summarization), not duplicate cases. This lexical check still cannot prove general semantic independence.
 - Answer keys: 320, stored separately from prompts and excluded from model inputs.
 - Source fixture SHA-256: `6c0e65be55826cd04f5f0e7be1ebd5fd290b0f3062ffff4cbd58e48eb1d45656`
-- Generated manifest SHA-256: `5f76a665febcb46f63c25c19556c1127cb603238cc046b7f8154fc8a9531d40d`
+- Generated v0.1 single-string manifest SHA-256 (superseded for execution): `5f76a665febcb46f63c25c19556c1127cb603238cc046b7f8154fc8a9531d40d`
+- Generated v0.2 manifest SHA-256: `6d75567be1ec32e1599951e98776625e93b4cc1826a269ff8b4f59304306d982`
 - Generated answer-key SHA-256: `37657febdddc089d0ff7153cb0c62bd06162ee3eff69feca8ffba9d20614ece5`
+- v0.2 uses an explicit `messages` sequence as the authoritative request field. All 320 single-turn items become one user message; the 40 multi-turn items are distinct ordered user/assistant/user conversations (40 unique user-message sequences). The original `prompt` is retained only as an audit/source field. The prior v0.1 generated artifact remains local and is not the execution manifest.
 
 ## Exact-overlap scan
 

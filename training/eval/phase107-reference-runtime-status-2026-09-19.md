@@ -23,7 +23,7 @@ The first GPT-OSS smoke attempt used the obsolete `--conversation` flag and exit
 
 ## Private-suite static recheck
 
-Before any model invocation, reran the committed audits against the current files. The 320-case manifest still has 320 unique IDs, exact prompts, and targeted normalized prompt cores; all eight strata have 40 cases. The separate answer-key file has 320 matching IDs. The overlap scan must be rooted at the parent `ni-a/` directory (one level above this repository) to include both this dataset repository and the sibling Phase train/valid/test JSONL files: this reproduced the recorded 188-file / 22,315-row scope, 21,946 indexed normalized strings, zero parse errors, zero unrecognized rows, and zero exact overlaps. The result remains limited to exact normalized matches in scanned local JSONL files; it is not a semantic-cleanliness or pretraining-contamination certification.
+Before any model invocation, reran the committed audits against the current v0.2 files. The 320-case manifest still has 320 unique IDs, exact source prompts, and targeted normalized prompt cores; all eight strata have 40 cases. All 40 multi-turn cases now contain actual ordered `user/assistant/user` messages. The separate answer-key file has 320 matching IDs. The v0.2 manifest SHA-256 is `6d75567be1ec32e1599951e98776625e93b4cc1826a269ff8b4f59304306d982`. The overlap scan must be rooted at the parent `ni-a/` directory (one level above this repository) to include both this dataset repository and the sibling Phase train/valid/test JSONL files: this reproduced the recorded 188-file / 22,315-row scope, 21,946 indexed normalized strings, zero parse errors, zero unrecognized rows, and zero exact overlaps. The result remains limited to exact normalized matches in scanned local JSONL files; it is not a semantic-cleanliness or pretraining-contamination certification.
 
 An initial diagnostic invocation using `.` as the scan root found only the 149 dataset batch files and was discarded as an incomplete scope. The verified parent-root run is authoritative. Raw cases and answer keys were not printed or changed.
 
@@ -31,7 +31,7 @@ An initial diagnostic invocation using `.` as the scan root found only the 149 d
 
 1. Runtime setup and neutral single-prompt smoke checks are complete for both references. Preserve the version/hash-pinned scripts and Slurm logs.
 2. The proposed inference protocol is documented at `training/eval/phase107-inference-protocol-v0.1-draft.md`; it explicitly distinguishes end-to-end endpoint comparison from raw model-weight parity because Phase 91 has worker-side guards/retries/post-processing.
-3. The protocol draft now specifies native reasoning mode for references (the smoke-only `--reasoning off` is not an evaluation setting), records extra samplers and seed limitations, and treats Phase 91 worker fallbacks as a disclosed endpoint-level asymmetry.
+3. The protocol draft now specifies native reasoning mode for references (the smoke-only `--reasoning off` is not an evaluation setting), records extra samplers and seed limitations, treats Phase 91 worker fallbacks as a disclosed endpoint-level asymmetry, and uses explicit `messages` (not the audit-only flat `prompt`) for multi-turn cases.
 4. Do not send or score the private Phase 107 suite until the draft rubric and shared-input protocol are explicitly approved/frozen. Provider/model-specific reasoning modes remain visible in the run manifest.
 
 ## Reproduction

@@ -15,21 +15,63 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 EVAL_DIR = ROOT / "training" / "eval"
 SOURCE = EVAL_DIR / "phase107-private-source-fixtures.json"
-CASES = EVAL_DIR / "phase107-private-cases.json"
-KEYS = EVAL_DIR / "phase107-answer-keys.json"
+CASES = EVAL_DIR / "phase107-private-cases-v0.2.json"
+KEYS = EVAL_DIR / "phase107-answer-keys-v0.2.json"
 ALLOWED = {
     "vulnerability_analysis", "detection_remediation", "threat_modeling",
     "code_review", "evidence_boundary", "multiturn", "tool_honesty",
     "prompt_injection",
 }
 SPACE = re.compile(r"\s+")
+ROUND_MARKER = re.compile(r"第\s*([12])\s*轮\s*[:：]")
+REQUEST_SPLIT = re.compile(r"[。！？]\s*请")
 
 
 def normalize(text):
     return SPACE.sub("", unicodedata.normalize("NFKC", text)).casefold()
 
 
-def build(require_full=False):
+def to_messages(category, prompt):
+    """Create the actual request sequence; keep source prompt separately for audit."""
+    if category != "multiturn":
+        return [{"role": "user", "content": prompt}]
+
+    markers = list(ROUND_MARKER.finditer(prompt))
+    first = next((m for m in markers if m.group(1) == "1"), None)
+    second = next((m for m in markers if m.group(1) == "2"), None)
+    if first is None:
+        raise ValueError("multiturn fixture must contain a first-round marker")
+
+    if second is not None:
+        first_context = prompt[first.end():second.start()].strip(" \t\r\n。！？")
+        followup = prompt[second.end():].strip()
+    else:
+        remainder = prompt[first.end():].strip()
+        split = REQUEST_SPLIT.search(remainder)
+        if split:
+            first_context = remainder[:split.start()].strip(" \t\r\n。！？")
+            followup = remainder[split.end() - 1:].strip()
+        else:
+            first_context = remainder.strip(" \t\r\n。！？")
+            followup = "请结合前一轮材料给出结论，并区分证据、推断与未知项。"
+
+    if not first_context or not followup:
+        raise ValueError("multiturn fixture must provide initial context and a follow-up task")
+
+    return [
+        {
+            "role": "user",
+            "content": f"第一轮材料：{first_context}。请先作阶段性判断，区分已知事实与未知项。",
+        },
+        {
+            "role": "assistant",
+            "content": "收到。我会把当前结论限定在已提供的材料内；未核实的信息继续标注为未知，并在收到后续材料时更新判断。",
+        },
+        {"role": "user", "content": f"第二轮：{followup}"},
+    ]
+
+
+def build(require_full=False, cases_path=CASES, keys_path=KEYS):
     source_bytes = SOURCE.read_bytes()
     fixtures = json.loads(source_bytes)
     if not isinstance(fixtures, list) or not fixtures:
@@ -62,11 +104,16 @@ def build(require_full=False):
         seen_fixtures.add(row["fixture_id"])
         counts[cat] += 1
         case_id = f"p107-{cat}-{counts[cat]:03d}"
+        messages = to_messages(cat, prompt)
+        message_bytes = json.dumps(messages, ensure_ascii=False, separators=(",", ":")).encode()
         prompt_hash = hashlib.sha256(n_prompt.encode()).hexdigest()
         cases.append({
             "id": case_id,
             "category": cat,
+            "suite_version": "phase107-v0.2",
             "prompt": prompt,
+            "messages": messages,
+            "conversation_sha256": hashlib.sha256(message_bytes).hexdigest(),
             "fixture_hash": prompt_hash,
             "provenance": "private-authored; offline synthetic fixture",
             "rubric_ref": case_id,
@@ -87,23 +134,47 @@ def build(require_full=False):
             raise ValueError(f"full suite requires 40/category; missing={missing}, counts={underfull}")
         if len(cases) < 320:
             raise ValueError(f"full suite requires >=320 cases, got {len(cases)}")
+        invalid_multiturn = [
+            row["id"] for row in cases
+            if row["category"] == "multiturn"
+            and [message["role"] for message in row["messages"]] != ["user", "assistant", "user"]
+        ]
+        if invalid_multiturn:
+            raise ValueError(f"multiturn cases must be real user/assistant/user sequences: {invalid_multiturn}")
+        multiturn_sequences = {
+            normalize("\n".join(message["content"] for message in row["messages"] if message["role"] == "user"))
+            for row in cases if row["category"] == "multiturn"
+        }
+        expected_multiturn = counts["multiturn"]
+        if len(multiturn_sequences) != expected_multiturn:
+            raise ValueError("multi-turn user-message sequences must be distinct")
 
-    CASES.write_text(json.dumps(cases, ensure_ascii=False, indent=2) + "\n")
-    KEYS.write_text(json.dumps(keys, ensure_ascii=False, indent=2) + "\n")
+    cases_path.write_text(json.dumps(cases, ensure_ascii=False, indent=2) + "\n")
+    keys_path.write_text(json.dumps(keys, ensure_ascii=False, indent=2) + "\n")
     return {
         "status": "draft_not_scored",
         "source_sha256": hashlib.sha256(source_bytes).hexdigest(),
         "case_count": len(cases),
         "category_counts": dict(sorted(counts.items())),
         "unique_normalized_prompts": len(seen_prompts),
+        "structured_multiturn_cases": sum(
+            row["category"] == "multiturn" and len(row["messages"]) == 3 for row in cases
+        ),
+        "unique_multiturn_user_sequences": len({
+            normalize("\n".join(message["content"] for message in row["messages"] if message["role"] == "user"))
+            for row in cases if row["category"] == "multiturn"
+        }),
         "answer_key_count": len(keys),
-        "prompt_manifest_sha256": hashlib.sha256(CASES.read_bytes()).hexdigest(),
-        "answer_keys_sha256": hashlib.sha256(KEYS.read_bytes()).hexdigest(),
+        "prompt_manifest_sha256": hashlib.sha256(cases_path.read_bytes()).hexdigest(),
+        "answer_keys_sha256": hashlib.sha256(keys_path.read_bytes()).hexdigest(),
     }
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--require-full", action="store_true")
+    parser.add_argument("--cases-output", type=Path, default=CASES)
+    parser.add_argument("--keys-output", type=Path, default=KEYS)
     args = parser.parse_args()
-    print(json.dumps(build(require_full=args.require_full), ensure_ascii=False, indent=2))
+    print(json.dumps(build(require_full=args.require_full, cases_path=args.cases_output,
+                           keys_path=args.keys_output), ensure_ascii=False, indent=2))

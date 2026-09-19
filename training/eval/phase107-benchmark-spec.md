@@ -15,7 +15,7 @@ This is a design draft only. It does not alter the Phase 104 scoring rule or sta
 
 ## Case schema (draft)
 
-Prompt manifest rows contain `id`, `stratum`, `prompt`, `fixture_hash`, `provenance`, and `rubric_ref`. A separate private answer-key file contains `must_cover`, `must_not_claim`, `evidence_boundary`, and `format_contract`. Do not include answer keys in model requests.
+Prompt manifest rows contain `id`, `stratum`, `messages`, `fixture_hash`, `provenance`, and `rubric_ref`. Single-turn rows use one user message; multi-turn rows use an explicit ordered conversation (including the same fixed prior assistant turn for all systems). The original `prompt` field is retained only as an auditable source representation; the runner must treat `messages` as authoritative and must not concatenate both. A separate private answer-key file contains `must_cover`, `must_not_claim`, `evidence_boundary`, and `format_contract`. Do not include answer keys in model requests.
 
 ## Method references
 
@@ -27,6 +27,6 @@ Public-benchmark runs and the private held-out suite must be scored/reported sep
 
 ## Status
 
-Draft, not scored. A local-only 320-case candidate bank now exists (40 per stratum), with separate answer keys. Generation and exact-overlap checks pass, but the rubric remains unfrozen and no model was queried. Phase 104/106 remain historical diagnostic evidence only; Phase 91 production is unchanged.
+Draft, not scored. The local-only v0.2 320-case candidate bank has 40 items per stratum, separate answer keys, and actual user/assistant/user turns for its 40 multi-turn cases. Generation, targeted diversity, and exact-overlap checks pass, but the rubric/protocol remain unfrozen and no model was queried. Phase 104/106 remain historical diagnostic evidence only; Phase 91 production is unchanged.
 
 The candidate bank and keys are gitignored. The reproducible builder and aggregate audit are tracked; hashes are recorded in `phase107-private-suite-audit.md`. Exact-overlap checks cover the scanned local JSONL scope only and do not establish semantic or pretraining cleanliness. No parity or model-quality claim may be made from this draft.
