@@ -26,9 +26,8 @@ readonly GPT_MODEL="$MODEL_DIR/gpt-oss-20b-UD-Q4_K_XL.gguf"
 readonly GEMMA_MODEL="$MODEL_DIR/gemma-4-26B-A4B-it-UD-Q4_K_M.gguf"
 test -x "$SERVER" && test -s "$GPT_MODEL" && test -s "$GEMMA_MODEL"
 
-gpt_pid=""; gemma_pid=""; forward_pid=""
+gpt_pid=""; gemma_pid=""
 cleanup() {
-  [[ -n "$forward_pid" ]] && kill "$forward_pid" 2>/dev/null || true
   [[ -n "$gemma_pid" ]] && kill "$gemma_pid" 2>/dev/null || true
   [[ -n "$gpt_pid" ]] && kill "$gpt_pid" 2>/dev/null || true
   wait 2>/dev/null || true
@@ -59,16 +58,8 @@ wait_health http://127.0.0.1:18081/health "$gpt_pid" gptoss
 gemma_pid=$!
 wait_health http://127.0.0.1:18082/health "$gemma_pid" gemma4
 
-# Reverse SSH ports bind to login-node loopback only; no campus/public listener.
-ssh -o BatchMode=yes -o StrictHostKeyChecking=accept-new -o ExitOnForwardFailure=yes \
-  -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -N \
-  -R 127.0.0.1:39081:127.0.0.1:18081 \
-  -R 127.0.0.1:39082:127.0.0.1:18082 \
-  zj225@slurmc.ie.cuhk.edu.hk >"$LOG_DIR/phase107-cpu-reverse-tunnel-$SLURM_JOB_ID.log" 2>&1 &
-forward_pid=$!
-sleep 2
-kill -0 "$forward_pid" || { echo "reverse SSH tunnel failed" >&2; exit 5; }
 echo "reference_servers_ready=true compute=cpu-only threads_per_server=12; requests are sequential"
-while kill -0 "$gpt_pid" 2>/dev/null && kill -0 "$gemma_pid" 2>/dev/null && kill -0 "$forward_pid" 2>/dev/null; do sleep 30; done
-echo "reference server or tunnel exited unexpectedly" >&2
+echo "collector must use an authenticated local SSH forward to a100-3:18081/18082"
+while kill -0 "$gpt_pid" 2>/dev/null && kill -0 "$gemma_pid" 2>/dev/null; do sleep 30; done
+echo "reference server exited unexpectedly" >&2
 exit 6

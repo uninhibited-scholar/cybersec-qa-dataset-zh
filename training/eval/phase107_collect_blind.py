@@ -145,6 +145,15 @@ def start_tunnel(command: list[str], label: str) -> subprocess.Popen:
     return p
 
 
+def cluster_tunnel_command(cluster_user: str, cluster_host: str, reference_host: str,
+                           gptoss_port: int = 18081, gemma_port: int = 18082) -> list[str]:
+    """Forward workstation ports through the authenticated login node to a compute host."""
+    return ["ssh", "-o", "BatchMode=yes", "-o", "ExitOnForwardFailure=yes", "-N",
+            "-L", f"127.0.0.1:18181:{reference_host}:{gptoss_port}",
+            "-L", f"127.0.0.1:18182:{reference_host}:{gemma_port}",
+            f"{cluster_user}@{cluster_host}"]
+
+
 def wait_port(port: int, proc: subprocess.Popen, label: str) -> None:
     deadline = time.monotonic() + 25
     while time.monotonic() < deadline:
@@ -237,6 +246,10 @@ def main() -> int:
     ap.add_argument("--mini-host", default="192.168.31.212")
     ap.add_argument("--cluster-user", default="zj225")
     ap.add_argument("--cluster-host", default="slurmc.ie.cuhk.edu.hk")
+    ap.add_argument("--reference-host", default="a100-3",
+                    help="cluster-internal host with loopback-only llama-server ports")
+    ap.add_argument("--reference-gptoss-port", type=int, default=18081)
+    ap.add_argument("--reference-gemma-port", type=int, default=18082)
     ap.add_argument("--seed", type=int, default=20260919)
     ap.add_argument("--systems", nargs="+", choices=SYSTEMS, default=list(SYSTEMS),
                     help="Collect selected blinded arms now; later runs can resume into the same outdir.")
@@ -297,10 +310,9 @@ def main() -> int:
             if len(token) < 16:
                 raise RuntimeError("credential source returned invalid data")
         if requested_systems.intersection({"gptoss20b", "gemma4_26b"}):
-            p = start_tunnel(["ssh", "-o", "BatchMode=yes", "-o", "ExitOnForwardFailure=yes", "-N",
-                              "-L", "127.0.0.1:18181:127.0.0.1:39081",
-                              "-L", "127.0.0.1:18182:127.0.0.1:39082",
-                              f"{args.cluster_user}@{args.cluster_host}"], "cluster")
+            p = start_tunnel(cluster_tunnel_command(
+                args.cluster_user, args.cluster_host, args.reference_host,
+                args.reference_gptoss_port, args.reference_gemma_port), "cluster")
             processes.append(p)
             if "gptoss20b" in requested_systems: wait_port(18181, p, "GPT-OSS")
             if "gemma4_26b" in requested_systems: wait_port(18182, p, "Gemma")
