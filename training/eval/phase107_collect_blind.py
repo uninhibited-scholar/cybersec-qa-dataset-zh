@@ -8,6 +8,7 @@ of Git. No evaluator-client retries are made.
 from __future__ import annotations
 
 import argparse
+import ast
 import hashlib
 import json
 import os
@@ -34,6 +35,8 @@ SYSTEM_PROMPT = (
     "Markdown 回答，不得输出 `<tool_call>`、工具名或规划模式标记。"
 )
 SYSTEMS = ("phase91", "gptoss20b", "gemma4_26b")
+EXPECTED_PHASE91_WORKER_SHA256 = "a4936301d54bb08bf8b7fa82847e090bbba827c6815513dd5d2d3ae88f7302cb"
+EXPECTED_SYSTEM_PROMPT_SHA256 = "8ece8f47d1fcdca21bdcc8174539ad29182bbaaaf3eb7b303d5536aaaf53ade5"
 OUT_DIR: Path
 
 
@@ -43,6 +46,82 @@ def sha256(path: Path) -> str:
         for block in iter(lambda: f.read(1024 * 1024), b""):
             h.update(block)
     return h.hexdigest()
+
+
+def sha256_bytes(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
+def extract_no_tool_system(worker_source: bytes) -> str:
+    """Reconstruct the worker's static no-tool system content without executing it."""
+    tree = ast.parse(worker_source.decode("utf-8"))
+    render = next((node for node in tree.body
+                   if isinstance(node, ast.FunctionDef) and node.name == "render_prompt"), None)
+    if render is None:
+        raise ValueError("Phase 91 worker has no render_prompt function")
+
+    parts_assignment = next((node for node in render.body
+                             if isinstance(node, ast.Assign)
+                             and any(isinstance(target, ast.Name) and target.id == "system_parts"
+                                     for target in node.targets)), None)
+    if parts_assignment is None:
+        raise ValueError("cannot locate worker system-prompt construction")
+    base_parts = ast.literal_eval(parts_assignment.value)
+    if not isinstance(base_parts, list) or not base_parts or not all(isinstance(x, str) for x in base_parts):
+        raise ValueError("unsupported worker base system-prompt shape")
+
+    tools_branch = next((node for node in render.body
+                         if isinstance(node, ast.If)
+                         and isinstance(node.test, ast.Name) and node.test.id == "tools"), None)
+    if tools_branch is None:
+        raise ValueError("cannot locate worker no-tools prompt branch")
+    no_tool_clauses = [
+        ast.literal_eval(call.args[0])
+        for statement in tools_branch.orelse
+        for call in ast.walk(statement)
+        if isinstance(call, ast.Call)
+        and isinstance(call.func, ast.Attribute)
+        and isinstance(call.func.value, ast.Name)
+        and call.func.value.id == "system_parts"
+        and call.func.attr == "append"
+        and call.args
+        and isinstance(call.args[0], ast.Constant)
+        and isinstance(call.args[0].value, str)
+    ]
+    if len(no_tool_clauses) != 1:
+        raise ValueError("unsupported worker no-tools prompt shape")
+
+    newline_join = any(
+        isinstance(node, ast.Call)
+        and isinstance(node.func, ast.Attribute)
+        and node.func.attr == "join"
+        and isinstance(node.func.value, ast.Constant)
+        and node.func.value.value == "\n"
+        and node.args
+        and isinstance(node.args[0], ast.Name)
+        and node.args[0].id == "system_parts"
+        for node in ast.walk(render)
+    )
+    if not newline_join:
+        raise ValueError("unsupported worker system-prompt join semantics")
+    return "\n".join([*base_parts, no_tool_clauses[0]])
+
+
+def validate_prompt_parity(worker_source: bytes, reference_prompt: str) -> dict:
+    worker_hash = sha256_bytes(worker_source)
+    if worker_hash != EXPECTED_PHASE91_WORKER_SHA256:
+        raise ValueError(f"Phase 91 worker hash changed: {worker_hash}")
+    reference_hash = sha256_bytes(reference_prompt.encode("utf-8"))
+    if reference_hash != EXPECTED_SYSTEM_PROMPT_SHA256:
+        raise ValueError(f"reference system-prompt hash changed: {reference_hash}")
+    effective_prompt = extract_no_tool_system(worker_source)
+    effective_hash = sha256_bytes(effective_prompt.encode("utf-8"))
+    if effective_prompt != reference_prompt:
+        raise ValueError(
+            "effective Phase 91 no-tool prompt differs from reference prompt; "
+            f"effective_sha256={effective_hash} reference_sha256={reference_hash}"
+        )
+    return {"worker_sha256": worker_hash, "system_prompt_sha256": effective_hash}
 
 
 def atomic_json(path: Path, value: dict) -> None:
@@ -163,6 +242,19 @@ def main() -> int:
     if len({c.get("id") for c in cases}) != 320 or any(not c.get("messages") for c in cases):
         raise SystemExit("preflight failed: duplicate IDs or missing messages")
 
+    worker_source_result = subprocess.run(
+        ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8",
+         f"{args.mini_user}@{args.mini_host}", "cat /Users/jiehan/cyber-agent/phase91_worker.py"],
+        capture_output=True, timeout=15,
+    )
+    if worker_source_result.returncode != 0:
+        raise SystemExit("preflight failed: cannot read pinned Phase 91 worker for prompt-parity check")
+    try:
+        prompt_parity = validate_prompt_parity(worker_source_result.stdout, SYSTEM_PROMPT)
+    except (SyntaxError, ValueError) as exc:
+        raise SystemExit(f"preflight failed: {exc}") from exc
+    del worker_source_result
+
     sealed_path = OUT_DIR / "sealed-identities.json"
     if sealed_path.exists():
         aliases = json.loads(sealed_path.read_text(encoding="utf-8"))["alias_to_system"]
@@ -218,6 +310,7 @@ def main() -> int:
             "run_seed": args.seed, "input_field": "messages", "answer_keys_loaded": False,
             "max_tokens": 700, "temperature": 0.12, "top_p": 0.9,
             "repeat_penalty": 1.12, "repeat_context": 128,
+            "phase91_prompt_parity": prompt_parity,
             "reference_top_k": 0, "reference_min_p": 0.0, "reference_dry_multiplier": 0.0,
             "tools": [], "client_retries": 0, "timeout_seconds": 300,
             "phase91_streaming_caveat": "full answer emitted in one SSE content chunk; first_content_s is not token-level TTFT",
