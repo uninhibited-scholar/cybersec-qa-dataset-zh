@@ -1,6 +1,6 @@
-# Phase 107 replacement benchmark — draft
+# Phase 107 replacement benchmark — v0.2 approved suite
 
-This is a design draft only. It does not alter the Phase 104 scoring rule or start a model run.
+The private v0.2 suite is approved for the Phase 107 evaluation. The separately versioned rubric and inference protocol are frozen in their v0.1 files. This does not alter Phase 104 scoring or authorize any deployment change.
 
 ## Acceptance criteria
 
@@ -27,6 +27,6 @@ Public-benchmark runs and the private held-out suite must be scored/reported sep
 
 ## Status
 
-Draft, not scored. The local-only v0.2 320-case candidate bank has 40 items per stratum, separate answer keys, and actual user/assistant/user turns for its 40 multi-turn cases. Generation, targeted diversity, and exact-overlap checks pass, but the rubric/protocol remain unfrozen and no model was queried. Phase 104/106 remain historical diagnostic evidence only; Phase 91 production is unchanged.
+Approved private v0.2 suite: 320 cases, 40 per stratum, separate answer keys, and actual user/assistant/user turns for 40 multi-turn cases. Generation, targeted diversity, and exact-overlap checks pass. The rubric and inference protocol are frozen at v0.1 following explicit user approval on 2026-09-19. Independent reviewer calibration and blind critical-failure adjudication remain required before scoring, ranking, or unblinding. Phase 104/106 remain historical diagnostic evidence only; Phase 91 production is unchanged.
 
-The candidate bank and keys are gitignored. The reproducible builder and aggregate audit are tracked; hashes are recorded in `phase107-private-suite-audit.md`. Exact-overlap checks cover the scanned local JSONL scope only and do not establish semantic or pretraining cleanliness. No parity or model-quality claim may be made from this draft.
+The candidate bank and keys are gitignored. The reproducible builder and aggregate audit are tracked; hashes are recorded in `phase107-private-suite-audit.md`. Exact-overlap checks cover the scanned local JSONL scope only and do not establish semantic or pretraining cleanliness. No parity or model-quality claim may be made from this suite alone.

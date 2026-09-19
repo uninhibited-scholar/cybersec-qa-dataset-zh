@@ -1,8 +1,8 @@
-# Phase 107 private suite — draft audit
+# Phase 107 private suite — v0.2 audit
 
 Date: 2026-09-19
 
-Status: private candidate set v0.2 generated; rubric/protocol not frozen; no model scoring performed.
+Status: private v0.2 suite approved; rubric/protocol v0.1 frozen by explicit user approval on 2026-09-19; no Phase 107 model scores yet.
 
 ## Generation and integrity
 
@@ -47,8 +47,8 @@ Status: private candidate set v0.2 generated; rubric/protocol not frozen; no mod
 
 ## Gates still open
 
-1. Independent semantic review of scenario independence, answer keys, ambiguity, and rubric alignment.
-2. Freeze a new rubric and matched inference protocol before any model scoring; Phase 104 rules stay unchanged.
-3. Only then run Phase 91 and at least two references under identical prompts, tools, context, decoding, token budget, retries, and parser. Keep the candidate bank and answer keys local and separate.
+1. Independent reviewer calibration of a stratified prompt/key sample and resolution of ambiguous criteria; preserve blind critical-failure adjudication for final outputs.
+2. Collect Phase 91 and at least two reference outputs under frozen protocol `phase107-inference-protocol-v0.1.md`; keep cases, keys, outputs, and identity mapping outside Git.
+3. Do not publish scores, rankings, parity claims, or promotion recommendations until the human-review gate in `phase107-rubric-v0.1.md` is complete. Phase 104 rules stay unchanged.
 
 No training, production API/Harness change, permission expansion, or model run occurred during this work.
