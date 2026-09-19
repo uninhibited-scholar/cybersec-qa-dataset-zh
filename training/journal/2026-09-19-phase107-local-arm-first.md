@@ -28,6 +28,13 @@ The approved A100 reference job `43695` is still pending for resources. Rather t
 - Phase 91 API health remained OK after collection; production model/adapter and service configuration were not changed.
 - A100 job `43695` remains pending; the separate FPNet job `43670` is unrelated and untouched.
 
+## Follow-up resource check
+
+- At 21:16 HKT, the cluster scheduler still showed job `43695` pending for resources with scheduled start `2026-09-21T13:44:13`.
+- The general `test` partition had two 1-CPU nodes with aggregate CPU state `0/1/1/2` (one idle CPU, one unavailable); it is not a substantial CPU substitute for the queued A100 reference run. The unrelated `43670` job remains running on `titanx1` and untouched.
+- The Mac mini is reachable, reports 16 GiB unified memory, and its Phase 91 health endpoint remains OK. The Phase 91 worker is running but idle after the 320-case collection. No production changes or further training were made.
+- CPU capacity is being used for local collection and can support bounded offline work; model changes remain deferred until the blinded comparison identifies an evidence-based gap, avoiding speculative fine-tuning and overfit.
+
 ## Limits
 
 This is collection of the production endpoint arm, not an ability score. `ok` only means the request produced a response under the collector's transport checks. No score, model rank, parity claim, or deployment decision is made until all three blinded arms are complete and the frozen human review gate is satisfied.
