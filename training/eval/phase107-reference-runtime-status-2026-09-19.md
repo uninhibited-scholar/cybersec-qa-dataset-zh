@@ -31,7 +31,8 @@ An initial diagnostic invocation using `.` as the scan root found only the 149 d
 
 1. Runtime setup and neutral single-prompt smoke checks are complete for both references. Preserve the version/hash-pinned scripts and Slurm logs.
 2. The proposed inference protocol is documented at `training/eval/phase107-inference-protocol-v0.1-draft.md`; it explicitly distinguishes end-to-end endpoint comparison from raw model-weight parity because Phase 91 has worker-side guards/retries/post-processing.
-3. Do not send or score the private Phase 107 suite until the draft rubric and matched inference protocol are explicitly approved/frozen. Provider-specific reasoning modes remain a separate condition.
+3. The protocol draft now specifies native reasoning mode for references (the smoke-only `--reasoning off` is not an evaluation setting), records extra samplers and seed limitations, and treats Phase 91 worker fallbacks as a disclosed endpoint-level asymmetry.
+4. Do not send or score the private Phase 107 suite until the draft rubric and shared-input protocol are explicitly approved/frozen. Provider/model-specific reasoning modes remain visible in the run manifest.
 
 ## Reproduction
 
