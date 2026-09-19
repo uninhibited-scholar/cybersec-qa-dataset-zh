@@ -34,6 +34,8 @@ The approved A100 reference job `43695` is still pending for resources. Rather t
 - The general `test` partition had two 1-CPU nodes with aggregate CPU state `0/1/1/2` (one idle CPU, one unavailable); it is not a substantial CPU substitute for the queued A100 reference run. The unrelated `43670` job remains running on `titanx1` and untouched.
 - The Mac mini is reachable, reports 16 GiB unified memory, and its Phase 91 health endpoint remains OK. The Phase 91 worker is running but idle after the 320-case collection. No production changes or further training were made.
 - CPU capacity is being used for local collection and can support bounded offline work; model changes remain deferred until the blinded comparison identifies an evidence-based gap, avoiding speculative fine-tuning and overfit.
+- To test the CPU fallback without touching the private benchmark, added `training/eval/phase107_cpu_reference_probe.sbatch`: one pinned GPT-OSS GGUF, CPU-only (`n_gpu_layers=0`), 12 CPUs/48 GiB, one neutral `READY` request, 15-minute wall limit, and summary-only timing/token metadata. It does not start either API or expose a network listener beyond node loopback.
+- Static shell syntax validation passed. Submitted the probe as Slurm job `43747`; at the recorded check it was `PENDING (Priority)`, not running. The approved A100 evaluation job `43695` remains unchanged and pending for resources.
 
 ## Limits
 
