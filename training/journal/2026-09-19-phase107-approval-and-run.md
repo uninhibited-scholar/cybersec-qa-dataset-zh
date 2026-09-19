@@ -31,4 +31,4 @@
 
 ## Pending result record
 
-Update after server startup, collection completion/failure, and reviewer calibration. Raw cases, answer keys, credentials, and raw outputs remain outside Git.
+At 2026-09-19 13:42 HKT, Slurm job `43685` was submitted for the isolated A100 reference servers and remained `PENDING (Resources)`. A local durable watcher (`phase107_wait_and_collect.py`, process/session 31436) waits for server health, then starts the randomized three-arm collection and releases only job 43685 on completion/failure. At this checkpoint no private case has been sent and no response artifact exists. Raw cases, answer keys, credentials, and raw outputs remain outside Git.
