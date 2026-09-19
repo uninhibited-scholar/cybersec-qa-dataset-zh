@@ -9,7 +9,7 @@ Status: private v0.2 suite approved; rubric/protocol v0.1 frozen by explicit use
 - Cases: 320 total, 40 in each of eight strata.
 - Unique fixture IDs: 320; unique exact prompts: 320; unique normalized prompts: 320.
 - Targeted scenario-core normalization: 320 distinct cores; largest repeated core group: 1.
-- Character 3/4/5-gram TF-IDF triage at the deliberately low 0.10 threshold flagged four pairs (maximum similarity 0.1237); each pair was manually inspected in the local private manifest. The flagged pairs are distinct decision contexts (including config metadata vs alert-rule metadata, SAML binding vs URL-fetch review, CSRF vs OAuth cookie behavior, and translation vs report summarization), not duplicate cases. This lexical check still cannot prove general semantic independence.
+- Character 3/4/5-gram TF-IDF triage at the deliberately low 0.10 threshold was re-run against the v0.2 execution manifest (same prompt field; the ordered `messages` are the runtime input) and flagged the same four pairs (maximum similarity 0.1237); each pair had already been manually inspected in the local private manifest. The flagged pairs are distinct decision contexts (including config metadata vs alert-rule metadata, SAML binding vs URL-fetch review, CSRF vs OAuth cookie behavior, and translation vs report summarization), not duplicate cases. This lexical check still cannot prove general semantic independence.
 - Answer keys: 320, stored separately from prompts and excluded from model inputs.
 - Source fixture SHA-256: `6c0e65be55826cd04f5f0e7be1ebd5fd290b0f3062ffff4cbd58e48eb1d45656`
 - Generated v0.1 single-string manifest SHA-256 (superseded for execution): `5f76a665febcb46f63c25c19556c1127cb603238cc046b7f8154fc8a9531d40d`
@@ -20,9 +20,11 @@ Status: private v0.2 suite approved; rubric/protocol v0.1 frozen by explicit use
 
 ## Exact-overlap scan
 
-- Scope: 188 local JSONL files (train/validation/test and numbered source batches); 21,946 normalized prompt/key strings indexed.
-- Parse errors: 0; unrecognized rows: 0; exact normalized overlaps: 0.
-- Result: `no_exact_overlap_in_scanned_scope_not_clean_certification`.
+- Re-run against the actual v0.2 execution manifest and answer keys on 2026-09-19 after detecting that the prior local audit JSON still referenced the superseded v0.1 manifest hash.
+- Scope: 188 local JSONL files (train/validation/test and numbered source batches) under the workspace; 21,946 normalized prompt/key strings indexed.
+- Current v0.2 manifest SHA-256: `6d75567be1ec32e1599951e98776625e93b4cc1826a269ff8b4f59304306d982`; answer-key SHA-256: `37657febdddc089d0ff7153cb0c62bd06162ee3eff69feca8ffba9d20614ece5`.
+- Parse errors: 0; unrecognized rows: 0; exact normalized overlaps: 0 across all 320 cases.
+- Result: `no_exact_overlap_in_scanned_scope_not_clean_certification`; machine-readable record: `phase107-overlap-audit.json`.
 - Limitations: no semantic near-duplicate detection, no guarantee that every checkpoint used only these scanned files, and no claim about foundation-model pretraining exposure or external sources.
 
 ## Runtime and reference availability re-check
