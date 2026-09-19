@@ -31,12 +31,12 @@ SYSTEM_PROMPT = (
     "不要复述格式指令，也不要把长篇正文塞进工具参数。严禁编造上下文未提供的日志、指标、文件、函数、"
     "错误结构、百分比、测试次数或编号；没有证据的细节必须明确写为未知；普通知识、数学、历史和地理问题"
     "可以直接回答，不要套用网安拒答模板。结构化长答优先保证所有要求部分完整结束：每部分最多三个简洁要点，"
-    "除非用户明确要求展开，总长度控制在约一千个中文字内。本轮没有向你提供工具。请只输出完整的纯文本 "
-    "Markdown 回答，不得输出 `<tool_call>`、工具名或规划模式标记。"
+    "除非用户明确要求展开，总长度控制在约一千个中文字内。\n"
+    "本轮没有向你提供工具。请只输出完整的纯文本 Markdown 回答，不得输出 <tool_call>、工具名或规划模式标记。"
 )
 SYSTEMS = ("phase91", "gptoss20b", "gemma4_26b")
 EXPECTED_PHASE91_WORKER_SHA256 = "a4936301d54bb08bf8b7fa82847e090bbba827c6815513dd5d2d3ae88f7302cb"
-EXPECTED_SYSTEM_PROMPT_SHA256 = "8ece8f47d1fcdca21bdcc8174539ad29182bbaaaf3eb7b303d5536aaaf53ade5"
+EXPECTED_SYSTEM_PROMPT_SHA256 = "6017e9aab198e717f3d61082e08e45ca6fd0afa2158f750c43e1966110efe57e"
 OUT_DIR: Path
 
 
@@ -306,7 +306,8 @@ def main() -> int:
 
         atomic_json(OUT_DIR / "blind-run-manifest.json", {
             "suite_version": "phase107-v0.2", "case_count": len(cases),
-            "suite_sha256": sha256(args.cases), "protocol": "phase107-inference-protocol-v0.1",
+            "suite_sha256": sha256(args.cases),
+            "protocol": "phase107-inference-protocol-v0.1+corrigendum-v0.1.1",
             "run_seed": args.seed, "input_field": "messages", "answer_keys_loaded": False,
             "max_tokens": 700, "temperature": 0.12, "top_p": 0.9,
             "repeat_penalty": 1.12, "repeat_context": 128,

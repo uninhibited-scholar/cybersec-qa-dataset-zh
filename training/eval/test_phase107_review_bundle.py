@@ -29,10 +29,15 @@ def sample_data():
         for c in cases for alias in ("A", "B", "C")
     ]
     manifest = {"suite_version": "phase107-v0.2", "case_count": 320,
-                "answer_keys_loaded": False, "protocol": "phase107-inference-protocol-v0.1",
+                "answer_keys_loaded": False,
+                "protocol": "phase107-inference-protocol-v0.1+corrigendum-v0.1.1",
                 "max_tokens": 700, "temperature": 0.12, "top_p": 0.9,
                 "repeat_penalty": 1.12, "repeat_context": 128,
                 "tools": [], "client_retries": 0, "timeout_seconds": 300}
+    manifest["phase91_prompt_parity"] = {
+        "worker_sha256": "a4936301d54bb08bf8b7fa82847e090bbba827c6815513dd5d2d3ae88f7302cb",
+        "system_prompt_sha256": "6017e9aab198e717f3d61082e08e45ca6fd0afa2158f750c43e1966110efe57e",
+    }
     return cases, keys, responses, manifest
 
 
@@ -46,6 +51,12 @@ def test_collection_requires_complete_unique_three_arm_coverage():
     changed = dict(manifest, tools=[{"type": "function"}])
     with pytest.raises(ValueError, match="frozen Phase 107"):
         validate_collection(cases, responses, changed)
+    prompt_mismatch = dict(manifest, phase91_prompt_parity={
+        "worker_sha256": "a4936301d54bb08bf8b7fa82847e090bbba827c6815513dd5d2d3ae88f7302cb",
+        "system_prompt_sha256": "wrong",
+    })
+    with pytest.raises(ValueError, match="corrigendum hash"):
+        validate_collection(cases, responses, prompt_mismatch)
 
 
 def test_bundle_hides_arm_order_and_only_keeps_blind_aliases():

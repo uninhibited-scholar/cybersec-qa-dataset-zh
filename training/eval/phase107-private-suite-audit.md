@@ -2,7 +2,7 @@
 
 Date: 2026-09-19
 
-Status: private v0.2 suite approved; rubric/protocol v0.1 frozen by explicit user approval on 2026-09-19; no Phase 107 model scores yet.
+Status: private v0.2 suite approved; rubric v0.1 and protocol v0.1 frozen by explicit user approval on 2026-09-19; prompt transcription corrigendum v0.1.1 approved on 2026-09-19. No Phase 107 model scores yet.
 
 ## Generation and integrity
 
@@ -52,7 +52,7 @@ Status: private v0.2 suite approved; rubric/protocol v0.1 frozen by explicit use
 ## Gates still open
 
 1. Independent reviewer calibration of a stratified prompt/key sample and resolution of ambiguous criteria; preserve blind critical-failure adjudication for final outputs.
-2. Collect Phase 91 and at least two reference outputs under frozen protocol `phase107-inference-protocol-v0.1.md`; keep cases, keys, outputs, and identity mapping outside Git.
+2. Collect Phase 91 and at least two reference outputs under frozen protocol `phase107-inference-protocol-v0.1.md` plus approved prompt transcription corrigendum `phase107-inference-protocol-v0.1-corrigendum-v0.1.1.md`; keep cases, keys, outputs, and identity mapping outside Git.
 3. Do not publish scores, rankings, parity claims, or promotion recommendations until the human-review gate in `phase107-rubric-v0.1.md` is complete. Phase 104 rules stay unchanged.
 
 No training, production API/Harness change, permission expansion, or model run occurred during this work.

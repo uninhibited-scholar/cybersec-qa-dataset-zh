@@ -23,6 +23,9 @@ RESPONSE_FIELDS = (
     "total_s",
 )
 KEY_FIELDS = ("must_cover", "must_not_claim", "evidence_boundary", "format_contract")
+EXPECTED_WORKER_SHA256 = "a4936301d54bb08bf8b7fa82847e090bbba827c6815513dd5d2d3ae88f7302cb"
+EXPECTED_EFFECTIVE_PROMPT_SHA256 = "6017e9aab198e717f3d61082e08e45ca6fd0afa2158f750c43e1966110efe57e"
+EXPECTED_PROTOCOL = "phase107-inference-protocol-v0.1+corrigendum-v0.1.1"
 
 # Calibration interpretations for known ambiguous cases. These annotations do
 # not edit the frozen rubric, prompts, or answer-key bytes; they tell reviewers
@@ -121,7 +124,7 @@ def validate_collection(cases: list[dict], responses: list[dict], run_manifest: 
     if run_manifest.get("answer_keys_loaded") is not False:
         raise ValueError("blind-run manifest must attest answer keys were not loaded during inference")
     required_protocol = {
-        "protocol": "phase107-inference-protocol-v0.1",
+        "protocol": EXPECTED_PROTOCOL,
         "max_tokens": 700,
         "temperature": 0.12,
         "top_p": 0.9,
@@ -133,6 +136,11 @@ def validate_collection(cases: list[dict], responses: list[dict], run_manifest: 
     }
     if any(run_manifest.get(key) != value for key, value in required_protocol.items()):
         raise ValueError("blind-run manifest does not match the frozen Phase 107 inference settings")
+    parity = run_manifest.get("phase91_prompt_parity")
+    if not isinstance(parity, dict) or parity.get("worker_sha256") != EXPECTED_WORKER_SHA256:
+        raise ValueError("blind-run manifest lacks the pinned Phase 91 worker identity")
+    if parity.get("system_prompt_sha256") != EXPECTED_EFFECTIVE_PROMPT_SHA256:
+        raise ValueError("blind-run manifest lacks the approved Phase 107 prompt-corrigendum hash")
 
     aliases = set()
     seen: set[tuple[str, str]] = set()
@@ -257,6 +265,8 @@ def main() -> int:
         "answer_keys_sha256": sha256(args.keys),
         "rubric": "phase107-rubric-v0.1.md",
         "rubric_sha256": sha256(repo_root / "training/eval/phase107-rubric-v0.1.md"),
+        "protocol": run_manifest["protocol"],
+        "effective_system_prompt_sha256": run_manifest["phase91_prompt_parity"]["system_prompt_sha256"],
         "identities_opened": False,
         "run_order_included": False,
         "identity_map_opened": False,

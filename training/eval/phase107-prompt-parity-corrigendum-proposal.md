@@ -1,6 +1,6 @@
 # Phase 107 prompt-parity corrigendum — proposal only
 
-Status: **Not approved; do not apply or run the benchmark from this proposal.** The approved v0.1 inference protocol remains unchanged until the user explicitly approves this correction.
+Status: **Approved by the user on 2026-09-19 and implemented** in `phase107-inference-protocol-v0.1-corrigendum-v0.1.1.md`. The frozen v0.1 protocol and rubric remain unchanged; the corrigendum records the approved transcription correction.
 
 ## Evidence
 
@@ -15,6 +15,6 @@ The difference is limited to the missing newline separator and two literal backt
 3. Add a preflight that reconstructs/reads the deployed worker's no-tool prompt and fails closed unless its hash equals the collector's reference prompt hash.
 4. Re-run the same v0.2, 320-case benchmark only after approval. No model weights, production service, tools, dataset, answer key, scoring criteria, or permissions change.
 
-## Approval requested
+## Approval record
 
-Approve or reject only the four corrections above. Until explicit approval is received, the previous pending job remains cancelled, no inference starts, and the production API remains untouched.
+The user approved: “参考模型使用 Phase 91 当前实际生效的提示词；题库、评分标准和生产服务不变。” This covers the four minimal corrections above. The previous Slurm job remains cancelled; the rerun uses a new job ID. Production API and model remain untouched.
