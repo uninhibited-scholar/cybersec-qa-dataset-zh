@@ -7,6 +7,8 @@
 - Builder validation passed: 320 rows, 320 IDs, 320 normalized prompts, 320 answer keys. Scenario-core audit found no repeated core after the targeted wrapper/number normalization.
 - Exact normalized overlap scan against the local tree, including answer-key phrases: 188 JSONL files, 21,946 indexed normalized prompt/key strings, 0 parse errors, 0 unrecognized rows, 0 exact overlaps.
 - Drafted a separate Phase 107 rubric (0–8 per case plus non-averaged critical-failure labels), paired reporting, and blind-review protocol. It is explicitly not frozen; no scores were produced.
+- Revalidated the live baseline over SSH: the Mac mini API health is `ok`; launchd confirms the production base `Qwen3-4B-mlx-4bit-phase3-wrapper` plus adapter `phase99-multiturn-candidate` on port 18765. No completion request was sent.
+- Confirmed the Slurm account is reachable, A100-40G partitions are listed, and no job is queued/running. Mini reference files include Gemma 3 4B MLX plus larger Gemma 4 26B and GPT-OSS 20B GGUF files; large references should use an isolated A100-compatible runtime, not load alongside the 16 GB production mini.
 - Recorded only aggregate counts and hashes in the tracked audit report; no prompt text, answer keys, model responses, or credentials are committed.
 
 ## Limitations and next gates

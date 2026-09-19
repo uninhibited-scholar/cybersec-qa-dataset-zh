@@ -21,6 +21,13 @@ Status: private candidate set generated; rubric not frozen; no model scoring per
 - Result: `no_exact_overlap_in_scanned_scope_not_clean_certification`.
 - Limitations: no semantic near-duplicate detection, no guarantee that every checkpoint used only these scanned files, and no claim about foundation-model pretraining exposure or external sources.
 
+## Runtime and reference availability re-check
+
+- Mac mini SSH is reachable; `com.uninhibited-scholar.cyber-agent-api` is running on the mini and its local `/health` returned `{"status":"ok","model":"qwen-cyber-local"}`.
+- launchd reports the active model path `Qwen3-4B-mlx-4bit-phase3-wrapper` and adapter path `phase99-multiturn-candidate`; the API listener is on port 18765. No completion requests were sent.
+- The school Slurm account is reachable and has A100-40G partitions listed; `squeue` showed no running or queued job. The cluster migration copy contains a dequantized base, so it is not substituted for the live MLX production endpoint.
+- The mini has local reference candidates including Gemma 3 4B MLX (about 2.1 GB), Gemma 4 26B GGUF (about 16 GB), and GPT-OSS 20B GGUF (about 11 GB). The two larger references should not be loaded alongside the mini's live production service; the Slurm A100 route needs an isolated, format-compatible runtime check before use. No model was loaded for this check.
+
 ## Strata
 
 | Stratum | Cases |
