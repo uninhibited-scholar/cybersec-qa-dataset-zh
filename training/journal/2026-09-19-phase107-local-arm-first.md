@@ -22,10 +22,12 @@ The approved A100 reference job `43695` is still pending for resources. Rather t
 ## Runtime state at start
 
 - Phase 91 API health and authorized `/v1/models` preflight passed through the Mac mini SSH tunnel.
-- Phase 91-only collector is running in unified exec session 24749 (process PID observed as 85891 at 2026-09-19 20:07 HKT).
-- Initial progress: 3/320 cases completed within roughly 30 seconds; per-row responses are flushed and fsynced immediately.
+- Using the Mac mini's available CPU/memory headroom, the Phase 91-only collector completed all 320 cases at approximately 21:13 HKT on 2026-09-19.
+- Post-run metadata audit: 320 rows, 320 unique case IDs, one blinded alias, all 320 classified `ok` (transport/completion status only, not a quality score).
+- Private output directory remains mode 0700 and response file mode 0600. Sealed identity mapping and raw answer content were not opened for scoring before all arms are available.
+- Phase 91 API health remained OK after collection; production model/adapter and service configuration were not changed.
 - A100 job `43695` remains pending; the separate FPNet job `43670` is unrelated and untouched.
 
 ## Limits
 
-This is collection of the production endpoint arm, not an ability score. No score, model rank, parity claim, or deployment decision is made until all three blinded arms are complete and the frozen human review gate is satisfied.
+This is collection of the production endpoint arm, not an ability score. `ok` only means the request produced a response under the collector's transport checks. No score, model rank, parity claim, or deployment decision is made until all three blinded arms are complete and the frozen human review gate is satisfied.
