@@ -131,6 +131,12 @@ def atomic_json(path: Path, value: dict) -> None:
     tmp.replace(path)
 
 
+def selected_completion_count(completed: set[tuple[str, str]], alias_to_system: dict[str, str],
+                              requested_systems: set[str]) -> int:
+    """Count resumable completions only for the arms selected in this pass."""
+    return sum(1 for _case_id, alias in completed if alias_to_system[alias] in requested_systems)
+
+
 def start_tunnel(command: list[str], label: str) -> subprocess.Popen:
     log = (OUT_DIR / f"tunnel-{label}.stderr.log").open("ab")
     p = subprocess.Popen(command, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
@@ -232,7 +238,10 @@ def main() -> int:
     ap.add_argument("--cluster-user", default="zj225")
     ap.add_argument("--cluster-host", default="slurmc.ie.cuhk.edu.hk")
     ap.add_argument("--seed", type=int, default=20260919)
+    ap.add_argument("--systems", nargs="+", choices=SYSTEMS, default=list(SYSTEMS),
+                    help="Collect selected blinded arms now; later runs can resume into the same outdir.")
     args = ap.parse_args()
+    requested_systems = set(args.systems)
     OUT_DIR = args.outdir.expanduser().resolve()
     OUT_DIR.mkdir(parents=True, exist_ok=True, mode=0o700)
     os.chmod(OUT_DIR, 0o700)
@@ -274,22 +283,27 @@ def main() -> int:
 
     processes: list[subprocess.Popen] = []
     try:
-        p = start_tunnel(["ssh", "-o", "BatchMode=yes", "-o", "ExitOnForwardFailure=yes", "-N",
-                          "-L", "127.0.0.1:18765:127.0.0.1:18765",
-                          f"{args.mini_user}@{args.mini_host}"], "mini")
-        processes.append(p); wait_port(18765, p, "mini")
-        p = start_tunnel(["ssh", "-o", "BatchMode=yes", "-o", "ExitOnForwardFailure=yes", "-N",
-                          "-L", "127.0.0.1:18181:127.0.0.1:39081",
-                          "-L", "127.0.0.1:18182:127.0.0.1:39082",
-                          f"{args.cluster_user}@{args.cluster_host}"], "cluster")
-        processes.append(p); wait_port(18181, p, "GPT-OSS"); wait_port(18182, p, "Gemma")
-        secret = subprocess.run(["ssh", "-o", "BatchMode=yes", f"{args.mini_user}@{args.mini_host}",
-                                 "cat /Users/jiehan/.config/cyber-agent/api-token"],
-                                check=True, capture_output=True, timeout=15).stdout
-        token = secret.decode("utf-8").strip()
-        del secret
-        if len(token) < 16:
-            raise RuntimeError("credential source returned invalid data")
+        token = None
+        if "phase91" in requested_systems:
+            p = start_tunnel(["ssh", "-o", "BatchMode=yes", "-o", "ExitOnForwardFailure=yes", "-N",
+                              "-L", "127.0.0.1:18765:127.0.0.1:18765",
+                              f"{args.mini_user}@{args.mini_host}"], "mini")
+            processes.append(p); wait_port(18765, p, "mini")
+            secret = subprocess.run(["ssh", "-o", "BatchMode=yes", f"{args.mini_user}@{args.mini_host}",
+                                     "cat /Users/jiehan/.config/cyber-agent/api-token"],
+                                    check=True, capture_output=True, timeout=15).stdout
+            token = secret.decode("utf-8").strip()
+            del secret
+            if len(token) < 16:
+                raise RuntimeError("credential source returned invalid data")
+        if requested_systems.intersection({"gptoss20b", "gemma4_26b"}):
+            p = start_tunnel(["ssh", "-o", "BatchMode=yes", "-o", "ExitOnForwardFailure=yes", "-N",
+                              "-L", "127.0.0.1:18181:127.0.0.1:39081",
+                              "-L", "127.0.0.1:18182:127.0.0.1:39082",
+                              f"{args.cluster_user}@{args.cluster_host}"], "cluster")
+            processes.append(p)
+            if "gptoss20b" in requested_systems: wait_port(18181, p, "GPT-OSS")
+            if "gemma4_26b" in requested_systems: wait_port(18182, p, "Gemma")
 
         endpoints = {
             "phase91": ("http://127.0.0.1:18765/v1/chat/completions", token),
@@ -297,17 +311,21 @@ def main() -> int:
             "gemma4_26b": ("http://127.0.0.1:18182/v1/chat/completions", None),
         }
         for system, (url, auth) in endpoints.items():
+            if system not in requested_systems:
+                continue
             status, _body, error = get_json(url.rsplit("/v1/", 1)[0] + "/health", auth)
             if status != 200 or error:
                 raise RuntimeError(f"health preflight failed for {system}: status={status}, type={error}")
-        status, _body, error = get_json("http://127.0.0.1:18765/v1/models", token)
-        if status != 200 or error:
-            raise RuntimeError(f"authorized Phase 91 preflight failed: status={status}, type={error}")
+        if "phase91" in requested_systems:
+            status, _body, error = get_json("http://127.0.0.1:18765/v1/models", token)
+            if status != 200 or error:
+                raise RuntimeError(f"authorized Phase 91 preflight failed: status={status}, type={error}")
 
         atomic_json(OUT_DIR / "blind-run-manifest.json", {
             "suite_version": "phase107-v0.2", "case_count": len(cases),
             "suite_sha256": sha256(args.cases),
             "protocol": "phase107-inference-protocol-v0.1+corrigendum-v0.1.1",
+            "systems_requested": sorted(requested_systems),
             "run_seed": args.seed, "input_field": "messages", "answer_keys_loaded": False,
             "max_tokens": 700, "temperature": 0.12, "top_p": 0.9,
             "repeat_penalty": 1.12, "repeat_context": 128,
@@ -319,12 +337,14 @@ def main() -> int:
         })
         rng = random.Random(args.seed)
         pending = list(cases); rng.shuffle(pending)
-        total = len(cases) * len(SYSTEMS)
-        count = len(completed)
+        total = len(cases) * len(requested_systems)
+        count = selected_completion_count(completed, aliases, requested_systems)
         for index, case in enumerate(pending, 1):
             order_rng = random.Random(args.seed + int(hashlib.sha256(case["id"].encode()).hexdigest()[:8], 16))
             arm_order = list(SYSTEMS); order_rng.shuffle(arm_order)
             for system in arm_order:
+                if system not in requested_systems:
+                    continue
                 alias = system_alias[system]
                 if (case["id"], alias) in completed:
                     continue
@@ -352,9 +372,14 @@ def main() -> int:
                 print(f"progress={count}/{total} case={index}/{len(cases)} alias={alias} class={row['classification']}", flush=True)
         atomic_json(OUT_DIR / "sealed-run-details.json", {
             "alias_to_system": aliases,
+            "systems_collected": sorted(requested_systems),
             "reference_model_hashes": {
-                "gptoss20b": "10fe673de12c20b74b8d670a9fdf0fd36b43b0a86ffc04daeb175c0a2b98c4f9",
-                "gemma4_26b": "f2c28b3dc4776931ac6f879e11f203dec637ea0f14267a86ec8f6165f63f293f",
+                **({"gptoss20b":
+                    "10fe673de12c20b74b8d670a9fdf0fd36b43b0a86ffc04daeb175c0a2b98c4f9"}
+                   if "gptoss20b" in requested_systems else {}),
+                **({"gemma4_26b":
+                    "f2c28b3dc4776931ac6f879e11f203dec637ea0f14267a86ec8f6165f63f293f"}
+                   if "gemma4_26b" in requested_systems else {}),
             },
             "reference_runtime": "llama.cpp b11046, native templates, reasoning auto",
             "phase91_worker_sha256": "a4936301d54bb08bf8b7fa82847e090bbba827c6815513dd5d2d3ae88f7302cb",

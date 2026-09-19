@@ -41,3 +41,10 @@ def test_reference_prompt_hash_is_pinned_to_frozen_protocol_copy():
         and node.targets[0].id == "SYSTEM_PROMPT"
     )
     assert collector.sha256_bytes(system_prompt.encode("utf-8")) == collector.EXPECTED_SYSTEM_PROMPT_SHA256
+
+
+def test_partial_arm_resume_counts_only_selected_blind_aliases():
+    aliases = {"A": "phase91", "B": "gptoss20b", "C": "gemma4_26b"}
+    done = {("case-1", "A"), ("case-1", "B"), ("case-2", "A"), ("case-3", "C")}
+    assert collector.selected_completion_count(done, aliases, {"phase91"}) == 2
+    assert collector.selected_completion_count(done, aliases, {"gptoss20b", "gemma4_26b"}) == 2
