@@ -27,4 +27,6 @@ Public-benchmark runs and the private held-out suite must be scored/reported sep
 
 ## Status
 
-Draft. No Phase 107 prompts have been accepted or run. Phase 104/106 remain historical diagnostic evidence only; Phase 91 production is unchanged.
+Draft, not scored. A local-only 320-case candidate bank now exists (40 per stratum), with separate answer keys. Generation and exact-overlap checks pass, but the rubric remains unfrozen and no model was queried. Phase 104/106 remain historical diagnostic evidence only; Phase 91 production is unchanged.
+
+The candidate bank and keys are gitignored. The reproducible builder and aggregate audit are tracked; hashes are recorded in `phase107-private-suite-audit.md`. Exact-overlap checks cover the scanned local JSONL scope only and do not establish semantic or pretraining cleanliness. No parity or model-quality claim may be made from this draft.
