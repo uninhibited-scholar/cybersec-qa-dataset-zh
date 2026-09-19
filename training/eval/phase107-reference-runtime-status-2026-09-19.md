@@ -12,6 +12,8 @@ This is an infrastructure-readiness note only. No Phase 107 prompts were sent to
 - The school Slurm login environment exposes Conda (`cyber-cuda`, `dl`) but no `module`, `nvcc`, or `cmake`. Inside a scheduled A100 allocation, PyTorch 2.9.0+cu128 reported CUDA available. The system CUDA driver is 12.8-compatible.
 - Installed in a separate project-local directory (not a shared environment) the official `llama.cpp` CUDA 12.8 Ubuntu x64 release `b11046`, archive SHA-256 `c27982438017c508721d8a38acedd6c746edac9c7b58517fe9a055cb61292c8a`. `llama-server` reports version `0.4.1-dev (build 11046, commit 60081bb2b)`. `libggml-cuda.so` dependencies resolve using the existing `cyber-cuda` CUDA 12 runtime/cuBLAS libraries; `llama-cli --list-devices` sees an NVIDIA A100-SXM4-40GB.
 - Neutral runtime smoke jobs successfully loaded both local references on the A100 and generated `READY` for the same harmless prompt (`Say exactly READY.`). GPT-OSS completed in about 7 seconds after setup; Gemma 4 completed in about 2 minutes 17 seconds including a 16.9 GB shared-storage read. These are runnability checks only, not quality results.
+- A separate loopback-only `llama-server` smoke on two RTX 2080 Ti GPUs accepted an OpenAI-compatible `/v1/chat/completions` request containing a synthetic user/assistant/user sequence and passed a final-answer/context assertion. No tools were configured, `--no-webui` was set, and the listener bound only to `127.0.0.1`. The first attempt generated a response but its validator exited because `python` was unavailable; it was corrected to `python3` and the rerun completed with exit 0. This validates the reference chat API/message transport only, not answer quality.
+- A read-only request to the remotely reachable Phase 91 `/v1/models` endpoint without credentials returned HTTP 401. The loopback health endpoint remains healthy. No token was retrieved or logged; a production evaluation client must use an already-authorized secret source or remain unrun.
 
 ## Scheduler result
 
@@ -33,6 +35,7 @@ An initial diagnostic invocation using `.` as the scan root found only the 149 d
 2. The proposed inference protocol is documented at `training/eval/phase107-inference-protocol-v0.1-draft.md`; it explicitly distinguishes end-to-end endpoint comparison from raw model-weight parity because Phase 91 has worker-side guards/retries/post-processing.
 3. The protocol draft now specifies native reasoning mode for references (the smoke-only `--reasoning off` is not an evaluation setting), records extra samplers and seed limitations, treats Phase 91 worker fallbacks as a disclosed endpoint-level asymmetry, and uses explicit `messages` (not the audit-only flat `prompt`) for multi-turn cases.
 4. Do not send or score the private Phase 107 suite until the draft rubric and shared-input protocol are explicitly approved/frozen. Provider/model-specific reasoning modes remain visible in the run manifest.
+5. Reference OpenAI chat-completions message transport has a passing loopback smoke script at `training/eval/phase107_openai_api_smoke.sbatch`. Phase 91 remote API calls require authorized authentication; no credential was loaded or disclosed in this preparation turn.
 
 ## Reproduction
 
