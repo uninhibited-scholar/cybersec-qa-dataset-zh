@@ -16,6 +16,7 @@ Status: private candidate set v0.2 generated; rubric/protocol not frozen; no mod
 - Generated v0.2 manifest SHA-256: `6d75567be1ec32e1599951e98776625e93b4cc1826a269ff8b4f59304306d982`
 - Generated answer-key SHA-256: `37657febdddc089d0ff7153cb0c62bd06162ee3eff69feca8ffba9d20614ece5`
 - v0.2 uses an explicit `messages` sequence as the authoritative request field. All 320 single-turn items become one user message; the 40 multi-turn items are distinct ordered user/assistant/user conversations (40 unique user-message sequences). The original `prompt` is retained only as an audit/source field. The prior v0.1 generated artifact remains local and is not the execution manifest.
+- Reproducible structure check: `training/scripts/phase107_suite_validate.py`; latest result pass (320 matching case/key IDs, 40 valid unique multi-turn histories, zero structural errors). Four low-threshold lexical flags were manually checked and found to represent distinct decision points; a full independent semantic/key review is still open.
 
 ## Exact-overlap scan
 

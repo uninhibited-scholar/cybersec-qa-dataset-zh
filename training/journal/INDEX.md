@@ -13,6 +13,7 @@
 - Phase 107 static integrity recheck: `2026-09-19-phase107-static-recheck.md`.
 - Phase 107 comparison-protocol audit: `2026-09-19-phase107-protocol-audit.md`.
 - Phase 107 multi-turn schema correction: `2026-09-19-phase107-multiturn-schema.md`.
+- Phase 107 manifest/key validator: `training/scripts/phase107_suite_validate.py`.
 - Phase 107 suite audit: `training/eval/phase107-private-suite-audit.md`.
 - Phase 107 scoring rubric draft: `training/eval/phase107-rubric-v0.1-draft.md`.
 - Phase 107 inference protocol draft: `training/eval/phase107-inference-protocol-v0.1-draft.md`.

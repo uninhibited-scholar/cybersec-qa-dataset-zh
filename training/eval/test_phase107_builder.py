@@ -1,8 +1,11 @@
 import sys
 from pathlib import Path
+import hashlib
+import json
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 from build_phase107_private_eval import to_messages
+from phase107_suite_validate import EXPECTED, normalize, validate
 
 
 def test_multiturn_builds_real_ordered_conversation():
@@ -29,3 +32,48 @@ def test_multiturn_without_second_marker_preserves_followup_request():
 def test_single_turn_stays_one_user_message():
     prompt = "请基于提供的防守日志区分观察事实与未知。"
     assert to_messages("evidence_boundary", prompt) == [{"role": "user", "content": prompt}]
+
+
+def _synthetic_valid_suite():
+    cases, keys = [], []
+    for category in sorted(EXPECTED):
+        for index in range(40):
+            case_id = f"p107-{category}-{index:03d}"
+            prompt = f"Synthetic defensive evaluation item {category} {index}."
+            messages = to_messages(category, f"第 1 轮：{prompt} 第 2 轮：补充事实 {index}。请更新。" if category == "multiturn" else prompt)
+            canonical = normalize(prompt)
+            serialized = json.dumps(messages, ensure_ascii=False, separators=(",", ":")).encode()
+            cases.append({
+                "id": case_id,
+                "category": category,
+                "suite_version": "phase107-v0.2",
+                "prompt": prompt,
+                "messages": messages,
+                "fixture_hash": hashlib.sha256(canonical.encode()).hexdigest(),
+                "conversation_sha256": hashlib.sha256(serialized).hexdigest(),
+            })
+            keys.append({
+                "id": case_id,
+                "must_cover": ["fact"],
+                "must_not_claim": ["unsupported conclusion"],
+                "evidence_boundary": "stay within supplied evidence",
+                "format_contract": "concise",
+                "scoring_status": "draft_unfrozen",
+            })
+    return cases, keys
+
+
+def test_manifest_validator_accepts_full_synthetic_suite():
+    cases, keys = _synthetic_valid_suite()
+    result = validate(cases, keys)
+    assert result["status"] == "pass"
+    assert result["structured_multiturn_count"] == 40
+    assert result["unique_multiturn_user_sequences"] == 40
+
+
+def test_manifest_validator_rejects_answer_key_mismatch():
+    cases, keys = _synthetic_valid_suite()
+    keys.pop()
+    result = validate(cases, keys)
+    assert result["status"] == "fail"
+    assert "case_key_id_mismatch" in result["errors"]
