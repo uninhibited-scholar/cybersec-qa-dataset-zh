@@ -3,6 +3,7 @@
 # This is an infrastructure smoke test, not a benchmark prompt or score.
 #SBATCH --job-name=phase107-cpu-probe
 #SBATCH --partition=GPU-LARGE
+#SBATCH --nodelist=a100-3
 #SBATCH --cpus-per-task=12
 #SBATCH --mem=48G
 #SBATCH --time=00:15:00
@@ -12,7 +13,12 @@ set -euo pipefail
 
 readonly ROOT="$HOME/cyber-model-migration/phase107-runtime"
 readonly RUNTIME="$ROOT/llama-b11046-cuda-12.8-x64/llama-b11046"
-readonly MODEL="$ROOT/models/gpt-oss-20b-UD-Q4_K_XL.gguf"
+readonly MODEL_NAME="${PHASE107_CPU_PROBE_MODEL:-gpt-oss-20b-UD-Q4_K_XL.gguf}"
+case "$MODEL_NAME" in
+  gpt-oss-20b-UD-Q4_K_XL.gguf|gemma-4-26B-A4B-it-UD-Q4_K_M.gguf) ;;
+  *) echo "unapproved probe model filename" >&2; exit 1 ;;
+esac
+readonly MODEL="$ROOT/models/$MODEL_NAME"
 readonly LOG_DIR="$ROOT/logs"
 readonly PORT=18083
 mkdir -p "$LOG_DIR"
@@ -53,12 +59,12 @@ loaded=$(date +%s)
 http_code=$(curl -sS --max-time 240 -o "$LOG_DIR/phase107-cpu-probe-response-$SLURM_JOB_ID.json" \
   -w '%{http_code}' "http://127.0.0.1:$PORT/v1/chat/completions" \
   -H 'Content-Type: application/json' \
-  -d '{"messages":[{"role":"user","content":"Say exactly READY."}],"max_tokens":64,"temperature":0.12,"top_p":0.9,"repeat_penalty":1.12,"repeat_last_n":128,"stream":false}')
+  -d '{"messages":[{"role":"user","content":"Say exactly READY."}],"max_tokens":700,"temperature":0.12,"top_p":0.9,"repeat_penalty":1.12,"repeat_last_n":128,"stream":false}')
 completed=$(date +%s)
 
-python3 - "$summary" "$http_code" "$started" "$loaded" "$completed" "$LOG_DIR/phase107-cpu-probe-response-$SLURM_JOB_ID.json" <<'PY'
+python3 - "$summary" "$http_code" "$started" "$loaded" "$completed" "$LOG_DIR/phase107-cpu-probe-response-$SLURM_JOB_ID.json" "$MODEL_NAME" <<'PY'
 import json, pathlib, sys
-summary_path, status, started, loaded, completed, response_path = sys.argv[1:]
+summary_path, status, started, loaded, completed, response_path, model_name = sys.argv[1:]
 response = json.loads(pathlib.Path(response_path).read_text())
 choice = (response.get("choices") or [{}])[0]
 usage = response.get("usage") or {}
@@ -70,7 +76,7 @@ result = {
     "finish_reason": choice.get("finish_reason"),
     "nonempty_content": bool((choice.get("message") or {}).get("content", "").strip()),
     "hardware_mode": "CPU-only (n_gpu_layers=0)",
-    "model_file": "gpt-oss-20b-UD-Q4_K_XL.gguf",
+    "model_file": model_name,
 }
 pathlib.Path(summary_path).write_text(json.dumps(result, indent=2) + "\n")
 print(json.dumps(result, sort_keys=True))
