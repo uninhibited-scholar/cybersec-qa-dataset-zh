@@ -131,6 +131,22 @@ def atomic_json(path: Path, value: dict) -> None:
     tmp.replace(path)
 
 
+def read_jsonl(path: Path) -> list[dict]:
+    rows = []
+    with path.open(encoding="utf-8") as f:
+        for line_no, line in enumerate(f, 1):
+            if not line.strip():
+                continue
+            try:
+                row = json.loads(line)
+            except json.JSONDecodeError as exc:
+                raise ValueError(f"invalid JSONL at line {line_no}") from exc
+            if not isinstance(row, dict):
+                raise ValueError(f"non-object JSONL row at line {line_no}")
+            rows.append(row)
+    return rows
+
+
 def selected_completion_count(completed: set[tuple[str, str]], alias_to_system: dict[str, str],
                               requested_systems: set[str]) -> int:
     """Count resumable completions only for the arms selected in this pass."""

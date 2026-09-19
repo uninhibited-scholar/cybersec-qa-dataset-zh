@@ -4,6 +4,7 @@ from phase107_collect_blind import (
     EXPECTED_PHASE91_WORKER_SHA256,
     EXPECTED_SYSTEM_PROMPT_SHA256,
     cluster_tunnel_command,
+    read_jsonl,
     validate_reference_local_resume,
 )
 
@@ -58,3 +59,12 @@ def test_reference_local_resume_rejects_prompt_or_suite_drift():
     }
     with pytest.raises(ValueError, match="manifest"):
         validate_reference_local_resume(cases, completed, aliases, prior, "expected")
+
+
+def test_read_jsonl_accepts_objects_and_rejects_bad_rows(tmp_path):
+    path = tmp_path / "rows.jsonl"
+    path.write_text('{"id":"one"}\n\n{"id":"two"}\n', encoding="utf-8")
+    assert read_jsonl(path) == [{"id": "one"}, {"id": "two"}]
+    path.write_text("[]\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="non-object"):
+        read_jsonl(path)
