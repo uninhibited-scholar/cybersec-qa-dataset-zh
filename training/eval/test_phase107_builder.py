@@ -6,6 +6,7 @@ import json
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 from build_phase107_private_eval import to_messages
 from phase107_suite_validate import EXPECTED, normalize, validate
+from phase107_neardup_audit import case_text
 
 
 def test_multiturn_builds_real_ordered_conversation():
@@ -32,6 +33,23 @@ def test_multiturn_without_second_marker_preserves_followup_request():
 def test_single_turn_stays_one_user_message():
     prompt = "请基于提供的防守日志区分观察事实与未知。"
     assert to_messages("evidence_boundary", prompt) == [{"role": "user", "content": prompt}]
+
+
+def test_neardup_user_scope_compares_all_user_turns_only():
+    case = {"messages": [
+        {"role": "user", "content": "first question"},
+        {"role": "assistant", "content": "shared context"},
+        {"role": "user", "content": "follow-up"},
+    ]}
+    assert case_text(case, "user_messages") == "first question\nfollow-up"
+
+
+def test_neardup_all_messages_retains_roles():
+    case = {"messages": [
+        {"role": "user", "content": "first question"},
+        {"role": "assistant", "content": "shared context"},
+    ]}
+    assert case_text(case, "all_messages") == "user: first question\nassistant: shared context"
 
 
 def _synthetic_valid_suite():

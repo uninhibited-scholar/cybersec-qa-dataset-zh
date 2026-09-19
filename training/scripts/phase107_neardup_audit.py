@@ -26,12 +26,29 @@ def features(text):
     return grams
 
 
-def audit(path, threshold=0.52, top_n=100):
+def case_text(case, scope):
+    if scope == "prompt":
+        return case["prompt"]
+    messages = case.get("messages", [])
+    if scope == "user_messages":
+        selected = (m for m in messages if m.get("role") == "user")
+    elif scope == "all_messages":
+        selected = iter(messages)
+    else:
+        raise ValueError(f"unsupported scope: {scope}")
+    return "\n".join(
+        f"{m.get('role', '')}: {m.get('content', '')}" if scope == "all_messages" else m.get("content", "")
+        for m in selected
+        if isinstance(m.get("content"), str)
+    )
+
+
+def audit(path, threshold=0.52, top_n=100, scope="prompt"):
     raw = path.read_bytes()
     cases = json.loads(raw)
     if len({case["id"] for case in cases}) != len(cases):
         raise ValueError("manifest IDs must be unique")
-    vectors = [features(case["prompt"]) for case in cases]
+    vectors = [features(case_text(case, scope)) for case in cases]
     df = Counter(feature for vector in vectors for feature in vector)
     n = len(cases)
     weights = []
@@ -62,6 +79,7 @@ def audit(path, threshold=0.52, top_n=100):
         "status": "manual_review_required" if pairs else "no_pairs_above_lexical_threshold_not_semantic_certification",
         "manifest_sha256": hashlib.sha256(raw).hexdigest(),
         "cases": n,
+        "text_scope": scope,
         "method": "NFKC/casefold; TF-IDF weighted character 3/4/5-gram cosine",
         "threshold": threshold,
         "pairs_above_threshold": len(pairs),
@@ -79,9 +97,11 @@ if __name__ == "__main__":
     parser.add_argument("--threshold", type=float, default=0.10,
                         help="low lexical-triage threshold; review flags manually, not a semantic duplicate verdict")
     parser.add_argument("--top", type=int, default=100)
+    parser.add_argument("--scope", choices=("prompt", "user_messages", "all_messages"), default="prompt",
+                        help="text to compare; v0.2 supports full user turns or the complete transcript")
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
-    result = audit(args.manifest, threshold=args.threshold, top_n=args.top)
+    result = audit(args.manifest, threshold=args.threshold, top_n=args.top, scope=args.scope)
     rendered = json.dumps(result, ensure_ascii=False, indent=2) + "\n"
     if args.output:
         args.output.write_text(rendered)
