@@ -389,7 +389,7 @@ def main() -> int:
             status, _body, error = get_json(url.rsplit("/v1/", 1)[0] + "/health", auth)
             if status != 200 or error:
                 raise RuntimeError(f"health preflight failed for {system}: status={status}, type={error}")
-        if "phase91" in requested_systems:
+        if "phase91" in requested_systems and not args.reference_local:
             status, _body, error = get_json("http://127.0.0.1:18765/v1/models", token)
             if status != 200 or error:
                 raise RuntimeError(f"authorized Phase 91 preflight failed: status={status}, type={error}")
