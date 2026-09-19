@@ -1,0 +1,1148 @@
+{
+  "status": "no_exact_overlap_in_scanned_scope_not_clean_certification",
+  "suite_sha256": "56eaa0f7fdff51af73b02d8ece1e48e1872901339287690a4d93325a84171124",
+  "cases": 360,
+  "split_files": [
+    {
+      "path": "cybersec-qa-dataset-zh/batch001.jsonl",
+      "sha256": "42645ba5d36557c1dc58affee6d3433333ad477643a9425035f87ce5e7785389",
+      "rows": 134,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch002.jsonl",
+      "sha256": "e9ea1a9b94f32ec57ae1e02ccba639d848e3a39a044346ed355cfa5347003647",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch003.jsonl",
+      "sha256": "9f7f004cd20c1cd87342ed54e8e3ad09b51682ecbaa8fcc5a9153e476bb2c734",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch004.jsonl",
+      "sha256": "a69a2615436db748aca624d8c3ed2a1617ffba1525ec63883f9d28d029f5ff1b",
+      "rows": 144,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch005.jsonl",
+      "sha256": "1d0ec62526c5d3ec3dce72ca2acd01e9b4f469d568897e26e376e8a1f165a277",
+      "rows": 149,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch006.jsonl",
+      "sha256": "184939af023f45ae003babd3f09d2b4bc2be6106b58165efb397048cd95a811f",
+      "rows": 149,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch007.jsonl",
+      "sha256": "2cdec5764d180eabce5bc54c521dd11b5ee76a4609482c4f808bbac1ee571102",
+      "rows": 148,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch008.jsonl",
+      "sha256": "ab9b9a16a97dd44e39421f876059b420d9b2ed6484760fed1ed2ee452e66844e",
+      "rows": 136,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch009.jsonl",
+      "sha256": "921c87d52b31f4f8cd28e1a33f2c49c4e67c4749d859e852d8d143efecaf6638",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch010.jsonl",
+      "sha256": "2d1e2bea897147c1389303818531fb4e3525c0aab5708bf4ce84b58c0001bba8",
+      "rows": 100,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch011.jsonl",
+      "sha256": "4ffe0a77940c8f957adf71e01e2a9dfb053cd7e1d382dfcf0c5eb7ba1ff75b11",
+      "rows": 122,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch012.jsonl",
+      "sha256": "33ede42a4a25ace694cef3a703c5dc0f6011c653e245e57f9fa3d2baa01c58fb",
+      "rows": 62,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch013.jsonl",
+      "sha256": "7074d7f140b164fc7e4e799c936e96fb015923ac7168af213709d4266cb14ddb",
+      "rows": 52,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch014.jsonl",
+      "sha256": "e49febfd29649ed4bd4bb3c2667d98309034bbf83a85f98bc33eb523870b6e99",
+      "rows": 42,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch015.jsonl",
+      "sha256": "8dda8ed19b8115745804c97758d9164218a219eb3bb26033bef2b884f3c3fdb4",
+      "rows": 36,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch016.jsonl",
+      "sha256": "e16a1093ca4295b510ba7c74230a3314dd3a0ee316697875710fb84489e2388d",
+      "rows": 144,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch017.jsonl",
+      "sha256": "6b507ec716296cd47c0ecd58124d3790084628b27ebab35f977ce24026d7319e",
+      "rows": 146,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch018.jsonl",
+      "sha256": "128c28c351d2410ade317d353637128cdcdc176a944d48cedc5dee6c98b74dc1",
+      "rows": 203,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch019.jsonl",
+      "sha256": "d9b671b14d702d8e8b47f386d5a6a5d1733c69ef29ebba28549a2ed3e4564ca6",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch020.jsonl",
+      "sha256": "89c2373041c507d760bc1571c138310d71bdacb45ca4a0b73b225703bbdba9a8",
+      "rows": 148,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch021.jsonl",
+      "sha256": "a5309ccd1ec49b458672959ed55a01150720d1cd94086e2031cf59f30709e4b7",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch022.jsonl",
+      "sha256": "aae33756d4e88d605aeefa24d1d4a9832bdc93b155d81d5617ae0b87bbb49bd4",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch023.jsonl",
+      "sha256": "4b8c3a80564c182e30fbe16031bdc84680aeb04f487b5810702ac58b0a2a67e3",
+      "rows": 149,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch024.jsonl",
+      "sha256": "aa7152d5a8e3c00f910df6b94d00599c936d319cbfedf0f608ce81f9e4bc341a",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch025.jsonl",
+      "sha256": "7ff570b8bfb0f8ff3a3c552d7b2e53bc565f3618715ee3aae1260e7531374dad",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch026.jsonl",
+      "sha256": "84f710605222a41dbc1cf6b292e13a82a4b588adfa461898537cf97c61d7a2c4",
+      "rows": 147,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch027.jsonl",
+      "sha256": "f000c04a1b788c699a84f33e0339a497b64dbdf164ee93b35c704a545db3020e",
+      "rows": 144,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch028.jsonl",
+      "sha256": "fbbd76d9d246080978809f4e02805893d44ca4d8fb5b75c18b1e1993de84d7eb",
+      "rows": 148,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch029.jsonl",
+      "sha256": "fc0bb8e7dfa6e65e0c88d1b6e0a52fb99eecea90ec87302e55ffab2300b9be60",
+      "rows": 147,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch030.jsonl",
+      "sha256": "b67b812539f67a531068405913acbf11dc79406042563f4b28991ec81af2cf74",
+      "rows": 144,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch031.jsonl",
+      "sha256": "932e31c073a219a75c54ca142b006ba0a50048a502aaf450a4c71d199c75c6d3",
+      "rows": 149,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch032.jsonl",
+      "sha256": "8697a58254ab9945e1e274cbdc477d9a4b5fc2d5f340a20676cf922855040590",
+      "rows": 147,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch033.jsonl",
+      "sha256": "488e7929be8059db4bbc75d53b8720610b1a69718996f73b8b6d192872fe36b7",
+      "rows": 149,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch034.jsonl",
+      "sha256": "ca283dec8238e8eef891d90d067b24f80eba8096b1b5daab34181b2fd47fca74",
+      "rows": 145,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch035.jsonl",
+      "sha256": "f318accdd80395010ab0afe8c3ea4f87346cdeda65757855e3fe27c16ced60e7",
+      "rows": 149,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch036.jsonl",
+      "sha256": "f4026583a353967d95cab36032d3f7ed4789e084c97be2a612fc7fd57b79abee",
+      "rows": 148,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch037.jsonl",
+      "sha256": "60d4465f331e92bccb63ee9aaf69abcce4b530a8a21ea3df1ce7abe56a6ccd50",
+      "rows": 148,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch038.jsonl",
+      "sha256": "b832d6c46570ec311073b5e5f67e405f3421d56c8a2b08adf32b0c80ed0d63eb",
+      "rows": 146,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch039.jsonl",
+      "sha256": "b54d4d08cdea3bb22f114de4d3d916eb910ce927f8803a81bcd8d7f333607467",
+      "rows": 147,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch040.jsonl",
+      "sha256": "056819d1659536bd6b609577207f5b6c104e2ee4542a5713678d15b3eef91306",
+      "rows": 149,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch041.jsonl",
+      "sha256": "8ffc7a0b6aeada4380a6e1e5ed982edc4b1f05c8f6fcc35887a4d383e3ed602e",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch042.jsonl",
+      "sha256": "1c7008f46b30523499885c1ba955a4fc67a06fbff7e8e82ddc0e5f89da994c08",
+      "rows": 149,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch043.jsonl",
+      "sha256": "16a93bd54a0cc40b6c645baa9f8c2a1334a86154d58a3ffb8bc393e395637d5e",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch044.jsonl",
+      "sha256": "8602cd43b2cfa8ec0fc3a50171b172c428dc47ebb9a120da66ab759693801eee",
+      "rows": 149,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch045.jsonl",
+      "sha256": "359047461b5d74703b504641ed7cd55643f7b58a379dd348049e8f8b6395c3c9",
+      "rows": 149,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch046.jsonl",
+      "sha256": "740f2d19c13afb53eb4b22a20819122fbd15ba200f8368f858ac0105e768750b",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch047.jsonl",
+      "sha256": "d700e4bd5085ffbd37892231cd645f1b8213a26083923affc776261f84464f44",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch048.jsonl",
+      "sha256": "51655e859e5250e3462986a3c14ad80c8b5d7b8faf83114c282f8096213e81f7",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch049.jsonl",
+      "sha256": "6b802144a4c0b1d86ded627bb5b23708b0723905a57c41d003398e8f543f3d8e",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch050.jsonl",
+      "sha256": "b69e1f0345f6d9246e96cf9d32e084ffef0533c87e23fb8126fe21e341d88b3f",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch051.jsonl",
+      "sha256": "ff42e875f2f9cfc5dd3272e9bf640e999ba6c67806cb98457c24c5d4ee2f1f8a",
+      "rows": 148,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch052.jsonl",
+      "sha256": "ba6b7d31c10b4edf19b43c76717b00020ae238c78e77a569a9eab4c9f01ccb55",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch053.jsonl",
+      "sha256": "fda77bee086766e61300a8b154ad0ac531f9dbdbe7e9df334353e2ca571cb7ef",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch054.jsonl",
+      "sha256": "71abc818ac9af76f505aa3b2f926426c521bb3f8e25f14d7b2e1f85330a90083",
+      "rows": 145,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch055.jsonl",
+      "sha256": "6afe1e018d9513b40dbc6778e6eb5e13df9ad87e72a8ccc5eaf042a4e835fa5d",
+      "rows": 148,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch056.jsonl",
+      "sha256": "bc4516fb4cb6b752a8684361fa2b4d175715fc6eac0e8ecf90d956572018c857",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch057.jsonl",
+      "sha256": "b4a1986523fa2c028414f6e4888958e74182c1a419928d0bcc5ec0bb52121e0a",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch058.jsonl",
+      "sha256": "91dd94fff6380125b4e1c6d99e2dbaefef5e835de3d481d67b8e33b0e6f470be",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch059.jsonl",
+      "sha256": "8cfb203d9d32fbb5ead10811fa6b33def4fd0acbdcaec7e467f03aa60ad577f8",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch060.jsonl",
+      "sha256": "822f602cea7ae88be0150de12af2f3525a4fed418859bbd29bc3e229f0d2a1fb",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch061.jsonl",
+      "sha256": "cb06b01ac707e64bf2459105460cada72dbde255ab11bbfdbc9b62e19c139c31",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch062.jsonl",
+      "sha256": "dfed5892d424a42e980bbcba4d45cc66c0f2e786230ada94df76e47c18ad497b",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch063.jsonl",
+      "sha256": "232a78505844ff1596555cd0829412977711df0e80554dc9c2e951812b475504",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch064.jsonl",
+      "sha256": "e20e23737979f27e01f666c7a516e88bd7e636ccf26c104ce8131e96cdb4fe84",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch065.jsonl",
+      "sha256": "017a5a2ec2f7f16a2a7b0d7904690bb8eb229bdc326832b2c3c94500fcc7ce79",
+      "rows": 146,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch066.jsonl",
+      "sha256": "395303791b859dae770fb727ba8d606572cb13e82d110dfc66cfb7ba0cead7d7",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch067.jsonl",
+      "sha256": "a02a0d56da19be961a6b4f0098c841522ccda7cd0a0ebfe572fe1067e58b108b",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch068.jsonl",
+      "sha256": "076c44394c793dab48991e4a3dd5b5234cfd057f5349dbce8928f5420e97cde7",
+      "rows": 147,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch069.jsonl",
+      "sha256": "e8874d08032c053cf0eeafbb20a8ac785a30e5e820b095d85c150d1718735185",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch070.jsonl",
+      "sha256": "54279396876dbf343643e251f44c89e5b02c8f9d42f653b1c4886c332bb4a2f0",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch071.jsonl",
+      "sha256": "12778796e56385ab97fcb45e73aa4453cfdc994a99d0a5b900f7e091219dba07",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch072.jsonl",
+      "sha256": "f2b51fb66395cf9853c42bdd68e8a70e62e039651ee4575d7e81e8bef1b01956",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch073.jsonl",
+      "sha256": "ab5f358662f77838a70a64ae03a4ed3041a1f497e29ed588021acfbfe6d1b568",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch074.jsonl",
+      "sha256": "97fe289bc0b5aef6be40bb45f8e88d36d86a9bd1abc48069433a09544f23e2f8",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch075.jsonl",
+      "sha256": "e481e5c94727e59778421d89af19545f91637b648f3c2d7898943c66a7920632",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch076.jsonl",
+      "sha256": "79f9ee4c53126cbc687e99b2d1459f0b537c46df73c69e74721862de589c076d",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch077.jsonl",
+      "sha256": "bfb1bfe5a5cfa85731becdd47e92374c4687ff8dc2888b625a524888c3a4ca98",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch078.jsonl",
+      "sha256": "32cb09f6e05c77c72445397b4f44be8e89e5a82cb60800f5021da908bb6bfa46",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch079.jsonl",
+      "sha256": "3c96ea3d4df8099c94e2a338a838da28a02a13a2f1b4f6557688daa1bbc712d0",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch080.jsonl",
+      "sha256": "a8c0991e6dcd4102677e69b9a4a0765d9a9e1fb1ec199fd868cbe024c19cb0b5",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch081.jsonl",
+      "sha256": "3e371c0c31add7f78a0ad0a7a19ccef4333cdbdc2a910ec6aba4a90e497c9dca",
+      "rows": 148,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch082.jsonl",
+      "sha256": "90367551d1dd1410051994a22a569569ab01f9c7e1ba7ff06973a0f10b008394",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch083.jsonl",
+      "sha256": "9c5e8d169593d6818061f0b51d68832a15782e0651fc9aa2478849ac326b5acc",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch084.jsonl",
+      "sha256": "c88bfd9aa619635a436da7f5e0ee2a27d930e69a62f010536a0a72ce799f3d42",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch085.jsonl",
+      "sha256": "602b0382231501567b164317683253ededa9f476a4682d1c9155fd124e3a9de7",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch086.jsonl",
+      "sha256": "8d2cf14aa74a4e43b7b2f5fc1c29ae91941e29791ac2ce8946d2800bf378a88a",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch087.jsonl",
+      "sha256": "20c9c0f9a24d80585443101f2326852608f57d2d1bf5f472aa042302cf9a38b2",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch088.jsonl",
+      "sha256": "d3d0dff48025e0cc14c84d23eacff4aec5a6795875a6c42ec86f4f7cd6dd2e28",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch089.jsonl",
+      "sha256": "c043566a80536d95b663f22a862dd32ce9ed0e4a165a28ad578298c1c96316e9",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch090.jsonl",
+      "sha256": "88eb33618c7e614971c7bf753322e1b0b904953bff9c72aa0a6fc82b42c862e6",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch091.jsonl",
+      "sha256": "25f61ff0ce1a2af238ed5d8d44d6bc3e21ee76930a18b446e72959739e90a17d",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch092.jsonl",
+      "sha256": "967c1c98a40dd6102be924ff49d73e9cde016bd8576d88df94db3c504eab6e75",
+      "rows": 149,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch093.jsonl",
+      "sha256": "8162e7c71406d493a5fe4deca4f50933d6b0e2edec6b4f0900311ea29d942e11",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch094.jsonl",
+      "sha256": "e4411bbf44358d551b4f6727c54e858088e266aeb8c02446e5144c2a2e5bf0e9",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch095.jsonl",
+      "sha256": "34b2c8552975d4b4d8f8e26eb48509384be9a2927fa48dac11f64f1fb12c074f",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch096.jsonl",
+      "sha256": "c2136dd992abbfb24a32120a6e89b3ea8ba2eb9c0774910d407b85ed759fbb1b",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch097.jsonl",
+      "sha256": "144156ba47f4acc0f379eedd4930a001cfa3d5ba86114ae8671a6e81c9d54e9b",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch098.jsonl",
+      "sha256": "c1f82b2fb7e777fb73d76e6dc23e6136040a6a2d243784869cc45d66d8094d2c",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch099.jsonl",
+      "sha256": "49b20191f394054f023493cf10d5287df1f8f53a21c0f42573a8a68f3063b0ea",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch100.jsonl",
+      "sha256": "ced8bc8f81a138eaae9535c8161aceb1ea6ec3130a40f0e475d401613a7452b5",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch101.jsonl",
+      "sha256": "fc8f0a5f09cbd31d1d62c65eb428e520ed208e17d2c3c21740c2081799fbe5b2",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch102.jsonl",
+      "sha256": "6c2b3e469d8c7cd5b95d0750a666d6b6b1b41e0fcc51446a0ead3e2959c89e59",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch103.jsonl",
+      "sha256": "618ea0122fe736241595124c16fb83d2eaa9663cc1b97a05612ab231ef7b539f",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch104.jsonl",
+      "sha256": "c2f11cce4f5d67ab0aa447aafa3ea54ae6822fe8ed7c699a2b4807dc74c6093d",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch105.jsonl",
+      "sha256": "5db9ebb2b17982bbc99f7756c74c39e220166f245c6c6040e3d6245f7a44fead",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch106.jsonl",
+      "sha256": "dea5284e08a14dc73b38feb50ac7ad1dcb9df67626afde7dfedbc98bb7f70af4",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch107.jsonl",
+      "sha256": "fac58cf59baa12624597d849a26c5fdb8cb67aa3fb1ecea19302269477924c78",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch108.jsonl",
+      "sha256": "40591e994cc765840cff3fac5c1aaf99eb3e75b9236a383545f6f06b61ea616f",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch109.jsonl",
+      "sha256": "5df7bf0bdd33d8a5f148f5cef3516e7e346d86a567a24a63b57113d9686bf2c6",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch110.jsonl",
+      "sha256": "b5422aaa5db47a483a4f31775ad4c9f09eeaacc05a197c5c16f449ae378e4503",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch111.jsonl",
+      "sha256": "41d209be265761b72ca7243a3185f5888cc89669c5f043c2a4faffb9f1f5fbb4",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch112.jsonl",
+      "sha256": "54f2e6cf7277980ae910f07d36bae4572da549d699a41fd65e527af9c5eb0858",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch113.jsonl",
+      "sha256": "2b7af857f0243a868d6cccb41e2ce74855346bb401a599d6659fb91221159883",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch114.jsonl",
+      "sha256": "a8a21aae63aa14ada9b539adc1169cd8c73bd0d1f48c22a7bf03eae133a65eac",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch115.jsonl",
+      "sha256": "cfd5fe5d69866d73f1f22716a7312242ac71f64c9c70c60f299a0cc7809f8dd3",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch116.jsonl",
+      "sha256": "2c7d672e7fe41947ca0efe91cc149f39fe4fea9655002f301d5286ca7c024832",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch117.jsonl",
+      "sha256": "bbad43a75f2811f12e34c9f080dd8e8acc3dc1904c815c736c7bf5f56eafbf8e",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch118.jsonl",
+      "sha256": "df155d1702c68186343432f1bb71c15ec567102ac8236c1d0e258b389738a972",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch119.jsonl",
+      "sha256": "05820425b439283dc43d1189cdf60becdc6a12b6716ddd3ed8565885974e74eb",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch120.jsonl",
+      "sha256": "2351a4c85334f169a5ca1e044eb48fd16a07f07dafdb425cb2c684dd12ba8d6a",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch121.jsonl",
+      "sha256": "8d164b9ef08407e0e6779b3af415afc7ebec27892cc11c53e889392d575108e1",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch122.jsonl",
+      "sha256": "c51084e4980671bf783ee86674650a3f2773df6a27c92611f1b9561ed6cb7fba",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch123.jsonl",
+      "sha256": "b51e09e0edac016c623429979dbba4268579b92d7edf5ecd44217c9f9dc3f2f8",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch124.jsonl",
+      "sha256": "6c049e86533239e5eb0306e6e96a34c07132e8e03758249c7bce6e7e170e3dc1",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch125.jsonl",
+      "sha256": "d50fda494f3e5024da9b873580e0aa11d65f992f3b27ac165ac3056dbc5fcab5",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch126.jsonl",
+      "sha256": "aa69a27dbdf0d3f532f2a05b7c6c27b25c10e7726e432f0db0b04b80ba4f365a",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch127.jsonl",
+      "sha256": "dd91e7b8ab9f56f49f8f59df71056e6de34dea2265a50727669330fab0f4fbed",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch128.jsonl",
+      "sha256": "7c5233986b525dc49a26369323cdfdadf976a87386a0e8569d3a106e7a30ce14",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch129.jsonl",
+      "sha256": "7f2376b28c89186fab47b7ddb50dcad8fd4e64cff4285934c0f38656beeba4be",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch130.jsonl",
+      "sha256": "260d41394a9cd56e9cf9bc09eab3e2aabccb677911b6216ea4c5136a71bb5436",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch131.jsonl",
+      "sha256": "e504ab0b8c252cffb98a49bef2be0a64f3b623c7980dc26541ac2de67c188f5d",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch132.jsonl",
+      "sha256": "b8e12c01e8c834228d207431f19239ee6ccaa58bde2bba02dffafd0c263be37e",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch133.jsonl",
+      "sha256": "26d54650845d3faa062226b82a7ce53da5887fb51f8b4a83b696e3eb9db66918",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch134.jsonl",
+      "sha256": "6161580373a5c83cf7919573d57ed97999fb66421e3af39b084d404079a9768a",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch135.jsonl",
+      "sha256": "d192ef45188a2b7e5fe93c0ee315c8a9c1cb95b9c6d5946c82652ff6433e8344",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch136.jsonl",
+      "sha256": "a4d6e51f3eccbaaa1ddf9d77152f82a0e899c91471406fb5fef4ddef634bcc7d",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch137.jsonl",
+      "sha256": "6eeed8e9d6b2a87a41b6c2eae0df96cc451b0dabca57ead2c45d30a9e064e0f0",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch138.jsonl",
+      "sha256": "67003bae2f305af6af7b348a2e5a02264c278cbd411d8b4f7b1a647352d5fcdd",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch139.jsonl",
+      "sha256": "5d8dae463855e930fc9d50aff5290a890b9eb19046c38269311784dbce38290b",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch140.jsonl",
+      "sha256": "f56787c3c936772dddec2304fcb1c071c11fa3a1c74a123fab69f775aa03ca89",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch141.jsonl",
+      "sha256": "1477df21499164f9fe195863c3c9d4c3c825818217a41257d7eac47aa7973d56",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch142.jsonl",
+      "sha256": "4663288a31969a4a77239a6ef1703e393e6fb0030966839a74de0cc43f80da8d",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch143.jsonl",
+      "sha256": "2f5f720cea2eb5eeef3ce0be444dcca36d1db416ae74bb490adeac46508d5d6e",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch144.jsonl",
+      "sha256": "f098b9e265d329313250739b1c73c20be1d0052927bacde3040b3f88c5842fc8",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch145.jsonl",
+      "sha256": "d450c0da7b4de21eddd9a36a883ab0e447bb1906f7078f02ce825bed63d6a1bf",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch146.jsonl",
+      "sha256": "43551cfbcbbce1818e7c2a98088fa37848ec0127fca352671a88bb2823c5133f",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch147.jsonl",
+      "sha256": "0d0636b3a83af1609eb5ced030b0a2085d2bf5da806a093c65427dbe707cce4c",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch148.jsonl",
+      "sha256": "3b92df15c3bcd9e5c8cc3988a33d4f0b618d7df243c94a550454ce2adee8811d",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "cybersec-qa-dataset-zh/batch149.jsonl",
+      "sha256": "0620d2d5a842c735fe0848206fcd6d0daf17f29c41715c80ca37d250c20ba81f",
+      "rows": 150,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase63_test.jsonl",
+      "sha256": "6857c9a1c970c91810400a275e033293a28c7c03106e5d146c41b3ecaab45985",
+      "rows": 1,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase63_train.jsonl",
+      "sha256": "073c83767dca878955b3d161e64bc3ca296e90f0584011cb485cba6b7b4c7e5c",
+      "rows": 8,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase63_valid.jsonl",
+      "sha256": "1a8d0c7c9f0fdb6101e66285912d6cb8549a95cedaba3c81f44fd24b1fe4827c",
+      "rows": 2,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase64_test.jsonl",
+      "sha256": "f3511190102322cabc01aef5f4a09b4dcb5bd09663492f6d0b13e9765f80e44f",
+      "rows": 2,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase64_train.jsonl",
+      "sha256": "08a5fcda5d80e6c9267b9f98820e2cfd140cf3f1e312e364c6dbf5b7f77a6aae",
+      "rows": 5,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase64_valid.jsonl",
+      "sha256": "d9e7d68c961bd2be9a34b0b2aabaf8baf54347d4c654fc7dc8ce357af23e2666",
+      "rows": 2,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase65_test.jsonl",
+      "sha256": "3576049116003da8f54a594fef3410f1e839e12f9dde39d31e11c7ff48fe90d4",
+      "rows": 3,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase65_train.jsonl",
+      "sha256": "e2c7f7d693164c694778e690b1eaf2578abdc45d20ac0a311c7ef8c90fcc28bb",
+      "rows": 12,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase65_valid.jsonl",
+      "sha256": "dbb063c55e8bc8f3f37c23a657b35f70fdeb77cab01f36fa32a304447fa24318",
+      "rows": 3,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase66_test.jsonl",
+      "sha256": "adec84202ff172744c93c8bfa283c00f10a4bb0da3fe8312f079640df88d9a68",
+      "rows": 3,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase66_train.jsonl",
+      "sha256": "ccfb4a9213ffbddac59d3d5f976f2e470779c25867899842eb28b85f2965d5f2",
+      "rows": 6,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase66_valid.jsonl",
+      "sha256": "082e7d394385e012d576f33616ca7f9a439e761c99d21373f1367a68b579fc28",
+      "rows": 3,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase68_test.jsonl",
+      "sha256": "064672ff900aff60699c83fec5de5efef9c72bb620fb5e24571c466572a7c539",
+      "rows": 1,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase68_train.jsonl",
+      "sha256": "4d2b2e09da3bdd42c1d4b7c96d4c6078b3f233a6b1b335b0672ba4cfb6d7d7fb",
+      "rows": 4,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase68_valid.jsonl",
+      "sha256": "5a1febee64bef1a881d9434688e27e943964a2999cba6299e17d736691a06e21",
+      "rows": 1,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase69_test.jsonl",
+      "sha256": "879b1680ca088bdde9def0cc275fb195eabfefbd40e647c3e5131e2df35a5577",
+      "rows": 1,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase69_train.jsonl",
+      "sha256": "df9c5c5a7d09680e14b7339684aa838d1c92affa10ad909847477166daf354e0",
+      "rows": 6,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase69_valid.jsonl",
+      "sha256": "f4426205af02dacf705f9b70ec9c168276e15a3b582dfed1f54f50e20bf35d15",
+      "rows": 1,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase78_test.jsonl",
+      "sha256": "6ea22e6a792edad434391ee650a24d82aba38be008dde685a2b4b016b81ecb7f",
+      "rows": 1,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase78_train.jsonl",
+      "sha256": "e515b21d7160202014f8a9e4b847d23bff95e042042a3eead860ade50ef5e64c",
+      "rows": 8,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase78_valid.jsonl",
+      "sha256": "71992ea6cdfd08c1f56e07d0b6aa309adddecd7206809a7e5911be1af8ddf445",
+      "rows": 2,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase81_test.jsonl",
+      "sha256": "37ffca6c8d5aa6accc21d19dcbb9c2c74a799c515f11c7736d737dd705977dcd",
+      "rows": 1,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase81_train.jsonl",
+      "sha256": "a03182975c9a150d936cc9147db3e496a71faa6fc434650ca247a15254818782",
+      "rows": 7,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase81_valid.jsonl",
+      "sha256": "14320a28779e5cde70c83f49ee571a6da8fd48d7d8aade73e888c9aa8a5b72ec",
+      "rows": 1,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase92-test.jsonl",
+      "sha256": "e89d265a6d7afb089280f22695379514e2344e8063ac794724aa4abe5b85f985",
+      "rows": 1,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase92-train.jsonl",
+      "sha256": "1497fa1069a7a9db955e7ad58757bb0928f968bedc0f60dbae7b710cf250d3b8",
+      "rows": 2,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase92-valid.jsonl",
+      "sha256": "56c703e3caa29136a0a392b7b89ae7e72e34990b3e0e247f3acff15a11551e5d",
+      "rows": 1,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase93-test.jsonl",
+      "sha256": "d25becaee986c53a100857c1e1c8d32476f2c60e4e3f4411fa8ae05b7417995f",
+      "rows": 2,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase93-train.jsonl",
+      "sha256": "a4384167b878b9a271a7b57a6dd89774da4e911e39a42c267b255d86be1d4c37",
+      "rows": 4,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase93-valid.jsonl",
+      "sha256": "0695ccee3017cd81d20699520bb5c0ef26ee2ce354574912111f5fa6e74a8b3a",
+      "rows": 2,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase96-focused-test.jsonl",
+      "sha256": "f619c31b431131b09cdc020d56a2b2c86bb48c444b79bc5805ed0bbd1191f5fc",
+      "rows": 3,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase96-focused-train.jsonl",
+      "sha256": "09e7306b700575f165c97f128689bce2d8aa5ad538ae7cd20e8b68300341d28d",
+      "rows": 6,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase96-focused-valid.jsonl",
+      "sha256": "271776cedee80975ff4fa431f7dc09c22f2992a5a9fe46f68edd68665e2dad9f",
+      "rows": 3,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase99-correction-test.jsonl",
+      "sha256": "98474bf846be96d594578e52de9803d01bf48e3288c761e7e62b389ca759d663",
+      "rows": 2,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase99-correction-train.jsonl",
+      "sha256": "33da81f4f666feebe240ec54b4d6734dd03038c8dbfaf1c630b9240bdb448428",
+      "rows": 8,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase99-correction-valid.jsonl",
+      "sha256": "dc0079931c76c9535dabe4686dcf8f9e56e7fedc35c170ca8161faa78af898f4",
+      "rows": 2,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase99-multiturn-data/test.jsonl",
+      "sha256": "da98d8c0e020dc9230b8ea95e3c46ea9be71889a063ffdc4692807413801f6bd",
+      "rows": 40,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase99-multiturn-data/train.jsonl",
+      "sha256": "fbbae3aea09e2deb4f59794ea78ded71db8fa4ce5ef2c61c54e48182d050c377",
+      "rows": 316,
+      "unrecognized_rows": 0
+    },
+    {
+      "path": "phase99-multiturn-data/valid.jsonl",
+      "sha256": "b4f47c521f5c5e2063b9541febe93ec340a0ad6868f78295f086fea2c91f02d0",
+      "rows": 40,
+      "unrecognized_rows": 0
+    }
+  ],
+  "indexed_unique_prompts": 21934,
+  "parse_errors": [],
+  "unrecognized_rows": 0,
+  "split_file_count": 188,
+  "overlapping_case_count": 0,
+  "by_category": {},
+  "overlaps": [],
+  "limitations": [
+    "Matches any user turn, conservatively flagging shared context.",
+    "Does not establish which files were consumed by each checkpoint.",
+    "No semantic near-duplicate detection; no pretraining contamination claim.",
+    "Scans local JSONL split files and batchNNN.jsonl files under cybersec-qa-dataset-zh; other formats, remote data, and pretraining exposure need separate lineage review."
+  ]
+}

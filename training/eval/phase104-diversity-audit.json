@@ -1,0 +1,48 @@
+{
+  "sha256": "56eaa0f7fdff51af73b02d8ece1e48e1872901339287690a4d93325a84171124",
+  "rows": 360,
+  "unique_ids": 360,
+  "unique_exact_prompts": 360,
+  "unique_normalized_cores": 45,
+  "largest_duplicate_core_group": 40,
+  "category_counts": {
+    "code_review": {
+      "rows": 40,
+      "unique_cores": 40
+    },
+    "cyber_accuracy": {
+      "rows": 40,
+      "unique_cores": 40
+    },
+    "detection_and_remediation": {
+      "rows": 40,
+      "unique_cores": 40
+    },
+    "evidence_boundary": {
+      "rows": 40,
+      "unique_cores": 1
+    },
+    "format_and_general": {
+      "rows": 40,
+      "unique_cores": 1
+    },
+    "multiturn": {
+      "rows": 40,
+      "unique_cores": 1
+    },
+    "prompt_injection": {
+      "rows": 40,
+      "unique_cores": 1
+    },
+    "threat_modeling": {
+      "rows": 40,
+      "unique_cores": 40
+    },
+    "tool_honesty": {
+      "rows": 40,
+      "unique_cores": 1
+    }
+  },
+  "duplicate_core_groups": 45,
+  "note": "Normalization removes only known category wrappers and case-number prefixes; it is a targeted audit, not a general semantic-similarity proof."
+}

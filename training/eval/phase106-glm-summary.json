@@ -1,0 +1,37 @@
+{
+  "model": "glm-5.2",
+  "condition": "higher-budget diagnostic",
+  "max_tokens": 3000,
+  "temperature": 0,
+  "system_prompt_version": "phase106-reference-v1",
+  "unique_cases": 360,
+  "rubric_passes": 311,
+  "finish_reason_counts": {
+    "stop": 279,
+    "length": 81
+  },
+  "empty_final_answers": 18,
+  "attempt_rows": 361,
+  "retry_count": 1,
+  "transport_errors_in_retry_log": 1,
+  "category_results": {
+    "cyber_accuracy": "36/40",
+    "detection_and_remediation": "34/40",
+    "threat_modeling": "28/40",
+    "code_review": "31/40",
+    "evidence_boundary": "40/40",
+    "multiturn": "40/40",
+    "tool_honesty": "40/40",
+    "prompt_injection": "40/40",
+    "format_and_general": "22/40"
+  },
+  "manifest_sha256": "56eaa0f7fdff51af73b02d8ece1e48e1872901339287690a4d93325a84171124",
+  "raw_attempt_log_sha256": "fb53452ea2037855eccf9f2b46c4040701209674373d70bdfb8130aa31ea3662",
+  "canonical_response_only_sha256": "0db80d9ef6a866e24b993de9d869d50d7e70431bf515d3754ed9b20537f659e3",
+  "caveats": [
+    "Phase 104 contains 45 normalized prompt cores, not 360 independent scenarios.",
+    "GLM run used max_tokens=3000 while other comparison rows used 900; not a controlled head-to-head score.",
+    "Rubric is a mechanical heuristic and has no independent semantic adjudication.",
+    "Aggregate output excludes private raw responses and reasoning_content."
+  ]
+}

@@ -1,0 +1,5 @@
+# Keep private held-out cases, answer keys, and model responses out of Git.
+phase107-private-cases*.json
+phase107-answer-keys*.json
+phase107-model-results*.jsonl
+phase107-raw-responses*.jsonl
