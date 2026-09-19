@@ -21,6 +21,12 @@ Direct GitHub download from the cluster CPU test node was extremely throttled; t
 
 The first GPT-OSS smoke attempt used the obsolete `--conversation` flag and exited before loading weights; it was corrected to `--single-turn`. A 32-token run generated only reasoning-channel text before its token cap, so it was not counted as a completed short-answer smoke. With `--reasoning off` and 64 tokens, the final short-answer smoke passed. The Gemma 4 smoke also passed with those settings.
 
+## Private-suite static recheck
+
+Before any model invocation, reran the committed audits against the current files. The 320-case manifest still has 320 unique IDs, exact prompts, and targeted normalized prompt cores; all eight strata have 40 cases. The separate answer-key file has 320 matching IDs. The overlap scan must be rooted at the parent `ni-a/` directory (one level above this repository) to include both this dataset repository and the sibling Phase train/valid/test JSONL files: this reproduced the recorded 188-file / 22,315-row scope, 21,946 indexed normalized strings, zero parse errors, zero unrecognized rows, and zero exact overlaps. The result remains limited to exact normalized matches in scanned local JSONL files; it is not a semantic-cleanliness or pretraining-contamination certification.
+
+An initial diagnostic invocation using `.` as the scan root found only the 149 dataset batch files and was discarded as an incomplete scope. The verified parent-root run is authoritative. Raw cases and answer keys were not printed or changed.
+
 ## Next safe execution sequence
 
 1. Runtime setup and neutral single-prompt smoke checks are complete for both references. Preserve the version/hash-pinned scripts and Slurm logs.
