@@ -9,6 +9,7 @@ Status: private candidate set generated; rubric not frozen; no model scoring per
 - Cases: 320 total, 40 in each of eight strata.
 - Unique fixture IDs: 320; unique exact prompts: 320; unique normalized prompts: 320.
 - Targeted scenario-core normalization: 320 distinct cores; largest repeated core group: 1.
+- Character 3/4/5-gram TF-IDF triage at the deliberately low 0.10 threshold flagged four pairs (maximum similarity 0.1237); each pair was manually inspected in the local private manifest. The flagged pairs are distinct decision contexts (including config metadata vs alert-rule metadata, SAML binding vs URL-fetch review, CSRF vs OAuth cookie behavior, and translation vs report summarization), not duplicate cases. This lexical check still cannot prove general semantic independence.
 - Answer keys: 320, stored separately from prompts and excluded from model inputs.
 - Source fixture SHA-256: `6c0e65be55826cd04f5f0e7be1ebd5fd290b0f3062ffff4cbd58e48eb1d45656`
 - Generated manifest SHA-256: `5f76a665febcb46f63c25c19556c1127cb603238cc046b7f8154fc8a9531d40d`

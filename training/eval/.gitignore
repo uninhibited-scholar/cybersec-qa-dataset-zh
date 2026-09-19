@@ -5,3 +5,4 @@ phase107-private-source-fixtures*.json
 phase107-model-results*.jsonl
 phase107-raw-responses*.jsonl
 phase107-overlap-audit*.json
+phase107-neardup-audit*.json
