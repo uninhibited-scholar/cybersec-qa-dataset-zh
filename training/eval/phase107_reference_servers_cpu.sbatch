@@ -7,7 +7,7 @@
 #SBATCH --nodelist=a100-3
 #SBATCH --cpus-per-task=12
 #SBATCH --mem=48G
-#SBATCH --time=12:00:00
+#SBATCH --time=1-00:00:00
 #SBATCH --output=logs/phase107-cpu-refs-%j.out
 
 set -euo pipefail
@@ -59,7 +59,22 @@ gemma_pid=$!
 wait_health http://127.0.0.1:18082/health "$gemma_pid" gemma4
 
 echo "reference_servers_ready=true compute=cpu-only threads_per_server=12; requests are sequential"
-echo "collector must use an authenticated local SSH forward to a100-3:18081/18082"
+if [[ -n "${PHASE107_REFERENCE_COLLECTION_DIR:-}" ]]; then
+  readonly COLLECTION_DIR="$PHASE107_REFERENCE_COLLECTION_DIR"
+  case "$COLLECTION_DIR" in
+    "$ROOT"/phase107-cpu-collection-*) ;;
+    *) echo "refusing collection directory outside the private Phase 107 staging prefix" >&2; exit 7 ;;
+  esac
+  test -s "$COLLECTION_DIR/phase107_collect_blind.py"
+  test -s "$COLLECTION_DIR/phase107-private-cases-v0.2.json"
+  echo "starting_reference_collection=$COLLECTION_DIR"
+  PHASE107_REFERENCE_EXECUTION_MODE="cpu-only a100-3; llama.cpp b11046; n_gpu_layers=0; 12 threads per server" \
+    python3 -u "$COLLECTION_DIR/phase107_collect_blind.py" \
+      --cases "$COLLECTION_DIR/phase107-private-cases-v0.2.json" \
+      --outdir "$COLLECTION_DIR" --systems phase91 gptoss20b gemma4_26b \
+      --reference-host a100-3 --reference-local
+  echo "reference_collection_completed=true"
+fi
 while kill -0 "$gpt_pid" 2>/dev/null && kill -0 "$gemma_pid" 2>/dev/null; do sleep 30; done
 echo "reference server exited unexpectedly" >&2
 exit 6
