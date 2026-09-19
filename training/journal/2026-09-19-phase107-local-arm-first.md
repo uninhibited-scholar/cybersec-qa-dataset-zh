@@ -44,6 +44,7 @@ The approved A100 reference job `43695` is still pending for resources. Rather t
 - First compute-local collector invocation failed before the first prompt because the new `--reference-local` branch referenced a JSONL reader not yet present in the collector; added the reader and a test. This was caught in preflight with zero benchmark requests sent.
 - Second compute-local invocation validated the staged Phase 91 arm and reference endpoints but still ran the normal authorized `/v1/models` preflight against Phase 91, which is intentionally unavailable from the cluster. It aborted before any benchmark request; the preflight is now skipped only in `--reference-local` mode, which is restricted to a full three-arm resume and still validates the Phase 91 manifest/hash evidence.
 - Static shell syntax, collector byte-compilation, `git diff --check`, and all 24 evaluation tests pass. The approved A100 evaluation job `43695` remains unchanged and pending for resources.
+- After the two fail-closed fixes, the compute-local collector started under Slurm step `43760.3` at about 21:51 HKT. It reused the exact 320 saved Phase 91 rows and the original alias map, then began the 640 reference requests. At the first progress checkpoint, 3 reference responses were durably appended: 1 `ok`, 1 `truncated` at the fixed 700-token ceiling, and 1 `empty`; no answer content or alias mapping was opened. These classifications are raw output/transport facts, not comparative scores. Collection is ongoing and resumable.
 
 ## Limits
 
