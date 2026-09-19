@@ -137,6 +137,30 @@ def selected_completion_count(completed: set[tuple[str, str]], alias_to_system: 
     return sum(1 for _case_id, alias in completed if alias_to_system[alias] in requested_systems)
 
 
+def validate_reference_local_resume(cases: list[dict], completed: set[tuple[str, str]],
+                                    aliases: dict[str, str], prior_manifest: dict,
+                                    suite_hash: str) -> dict:
+    """Require a complete sealed Phase 91 arm and its approved prompt-parity proof."""
+    if set(aliases.values()) != set(SYSTEMS):
+        raise ValueError("local reference resume requires the original complete alias map")
+    if (prior_manifest.get("suite_version") != "phase107-v0.2"
+            or prior_manifest.get("case_count") != len(cases)
+            or prior_manifest.get("suite_sha256") != suite_hash
+            or prior_manifest.get("answer_keys_loaded") is not False
+            or prior_manifest.get("protocol") != "phase107-inference-protocol-v0.1+corrigendum-v0.1.1"):
+        raise ValueError("local reference resume manifest does not match the frozen Phase 107 run")
+    parity = prior_manifest.get("phase91_prompt_parity")
+    if (not isinstance(parity, dict)
+            or parity.get("worker_sha256") != EXPECTED_PHASE91_WORKER_SHA256
+            or parity.get("system_prompt_sha256") != EXPECTED_SYSTEM_PROMPT_SHA256):
+        raise ValueError("local reference resume lacks the approved Phase 91 prompt-parity proof")
+    phase91_alias = next(alias for alias, system in aliases.items() if system == "phase91")
+    expected = {(case["id"], phase91_alias) for case in cases}
+    if not expected.issubset(completed):
+        raise ValueError(f"local reference resume requires all 320 Phase 91 rows; missing={len(expected - completed)}")
+    return parity
+
+
 def start_tunnel(command: list[str], label: str) -> subprocess.Popen:
     log = (OUT_DIR / f"tunnel-{label}.stderr.log").open("ab")
     p = subprocess.Popen(command, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
@@ -250,6 +274,8 @@ def main() -> int:
                     help="cluster-internal host with loopback-only llama-server ports")
     ap.add_argument("--reference-gptoss-port", type=int, default=18081)
     ap.add_argument("--reference-gemma-port", type=int, default=18082)
+    ap.add_argument("--reference-local", action="store_true",
+                    help="Run on the compute node beside loopback-only reference servers; requires a full saved Phase 91 arm.")
     ap.add_argument("--seed", type=int, default=20260919)
     ap.add_argument("--systems", nargs="+", choices=SYSTEMS, default=list(SYSTEMS),
                     help="Collect selected blinded arms now; later runs can resume into the same outdir.")
@@ -264,18 +290,33 @@ def main() -> int:
     if len({c.get("id") for c in cases}) != 320 or any(not c.get("messages") for c in cases):
         raise SystemExit("preflight failed: duplicate IDs or missing messages")
 
-    worker_source_result = subprocess.run(
-        ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8",
-         f"{args.mini_user}@{args.mini_host}", "cat /Users/jiehan/cyber-agent/phase91_worker.py"],
-        capture_output=True, timeout=15,
-    )
-    if worker_source_result.returncode != 0:
-        raise SystemExit("preflight failed: cannot read pinned Phase 91 worker for prompt-parity check")
-    try:
-        prompt_parity = validate_prompt_parity(worker_source_result.stdout, SYSTEM_PROMPT)
-    except (SyntaxError, ValueError) as exc:
-        raise SystemExit(f"preflight failed: {exc}") from exc
-    del worker_source_result
+    if args.reference_local:
+        if requested_systems != set(SYSTEMS):
+            raise SystemExit("reference-local mode requires the complete three-arm run and saved Phase 91 arm")
+        if not (OUT_DIR / "sealed-identities.json").is_file() or not (OUT_DIR / "blind-run-manifest.json").is_file():
+            raise SystemExit("reference-local mode requires the existing sealed identity map and Phase 91 run manifest")
+        prior_manifest = json.loads((OUT_DIR / "blind-run-manifest.json").read_text(encoding="utf-8"))
+        prior_rows = read_jsonl(OUT_DIR / "blind-responses.jsonl") if (OUT_DIR / "blind-responses.jsonl").exists() else []
+        prior_aliases = json.loads((OUT_DIR / "sealed-identities.json").read_text(encoding="utf-8"))["alias_to_system"]
+        prior_completed = {(row.get("case_id"), row.get("alias")) for row in prior_rows}
+        try:
+            prompt_parity = validate_reference_local_resume(
+                cases, prior_completed, prior_aliases, prior_manifest, sha256(args.cases))
+        except (KeyError, TypeError, ValueError) as exc:
+            raise SystemExit(f"preflight failed: {exc}") from exc
+    else:
+        worker_source_result = subprocess.run(
+            ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8",
+             f"{args.mini_user}@{args.mini_host}", "cat /Users/jiehan/cyber-agent/phase91_worker.py"],
+            capture_output=True, timeout=15,
+        )
+        if worker_source_result.returncode != 0:
+            raise SystemExit("preflight failed: cannot read pinned Phase 91 worker for prompt-parity check")
+        try:
+            prompt_parity = validate_prompt_parity(worker_source_result.stdout, SYSTEM_PROMPT)
+        except (SyntaxError, ValueError) as exc:
+            raise SystemExit(f"preflight failed: {exc}") from exc
+        del worker_source_result
 
     sealed_path = OUT_DIR / "sealed-identities.json"
     if sealed_path.exists():
@@ -297,7 +338,7 @@ def main() -> int:
     processes: list[subprocess.Popen] = []
     try:
         token = None
-        if "phase91" in requested_systems:
+        if "phase91" in requested_systems and not args.reference_local:
             p = start_tunnel(["ssh", "-o", "BatchMode=yes", "-o", "ExitOnForwardFailure=yes", "-N",
                               "-L", "127.0.0.1:18765:127.0.0.1:18765",
                               f"{args.mini_user}@{args.mini_host}"], "mini")
@@ -309,7 +350,7 @@ def main() -> int:
             del secret
             if len(token) < 16:
                 raise RuntimeError("credential source returned invalid data")
-        if requested_systems.intersection({"gptoss20b", "gemma4_26b"}):
+        if requested_systems.intersection({"gptoss20b", "gemma4_26b"}) and not args.reference_local:
             p = start_tunnel(cluster_tunnel_command(
                 args.cluster_user, args.cluster_host, args.reference_host,
                 args.reference_gptoss_port, args.reference_gemma_port), "cluster")
@@ -317,13 +358,17 @@ def main() -> int:
             if "gptoss20b" in requested_systems: wait_port(18181, p, "GPT-OSS")
             if "gemma4_26b" in requested_systems: wait_port(18182, p, "Gemma")
 
+        gpt_endpoint = "http://127.0.0.1:18081/v1/chat/completions" if args.reference_local else "http://127.0.0.1:18181/v1/chat/completions"
+        gemma_endpoint = "http://127.0.0.1:18082/v1/chat/completions" if args.reference_local else "http://127.0.0.1:18182/v1/chat/completions"
         endpoints = {
             "phase91": ("http://127.0.0.1:18765/v1/chat/completions", token),
-            "gptoss20b": ("http://127.0.0.1:18181/v1/chat/completions", None),
-            "gemma4_26b": ("http://127.0.0.1:18182/v1/chat/completions", None),
+            "gptoss20b": (gpt_endpoint, None),
+            "gemma4_26b": (gemma_endpoint, None),
         }
         for system, (url, auth) in endpoints.items():
             if system not in requested_systems:
+                continue
+            if args.reference_local and system == "phase91":
                 continue
             status, _body, error = get_json(url.rsplit("/v1/", 1)[0] + "/health", auth)
             if status != 200 or error:
