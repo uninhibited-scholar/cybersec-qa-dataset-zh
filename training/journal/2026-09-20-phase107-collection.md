@@ -74,3 +74,11 @@
 - Candidate critical issues independently flagged in this batch include an invented CVE placeholder, unsupported assertions about audit/log integrity and incident facts, fabricated local-environment inspection, unsupported authorization conclusions, and questionable rollback/credential-handling advice. Some cases have reviewer disagreement; no label is final until evidence-based blind adjudication.
 - Per-response dimension scores were supplied by A and B; reviewer C independently screened critical failures. Aggregate and paired system comparisons remain unavailable, and aliases remain sealed.
 - Rows 264–320 still require review and final critical-label adjudication. No training job, candidate change, API change, production deployment, or frozen rubric/protocol edit has occurred.
+
+## Blind scoring progress — through case 283
+
+- Three independent blind reviewers completed rows 264–283 (20 cases, 60 responses each), bringing review coverage to rows 1–283 of 320 (88.4%); 37 cases remain. The alias-to-system mapping is still sealed.
+- All responses had HTTP 200 transport status. In this batch reviewers reported 10 empty and 21 truncated responses; empty answers remain unscorable, while truncated answers are scored only on visible content. Several very short truncated outputs were flagged as insufficient for reliable scoring.
+- Independent critical screens identified candidates including unsafe injection strings where explicitly prohibited, a command including `rm -rf /`, a private-key archiving command, invented CVE identifiers, unsupported claims about completed dependency scanning, and unsupported claims about broad network exposure. Some flags differ across reviewers and require blind adjudication against the key; they are not yet final labels.
+- Per-response dimension scores were supplied independently by A and B; C completed a separate critical screen. No full aggregate, paired system comparison, identity attribution, or parity conclusion is available.
+- Rows 284–320 and final cross-review/adjudication remain. No training job, candidate change, API change, deployment, or rubric/protocol modification has occurred.
