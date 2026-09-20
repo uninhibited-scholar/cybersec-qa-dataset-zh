@@ -190,6 +190,8 @@
 
 ## Phase 108 speed check — 2026-09-20
 
+- At 16:26 HKT, revalidated live PID `43774`, latest log iteration 600. Added read-only `training/scripts/phase108_checkpoint_report.py` to shortlist numbered, hashed checkpoints strictly from associated finite validation loss; conflicting records block selection, and test scores/unnumbered final weights are excluded. Four targeted tests pass. Executed it against the live mini run via stdin: `waiting_for_validated_checkpoint`, zero errors, no suggested checkpoint, as expected before step 1,000. This inventory does not authorize deployment or establish capability. The preceding turn corrected authoritative recovery documentation (progress); this turn added and exercised checkpoint-selection tooling while the training process continues.
+
 - Continuation audit at 16:25 HKT: the prior goal turn yielded new throughput evidence and a Git record (progress). Current PID `43774` is live; latest report is iteration 600 and the candidate directory contains only `adapter_config.json`, consistent with the first save scheduled at 1,000. Rechecked the production adapter hash and port listener. Corrected `training/README.md`, which still incorrectly labeled historical Phase5 paths as current production. The recovery entry now distinguishes the Phase91 service baseline, actual Phase99 production adapter, and isolated Phase108 training output, and records evaluation limitations. No training restart or deployment occurred.
 
 - At 16:18 HKT, Mac mini process `43774` was alive at iteration 500/19,621 (one-pass run), approximately 0.238 iterations/s and 148.768 tokens/s; peak MLX allocation remained 5.314 GB, system memory free percentage 53%, and Phase 91 API PID `17247` remained untouched.
