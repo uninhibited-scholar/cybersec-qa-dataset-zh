@@ -296,3 +296,4 @@
 - At23:36 HKT, PID43774 remains live at step8300; train loss1.772,0.299 it/s,188.249 tokens/s, trained tokens5,371,833, peak allocation5.740GB. No production change.
 - At23:41 HKT, PID43774 remains live at step8400; train loss1.727,0.303 it/s,191.713 tokens/s, trained tokens5,435,019, peak allocation5.740GB. No production change.
 - At23:47 HKT, PID43774 remains live at step8500; train loss1.750,0.274 it/s,188.336 tokens/s, trained tokens5,503,687, peak allocation5.740GB. No production change.
+- At23:53 HKT, PID43774 remains live at step8600; train loss1.663,0.297 it/s,189.564 tokens/s, trained tokens5,567,448, peak allocation5.740GB. No production change.
