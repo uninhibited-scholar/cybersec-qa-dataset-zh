@@ -190,6 +190,8 @@
 
 ## Phase 108 speed check — 2026-09-20
 
+- Step3000 checkpoint/config backed up to cluster `models/phase108-step3000-20260920` under migration root; directory0700/files0600. Destination SHA matches source `47312f1389777d725932ba797c064ff5d831c9ef77aa99ad65424e10831ffd5b`. CPU integrity check:56 tensors, all finite, same keys/shapes as step2000,56 changed tensors. Source preserved; no weights committed and no production change. Backup config still carries original Mac paths. This verifies preservation and actual updates only, not capability improvement.
+
 - At18:39 HKT, live mini PID43774 reached3,000/19,621 microbatches. Pre-update sampled validation loss1.876 (32 batches,64.544s); train loss1.751,193.979 tokens/s, peak5.475GB,1,939,450 cumulative tokens. New numbered checkpoint `0003000_adapters.safetensors` SHA256 `47312f1389777d725932ba797c064ff5d831c9ef77aa99ad65424e10831ffd5b`. Sampled validation increases are not a paired trend because subsets differ; retain checkpoints for common-validation comparison rather than declaring success or overfitting. Previous turns were verified waits on this live process; no restart or production modification.
 
 - Step2000 backup tensor integrity verified with `safetensors.numpy.load_file`:56 tensors, keys and shapes identical to step1000, all finite,56/56 changed by exact array comparison. This is a small CPU file-integrity check, not a GPU inference job or proof of quality. Mini PID43774 remains live at step2,300 (~195.892 tokens/s). Candidate continues isolated; production unchanged.
