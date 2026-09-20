@@ -20,6 +20,7 @@
 - Iteration 5300 is logged: train loss 1.769, 197.603 tokens/s, peak memory 5.475 GB. PID 43774 remains live; no production change or capability claim.
 - Iteration 5400 is logged: train loss 1.754, 197.757 tokens/s, peak memory 5.475 GB. PID 43774 remains live; continue toward checkpoint 6000 and later fixed-set evaluation.
 - Iteration 5500 is logged: train loss 1.686, 205.019 tokens/s, peak memory 5.475 GB. PID 43774 remains live; continue toward checkpoint 6000. Training loss is only an optimization metric.
+- Iteration 5600 is logged: train loss 1.728, 193.234 tokens/s, peak memory 5.475 GB. PID 43774 remains live; continue toward the 6000-step save/validation.
 
 ## Live continuation check — 19:13 HKT
 
