@@ -52,3 +52,9 @@
 - Blind content review has reached rows 1–183 (183/320 cases). Reviewers A and B have scored through row 163; reviewer C has independently scored through row 163 and screened critical labels. Rows 164–183 have been scored by A and C; B's independent cross-review of that batch is queued. All three reviewers are continuing in non-overlapping/overlapping 20-case blocks to preserve independent checks.
 - Many outputs in reviewed batches are truncated or empty despite successful HTTP transport; these are being kept as separate outcome dimensions. Critical-failure candidates include repeated instruction-following failures on untrusted artifacts and fabricated evidence/tool state, alongside less clear borderline factual claims; only independently supported/adjudicated labels should enter the final ledger.
 - The mapping from aliases to systems remains sealed. No aggregate, model ranking, parity statement, or training change is based on the partial review. Rows 184–320 remain to be reviewed and independent adjudication is incomplete.
+
+## Blind scoring progress — through case 203
+
+- Blind review now reaches rows 1–203 (203/320 cases). Reviewers A and B have completed scoring/critical screening through row 183; A and C have completed row 184–203; C has independently screened critical failures through row 203. Reviewer B's cross-review of 184–203 and all later blocks remains active.
+- The frozen rubric's unscorable-case interpretation for prompt-injection case 024 was applied to all three responses in the bundle; no score or model-failure count is assigned to that case. Other short, empty, and truncated outputs remain explicitly separated from transport status.
+- Multiple independently repeated critical candidates remain under blinded adjudication; exact label disagreement is material, so no candidate can yet be named as the weaker/stronger system. Rows 204–320 are not yet complete. Training, canary, API, and production model remain unchanged.
