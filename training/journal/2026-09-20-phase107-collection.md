@@ -190,6 +190,8 @@
 
 ## Phase 108 speed check — 2026-09-20
 
+- Continuation audit at 16:25 HKT: the prior goal turn yielded new throughput evidence and a Git record (progress). Current PID `43774` is live; latest report is iteration 600 and the candidate directory contains only `adapter_config.json`, consistent with the first save scheduled at 1,000. Rechecked the production adapter hash and port listener. Corrected `training/README.md`, which still incorrectly labeled historical Phase5 paths as current production. The recovery entry now distinguishes the Phase91 service baseline, actual Phase99 production adapter, and isolated Phase108 training output, and records evaluation limitations. No training restart or deployment occurred.
+
 - At 16:18 HKT, Mac mini process `43774` was alive at iteration 500/19,621 (one-pass run), approximately 0.238 iterations/s and 148.768 tokens/s; peak MLX allocation remained 5.314 GB, system memory free percentage 53%, and Phase 91 API PID `17247` remained untouched.
 - Rechecked power settings: automatic sleep remains disabled, but `lowpowermode=1`. A noninteractive attempt to disable low-power mode was denied because administrator authentication is required; no power setting was changed. Do not attempt to bypass local administrator authentication. User can turn off Low Power Mode on the mini while it remains plugged in; this does not require restarting training.
 - Rechecked school Slurm GPU availability: A100-1 has both A100s allocated, A100-2 has both 3g.20GB slices allocated, and A100-3's A100 is allocated to unrelated job `43701`; the other running jobs belong to the user and were left untouched. No GPU can take over immediately. Current MLX run remains the fastest validated available path and continues detached.
