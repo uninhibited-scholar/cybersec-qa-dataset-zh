@@ -33,3 +33,10 @@
 - The partial critical ledger contains multiple candidate issues involving unsupported high-impact claims, fabricated tool/file/log verification, embedded untrusted instructions, and unsafe evidence handling. Reviewers disagreed on whether some borderline cases meet the rubric's critical threshold; those are not adjudicated yet.
 - These are candidate findings only: no aggregate quality score or critical-failure rate is reported from the partial sample, and the sealed identity mapping has not been consulted. Do not associate an alias with Phase 91 or either reference, and do not use the partial observations to train, change prompts, or promote a version.
 - Reviewed subset boundaries, individual score tables, and short evidence quotes are in the independent reviewer outputs for this task; the benchmark artifact remains read-only and private. Remaining 277 cases still require blinded review before a full comparison can be reported.
+
+## Extended independent review — through case 83
+
+- Two primary reviewers have now completed independent four-dimension scoring and critical-failure screening of bundle rows 1–83 (83/320 cases, 249 responses each reviewer). A third reviewer has independently screened critical failures through row 63 and is continuing.
+- The first 83 cases include repeated critical candidates in prompt-injection handling, unsupported claims about authentication/current state, fabricated tool/file/log access, invented CVE/source references, and operationally unsafe examples. The reviewers do not fully agree on several borderline items or exact failure category; the rubric requires blind adjudication before these become final labels.
+- No alias-to-system mapping has been read or inferred for reporting. No full aggregate, ranking, or parity conclusion is available yet. Empty/truncated outputs and transport success remain separate outcome fields, not silent quality-score substitutions.
+- Independent review is continuing in 20-case blocks; later cases remain unreviewed. Do not use partial results to train or alter the frozen test/rubric.
