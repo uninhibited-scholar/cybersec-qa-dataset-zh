@@ -1,0 +1,1613 @@
+{
+  "method": "normalized character 4-gram set Jaccard, train prompts versus joined eval user turns",
+  "threshold": 0.3,
+  "train_rows": 19621,
+  "eval_cases": 320,
+  "train_sha256": "63526e22f95e170f2d5b31ae610ffb919f8089499a33320d9ef82d2bb259ba57",
+  "cases_sha256": "6d75567be1ec32e1599951e98776625e93b4cc1826a269ff8b4f59304306d982",
+  "flagged_cases": [],
+  "nearest_by_case": [
+    {
+      "case_id": "p107-evidence_boundary-001",
+      "jaccard": 0.02403846153846154,
+      "train_line": 5131
+    },
+    {
+      "case_id": "p107-evidence_boundary-002",
+      "jaccard": 0.013793103448275862,
+      "train_line": 14223
+    },
+    {
+      "case_id": "p107-evidence_boundary-003",
+      "jaccard": 0.024096385542168676,
+      "train_line": 3655
+    },
+    {
+      "case_id": "p107-evidence_boundary-004",
+      "jaccard": 0.008403361344537815,
+      "train_line": 5177
+    },
+    {
+      "case_id": "p107-evidence_boundary-005",
+      "jaccard": 0.0043859649122807015,
+      "train_line": 15439
+    },
+    {
+      "case_id": "p107-evidence_boundary-006",
+      "jaccard": 0.005917159763313609,
+      "train_line": 1200
+    },
+    {
+      "case_id": "p107-evidence_boundary-007",
+      "jaccard": 0.008403361344537815,
+      "train_line": 18104
+    },
+    {
+      "case_id": "p107-evidence_boundary-008",
+      "jaccard": 0.017045454545454544,
+      "train_line": 4184
+    },
+    {
+      "case_id": "p107-evidence_boundary-009",
+      "jaccard": 0.02654867256637168,
+      "train_line": 11190
+    },
+    {
+      "case_id": "p107-evidence_boundary-010",
+      "jaccard": 0.004273504273504274,
+      "train_line": 17659
+    },
+    {
+      "case_id": "p107-evidence_boundary-011",
+      "jaccard": 0.009302325581395349,
+      "train_line": 488
+    },
+    {
+      "case_id": "p107-evidence_boundary-012",
+      "jaccard": 0.04,
+      "train_line": 1289
+    },
+    {
+      "case_id": "p107-evidence_boundary-013",
+      "jaccard": 0.006756756756756757,
+      "train_line": 17938
+    },
+    {
+      "case_id": "p107-evidence_boundary-014",
+      "jaccard": 0.006060606060606061,
+      "train_line": 11084
+    },
+    {
+      "case_id": "p107-evidence_boundary-015",
+      "jaccard": 0.008771929824561403,
+      "train_line": 9281
+    },
+    {
+      "case_id": "p107-evidence_boundary-016",
+      "jaccard": 0.00847457627118644,
+      "train_line": 3341
+    },
+    {
+      "case_id": "p107-evidence_boundary-017",
+      "jaccard": 0.025423728813559324,
+      "train_line": 1974
+    },
+    {
+      "case_id": "p107-evidence_boundary-018",
+      "jaccard": 0.008771929824561403,
+      "train_line": 6759
+    },
+    {
+      "case_id": "p107-evidence_boundary-019",
+      "jaccard": 0.012987012987012988,
+      "train_line": 246
+    },
+    {
+      "case_id": "p107-evidence_boundary-020",
+      "jaccard": 0.017699115044247787,
+      "train_line": 16195
+    },
+    {
+      "case_id": "p107-evidence_boundary-021",
+      "jaccard": 0.010582010582010581,
+      "train_line": 2759
+    },
+    {
+      "case_id": "p107-evidence_boundary-022",
+      "jaccard": 0.016666666666666666,
+      "train_line": 11442
+    },
+    {
+      "case_id": "p107-evidence_boundary-023",
+      "jaccard": 0.0018656716417910447,
+      "train_line": 19286
+    },
+    {
+      "case_id": "p107-evidence_boundary-024",
+      "jaccard": 0.01948051948051948,
+      "train_line": 2119
+    },
+    {
+      "case_id": "p107-evidence_boundary-025",
+      "jaccard": 0.0,
+      "train_line": null
+    },
+    {
+      "case_id": "p107-evidence_boundary-026",
+      "jaccard": 0.01904761904761905,
+      "train_line": 1344
+    },
+    {
+      "case_id": "p107-evidence_boundary-027",
+      "jaccard": 0.005681818181818182,
+      "train_line": 4937
+    },
+    {
+      "case_id": "p107-evidence_boundary-028",
+      "jaccard": 0.01384083044982699,
+      "train_line": 4067
+    },
+    {
+      "case_id": "p107-evidence_boundary-029",
+      "jaccard": 0.001893939393939394,
+      "train_line": 16798
+    },
+    {
+      "case_id": "p107-evidence_boundary-030",
+      "jaccard": 0.013422818791946308,
+      "train_line": 7349
+    },
+    {
+      "case_id": "p107-evidence_boundary-031",
+      "jaccard": 0.02976190476190476,
+      "train_line": 10567
+    },
+    {
+      "case_id": "p107-evidence_boundary-032",
+      "jaccard": 0.014423076923076924,
+      "train_line": 6036
+    },
+    {
+      "case_id": "p107-evidence_boundary-033",
+      "jaccard": 0.029411764705882353,
+      "train_line": 5195
+    },
+    {
+      "case_id": "p107-evidence_boundary-034",
+      "jaccard": 0.02586206896551724,
+      "train_line": 15672
+    },
+    {
+      "case_id": "p107-evidence_boundary-035",
+      "jaccard": 0.011560693641618497,
+      "train_line": 10346
+    },
+    {
+      "case_id": "p107-evidence_boundary-036",
+      "jaccard": 0.009174311926605505,
+      "train_line": 16811
+    },
+    {
+      "case_id": "p107-evidence_boundary-037",
+      "jaccard": 0.006802721088435374,
+      "train_line": 2793
+    },
+    {
+      "case_id": "p107-evidence_boundary-038",
+      "jaccard": 0.006060606060606061,
+      "train_line": 7991
+    },
+    {
+      "case_id": "p107-evidence_boundary-039",
+      "jaccard": 0.0,
+      "train_line": null
+    },
+    {
+      "case_id": "p107-evidence_boundary-040",
+      "jaccard": 0.011299435028248588,
+      "train_line": 4534
+    },
+    {
+      "case_id": "p107-tool_honesty-001",
+      "jaccard": 0.02097902097902098,
+      "train_line": 6427
+    },
+    {
+      "case_id": "p107-tool_honesty-002",
+      "jaccard": 0.006756756756756757,
+      "train_line": 11735
+    },
+    {
+      "case_id": "p107-tool_honesty-003",
+      "jaccard": 0.013422818791946308,
+      "train_line": 18624
+    },
+    {
+      "case_id": "p107-tool_honesty-004",
+      "jaccard": 0.053691275167785234,
+      "train_line": 2754
+    },
+    {
+      "case_id": "p107-tool_honesty-005",
+      "jaccard": 0.007246376811594203,
+      "train_line": 16329
+    },
+    {
+      "case_id": "p107-tool_honesty-006",
+      "jaccard": 0.04316546762589928,
+      "train_line": 2503
+    },
+    {
+      "case_id": "p107-tool_honesty-007",
+      "jaccard": 0.018691588785046728,
+      "train_line": 9888
+    },
+    {
+      "case_id": "p107-tool_honesty-008",
+      "jaccard": 0.01060070671378092,
+      "train_line": 5473
+    },
+    {
+      "case_id": "p107-tool_honesty-009",
+      "jaccard": 0.021739130434782608,
+      "train_line": 6588
+    },
+    {
+      "case_id": "p107-tool_honesty-010",
+      "jaccard": 0.04090909090909091,
+      "train_line": 16422
+    },
+    {
+      "case_id": "p107-tool_honesty-011",
+      "jaccard": 0.015463917525773196,
+      "train_line": 8376
+    },
+    {
+      "case_id": "p107-tool_honesty-012",
+      "jaccard": 0.008620689655172414,
+      "train_line": 5328
+    },
+    {
+      "case_id": "p107-tool_honesty-013",
+      "jaccard": 0.004366812227074236,
+      "train_line": 3111
+    },
+    {
+      "case_id": "p107-tool_honesty-014",
+      "jaccard": 0.07894736842105263,
+      "train_line": 17283
+    },
+    {
+      "case_id": "p107-tool_honesty-015",
+      "jaccard": 0.075,
+      "train_line": 11682
+    },
+    {
+      "case_id": "p107-tool_honesty-016",
+      "jaccard": 0.014492753623188406,
+      "train_line": 14155
+    },
+    {
+      "case_id": "p107-tool_honesty-017",
+      "jaccard": 0.013100436681222707,
+      "train_line": 2702
+    },
+    {
+      "case_id": "p107-tool_honesty-018",
+      "jaccard": 0.00980392156862745,
+      "train_line": 16377
+    },
+    {
+      "case_id": "p107-tool_honesty-019",
+      "jaccard": 0.028846153846153848,
+      "train_line": 815
+    },
+    {
+      "case_id": "p107-tool_honesty-020",
+      "jaccard": 0.013452914798206279,
+      "train_line": 246
+    },
+    {
+      "case_id": "p107-tool_honesty-021",
+      "jaccard": 0.05982905982905983,
+      "train_line": 19099
+    },
+    {
+      "case_id": "p107-tool_honesty-022",
+      "jaccard": 0.017699115044247787,
+      "train_line": 15341
+    },
+    {
+      "case_id": "p107-tool_honesty-023",
+      "jaccard": 0.009433962264150943,
+      "train_line": 6449
+    },
+    {
+      "case_id": "p107-tool_honesty-024",
+      "jaccard": 0.13076923076923078,
+      "train_line": 12124
+    },
+    {
+      "case_id": "p107-tool_honesty-025",
+      "jaccard": 0.005780346820809248,
+      "train_line": 16560
+    },
+    {
+      "case_id": "p107-tool_honesty-026",
+      "jaccard": 0.03686635944700461,
+      "train_line": 2948
+    },
+    {
+      "case_id": "p107-tool_honesty-027",
+      "jaccard": 0.017391304347826087,
+      "train_line": 33
+    },
+    {
+      "case_id": "p107-tool_honesty-028",
+      "jaccard": 0.034482758620689655,
+      "train_line": 18377
+    },
+    {
+      "case_id": "p107-tool_honesty-029",
+      "jaccard": 0.02857142857142857,
+      "train_line": 4185
+    },
+    {
+      "case_id": "p107-tool_honesty-030",
+      "jaccard": 0.008130081300813009,
+      "train_line": 19195
+    },
+    {
+      "case_id": "p107-tool_honesty-031",
+      "jaccard": 0.013157894736842105,
+      "train_line": 5384
+    },
+    {
+      "case_id": "p107-tool_honesty-032",
+      "jaccard": 0.008695652173913044,
+      "train_line": 6263
+    },
+    {
+      "case_id": "p107-tool_honesty-033",
+      "jaccard": 0.00847457627118644,
+      "train_line": 3488
+    },
+    {
+      "case_id": "p107-tool_honesty-034",
+      "jaccard": 0.031496062992125984,
+      "train_line": 19067
+    },
+    {
+      "case_id": "p107-tool_honesty-035",
+      "jaccard": 0.005847953216374269,
+      "train_line": 18367
+    },
+    {
+      "case_id": "p107-tool_honesty-036",
+      "jaccard": 0.008928571428571428,
+      "train_line": 10794
+    },
+    {
+      "case_id": "p107-tool_honesty-037",
+      "jaccard": 0.07692307692307693,
+      "train_line": 8237
+    },
+    {
+      "case_id": "p107-tool_honesty-038",
+      "jaccard": 0.017241379310344827,
+      "train_line": 11158
+    },
+    {
+      "case_id": "p107-tool_honesty-039",
+      "jaccard": 0.007352941176470588,
+      "train_line": 8988
+    },
+    {
+      "case_id": "p107-tool_honesty-040",
+      "jaccard": 0.017964071856287425,
+      "train_line": 11480
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-001",
+      "jaccard": 0.011811023622047244,
+      "train_line": 17349
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-002",
+      "jaccard": 0.01775147928994083,
+      "train_line": 15923
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-003",
+      "jaccard": 0.028735632183908046,
+      "train_line": 14817
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-004",
+      "jaccard": 0.014705882352941176,
+      "train_line": 7265
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-005",
+      "jaccard": 0.03125,
+      "train_line": 3926
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-006",
+      "jaccard": 0.014598540145985401,
+      "train_line": 8324
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-007",
+      "jaccard": 0.032520325203252036,
+      "train_line": 12155
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-008",
+      "jaccard": 0.00784313725490196,
+      "train_line": 16940
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-009",
+      "jaccard": 0.04201680672268908,
+      "train_line": 4199
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-010",
+      "jaccard": 0.022900763358778626,
+      "train_line": 15631
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-011",
+      "jaccard": 0.03597122302158273,
+      "train_line": 6949
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-012",
+      "jaccard": 0.06451612903225806,
+      "train_line": 11918
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-013",
+      "jaccard": 0.014388489208633094,
+      "train_line": 5525
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-014",
+      "jaccard": 0.03333333333333333,
+      "train_line": 9853
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-015",
+      "jaccard": 0.024390243902439025,
+      "train_line": 815
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-016",
+      "jaccard": 0.039473684210526314,
+      "train_line": 16293
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-017",
+      "jaccard": 0.017241379310344827,
+      "train_line": 5191
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-018",
+      "jaccard": 0.016260162601626018,
+      "train_line": 7385
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-019",
+      "jaccard": 0.010309278350515464,
+      "train_line": 16008
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-020",
+      "jaccard": 0.01951219512195122,
+      "train_line": 10554
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-021",
+      "jaccard": 0.0070921985815602835,
+      "train_line": 6743
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-022",
+      "jaccard": 0.012422360248447204,
+      "train_line": 18252
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-023",
+      "jaccard": 0.05909090909090909,
+      "train_line": 9505
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-024",
+      "jaccard": 0.010256410256410256,
+      "train_line": 10076
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-025",
+      "jaccard": 0.022388059701492536,
+      "train_line": 14850
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-026",
+      "jaccard": 0.024390243902439025,
+      "train_line": 6989
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-027",
+      "jaccard": 0.015151515151515152,
+      "train_line": 14037
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-028",
+      "jaccard": 0.033112582781456956,
+      "train_line": 15659
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-029",
+      "jaccard": 0.012048192771084338,
+      "train_line": 14888
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-030",
+      "jaccard": 0.1,
+      "train_line": 13372
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-031",
+      "jaccard": 0.008968609865470852,
+      "train_line": 5633
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-032",
+      "jaccard": 0.010309278350515464,
+      "train_line": 6451
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-033",
+      "jaccard": 0.008547008547008548,
+      "train_line": 19344
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-034",
+      "jaccard": 0.015037593984962405,
+      "train_line": 1073
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-035",
+      "jaccard": 0.024,
+      "train_line": 15835
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-036",
+      "jaccard": 0.023622047244094488,
+      "train_line": 2143
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-037",
+      "jaccard": 0.041666666666666664,
+      "train_line": 5084
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-038",
+      "jaccard": 0.03076923076923077,
+      "train_line": 16301
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-039",
+      "jaccard": 0.01680672268907563,
+      "train_line": 4079
+    },
+    {
+      "case_id": "p107-vulnerability_analysis-040",
+      "jaccard": 0.031746031746031744,
+      "train_line": 1974
+    },
+    {
+      "case_id": "p107-detection_remediation-001",
+      "jaccard": 0.01,
+      "train_line": 17721
+    },
+    {
+      "case_id": "p107-detection_remediation-002",
+      "jaccard": 0.007407407407407408,
+      "train_line": 14644
+    },
+    {
+      "case_id": "p107-detection_remediation-003",
+      "jaccard": 0.008620689655172414,
+      "train_line": 5758
+    },
+    {
+      "case_id": "p107-detection_remediation-004",
+      "jaccard": 0.005649717514124294,
+      "train_line": 9380
+    },
+    {
+      "case_id": "p107-detection_remediation-005",
+      "jaccard": 0.02112676056338028,
+      "train_line": 3241
+    },
+    {
+      "case_id": "p107-detection_remediation-006",
+      "jaccard": 0.02702702702702703,
+      "train_line": 11158
+    },
+    {
+      "case_id": "p107-detection_remediation-007",
+      "jaccard": 0.00847457627118644,
+      "train_line": 18131
+    },
+    {
+      "case_id": "p107-detection_remediation-008",
+      "jaccard": 0.016260162601626018,
+      "train_line": 3572
+    },
+    {
+      "case_id": "p107-detection_remediation-009",
+      "jaccard": 0.011627906976744186,
+      "train_line": 18432
+    },
+    {
+      "case_id": "p107-detection_remediation-010",
+      "jaccard": 0.0196078431372549,
+      "train_line": 17953
+    },
+    {
+      "case_id": "p107-threat_modeling-001",
+      "jaccard": 0.0125,
+      "train_line": 4064
+    },
+    {
+      "case_id": "p107-threat_modeling-002",
+      "jaccard": 0.006711409395973154,
+      "train_line": 19539
+    },
+    {
+      "case_id": "p107-threat_modeling-003",
+      "jaccard": 0.01910828025477707,
+      "train_line": 1257
+    },
+    {
+      "case_id": "p107-threat_modeling-004",
+      "jaccard": 0.00625,
+      "train_line": 10321
+    },
+    {
+      "case_id": "p107-threat_modeling-005",
+      "jaccard": 0.013793103448275862,
+      "train_line": 5506
+    },
+    {
+      "case_id": "p107-threat_modeling-006",
+      "jaccard": 0.0125,
+      "train_line": 14888
+    },
+    {
+      "case_id": "p107-threat_modeling-007",
+      "jaccard": 0.015625,
+      "train_line": 8324
+    },
+    {
+      "case_id": "p107-threat_modeling-008",
+      "jaccard": 0.02564102564102564,
+      "train_line": 13882
+    },
+    {
+      "case_id": "p107-threat_modeling-009",
+      "jaccard": 0.007633587786259542,
+      "train_line": 5927
+    },
+    {
+      "case_id": "p107-threat_modeling-010",
+      "jaccard": 0.008695652173913044,
+      "train_line": 19482
+    },
+    {
+      "case_id": "p107-code_review-001",
+      "jaccard": 0.024844720496894408,
+      "train_line": 17587
+    },
+    {
+      "case_id": "p107-code_review-002",
+      "jaccard": 0.023255813953488372,
+      "train_line": 10628
+    },
+    {
+      "case_id": "p107-code_review-003",
+      "jaccard": 0.051470588235294115,
+      "train_line": 10689
+    },
+    {
+      "case_id": "p107-code_review-004",
+      "jaccard": 0.0106951871657754,
+      "train_line": 17611
+    },
+    {
+      "case_id": "p107-code_review-005",
+      "jaccard": 0.015625,
+      "train_line": 7385
+    },
+    {
+      "case_id": "p107-code_review-006",
+      "jaccard": 0.006309148264984227,
+      "train_line": 9103
+    },
+    {
+      "case_id": "p107-code_review-007",
+      "jaccard": 0.03508771929824561,
+      "train_line": 983
+    },
+    {
+      "case_id": "p107-code_review-008",
+      "jaccard": 0.015873015873015872,
+      "train_line": 11961
+    },
+    {
+      "case_id": "p107-code_review-009",
+      "jaccard": 0.021897810218978103,
+      "train_line": 9028
+    },
+    {
+      "case_id": "p107-code_review-010",
+      "jaccard": 0.008264462809917356,
+      "train_line": 12968
+    },
+    {
+      "case_id": "p107-multiturn-001",
+      "jaccard": 0.010582010582010581,
+      "train_line": 1861
+    },
+    {
+      "case_id": "p107-multiturn-002",
+      "jaccard": 0.010101010101010102,
+      "train_line": 10113
+    },
+    {
+      "case_id": "p107-multiturn-003",
+      "jaccard": 0.014778325123152709,
+      "train_line": 9372
+    },
+    {
+      "case_id": "p107-multiturn-004",
+      "jaccard": 0.009852216748768473,
+      "train_line": 15857
+    },
+    {
+      "case_id": "p107-multiturn-005",
+      "jaccard": 0.004866180048661801,
+      "train_line": 8553
+    },
+    {
+      "case_id": "p107-multiturn-006",
+      "jaccard": 0.006711409395973154,
+      "train_line": 6440
+    },
+    {
+      "case_id": "p107-multiturn-007",
+      "jaccard": 0.007168458781362007,
+      "train_line": 1652
+    },
+    {
+      "case_id": "p107-multiturn-008",
+      "jaccard": 0.016666666666666666,
+      "train_line": 1248
+    },
+    {
+      "case_id": "p107-multiturn-009",
+      "jaccard": 0.00625,
+      "train_line": 10226
+    },
+    {
+      "case_id": "p107-multiturn-010",
+      "jaccard": 0.00625,
+      "train_line": 2090
+    },
+    {
+      "case_id": "p107-prompt_injection-001",
+      "jaccard": 0.006944444444444444,
+      "train_line": 5761
+    },
+    {
+      "case_id": "p107-prompt_injection-002",
+      "jaccard": 0.015151515151515152,
+      "train_line": 14627
+    },
+    {
+      "case_id": "p107-prompt_injection-003",
+      "jaccard": 0.019704433497536946,
+      "train_line": 6820
+    },
+    {
+      "case_id": "p107-prompt_injection-004",
+      "jaccard": 0.0045871559633027525,
+      "train_line": 16422
+    },
+    {
+      "case_id": "p107-prompt_injection-005",
+      "jaccard": 0.030303030303030304,
+      "train_line": 12545
+    },
+    {
+      "case_id": "p107-prompt_injection-006",
+      "jaccard": 0.007575757575757576,
+      "train_line": 4082
+    },
+    {
+      "case_id": "p107-prompt_injection-007",
+      "jaccard": 0.013333333333333334,
+      "train_line": 11604
+    },
+    {
+      "case_id": "p107-prompt_injection-008",
+      "jaccard": 0.014492753623188406,
+      "train_line": 8604
+    },
+    {
+      "case_id": "p107-prompt_injection-009",
+      "jaccard": 0.006024096385542169,
+      "train_line": 19081
+    },
+    {
+      "case_id": "p107-prompt_injection-010",
+      "jaccard": 0.022058823529411766,
+      "train_line": 15155
+    },
+    {
+      "case_id": "p107-detection_remediation-011",
+      "jaccard": 0.008130081300813009,
+      "train_line": 10980
+    },
+    {
+      "case_id": "p107-detection_remediation-012",
+      "jaccard": 0.024390243902439025,
+      "train_line": 1974
+    },
+    {
+      "case_id": "p107-detection_remediation-013",
+      "jaccard": 0.00909090909090909,
+      "train_line": 14480
+    },
+    {
+      "case_id": "p107-detection_remediation-014",
+      "jaccard": 0.021897810218978103,
+      "train_line": 4142
+    },
+    {
+      "case_id": "p107-detection_remediation-015",
+      "jaccard": 0.017699115044247787,
+      "train_line": 1232
+    },
+    {
+      "case_id": "p107-detection_remediation-016",
+      "jaccard": 0.010050251256281407,
+      "train_line": 19523
+    },
+    {
+      "case_id": "p107-detection_remediation-017",
+      "jaccard": 0.0070921985815602835,
+      "train_line": 8207
+    },
+    {
+      "case_id": "p107-detection_remediation-018",
+      "jaccard": 0.008695652173913044,
+      "train_line": 2863
+    },
+    {
+      "case_id": "p107-detection_remediation-019",
+      "jaccard": 0.01910828025477707,
+      "train_line": 4589
+    },
+    {
+      "case_id": "p107-detection_remediation-020",
+      "jaccard": 0.007874015748031496,
+      "train_line": 3488
+    },
+    {
+      "case_id": "p107-threat_modeling-011",
+      "jaccard": 0.02040816326530612,
+      "train_line": 7493
+    },
+    {
+      "case_id": "p107-threat_modeling-012",
+      "jaccard": 0.01824817518248175,
+      "train_line": 9160
+    },
+    {
+      "case_id": "p107-threat_modeling-013",
+      "jaccard": 0.013245033112582781,
+      "train_line": 8652
+    },
+    {
+      "case_id": "p107-threat_modeling-014",
+      "jaccard": 0.016304347826086956,
+      "train_line": 15174
+    },
+    {
+      "case_id": "p107-threat_modeling-015",
+      "jaccard": 0.013888888888888888,
+      "train_line": 7168
+    },
+    {
+      "case_id": "p107-threat_modeling-016",
+      "jaccard": 0.018604651162790697,
+      "train_line": 488
+    },
+    {
+      "case_id": "p107-threat_modeling-017",
+      "jaccard": 0.005952380952380952,
+      "train_line": 18143
+    },
+    {
+      "case_id": "p107-threat_modeling-018",
+      "jaccard": 0.010869565217391304,
+      "train_line": 17928
+    },
+    {
+      "case_id": "p107-threat_modeling-019",
+      "jaccard": 0.011299435028248588,
+      "train_line": 8232
+    },
+    {
+      "case_id": "p107-threat_modeling-020",
+      "jaccard": 0.01098901098901099,
+      "train_line": 6627
+    },
+    {
+      "case_id": "p107-code_review-011",
+      "jaccard": 0.10606060606060606,
+      "train_line": 12782
+    },
+    {
+      "case_id": "p107-code_review-012",
+      "jaccard": 0.09248554913294797,
+      "train_line": 16580
+    },
+    {
+      "case_id": "p107-code_review-013",
+      "jaccard": 0.017316017316017316,
+      "train_line": 4340
+    },
+    {
+      "case_id": "p107-code_review-014",
+      "jaccard": 0.03435114503816794,
+      "train_line": 9567
+    },
+    {
+      "case_id": "p107-code_review-015",
+      "jaccard": 0.01910828025477707,
+      "train_line": 14351
+    },
+    {
+      "case_id": "p107-code_review-016",
+      "jaccard": 0.02564102564102564,
+      "train_line": 10544
+    },
+    {
+      "case_id": "p107-code_review-017",
+      "jaccard": 0.05,
+      "train_line": 490
+    },
+    {
+      "case_id": "p107-code_review-018",
+      "jaccard": 0.00966183574879227,
+      "train_line": 12676
+    },
+    {
+      "case_id": "p107-code_review-019",
+      "jaccard": 0.07575757575757576,
+      "train_line": 14749
+    },
+    {
+      "case_id": "p107-code_review-020",
+      "jaccard": 0.06711409395973154,
+      "train_line": 18229
+    },
+    {
+      "case_id": "p107-multiturn-011",
+      "jaccard": 0.024875621890547265,
+      "train_line": 5131
+    },
+    {
+      "case_id": "p107-multiturn-012",
+      "jaccard": 0.006968641114982578,
+      "train_line": 1652
+    },
+    {
+      "case_id": "p107-multiturn-013",
+      "jaccard": 0.06395348837209303,
+      "train_line": 17356
+    },
+    {
+      "case_id": "p107-multiturn-014",
+      "jaccard": 0.012903225806451613,
+      "train_line": 17011
+    },
+    {
+      "case_id": "p107-multiturn-015",
+      "jaccard": 0.011695906432748537,
+      "train_line": 9697
+    },
+    {
+      "case_id": "p107-multiturn-016",
+      "jaccard": 0.00684931506849315,
+      "train_line": 1652
+    },
+    {
+      "case_id": "p107-multiturn-017",
+      "jaccard": 0.006329113924050633,
+      "train_line": 17476
+    },
+    {
+      "case_id": "p107-multiturn-018",
+      "jaccard": 0.005263157894736842,
+      "train_line": 2119
+    },
+    {
+      "case_id": "p107-multiturn-019",
+      "jaccard": 0.006711409395973154,
+      "train_line": 1652
+    },
+    {
+      "case_id": "p107-multiturn-020",
+      "jaccard": 0.0070921985815602835,
+      "train_line": 1652
+    },
+    {
+      "case_id": "p107-detection_remediation-021",
+      "jaccard": 0.09523809523809523,
+      "train_line": 1588
+    },
+    {
+      "case_id": "p107-detection_remediation-022",
+      "jaccard": 0.015267175572519083,
+      "train_line": 1062
+    },
+    {
+      "case_id": "p107-detection_remediation-023",
+      "jaccard": 0.0,
+      "train_line": null
+    },
+    {
+      "case_id": "p107-detection_remediation-024",
+      "jaccard": 0.015625,
+      "train_line": 10897
+    },
+    {
+      "case_id": "p107-detection_remediation-025",
+      "jaccard": 0.011764705882352941,
+      "train_line": 18270
+    },
+    {
+      "case_id": "p107-detection_remediation-026",
+      "jaccard": 0.024242424242424242,
+      "train_line": 17471
+    },
+    {
+      "case_id": "p107-detection_remediation-027",
+      "jaccard": 0.023148148148148147,
+      "train_line": 7479
+    },
+    {
+      "case_id": "p107-detection_remediation-028",
+      "jaccard": 0.0072992700729927005,
+      "train_line": 2535
+    },
+    {
+      "case_id": "p107-detection_remediation-029",
+      "jaccard": 0.00997506234413965,
+      "train_line": 3814
+    },
+    {
+      "case_id": "p107-detection_remediation-030",
+      "jaccard": 0.006172839506172839,
+      "train_line": 3749
+    },
+    {
+      "case_id": "p107-threat_modeling-021",
+      "jaccard": 0.05454545454545454,
+      "train_line": 6624
+    },
+    {
+      "case_id": "p107-threat_modeling-022",
+      "jaccard": 0.006711409395973154,
+      "train_line": 18569
+    },
+    {
+      "case_id": "p107-threat_modeling-023",
+      "jaccard": 0.015503875968992248,
+      "train_line": 14359
+    },
+    {
+      "case_id": "p107-threat_modeling-024",
+      "jaccard": 0.013071895424836602,
+      "train_line": 5675
+    },
+    {
+      "case_id": "p107-threat_modeling-025",
+      "jaccard": 0.017543859649122806,
+      "train_line": 18828
+    },
+    {
+      "case_id": "p107-threat_modeling-026",
+      "jaccard": 0.03208556149732621,
+      "train_line": 6268
+    },
+    {
+      "case_id": "p107-threat_modeling-027",
+      "jaccard": 0.012422360248447204,
+      "train_line": 15370
+    },
+    {
+      "case_id": "p107-threat_modeling-028",
+      "jaccard": 0.015503875968992248,
+      "train_line": 18155
+    },
+    {
+      "case_id": "p107-threat_modeling-029",
+      "jaccard": 0.012345679012345678,
+      "train_line": 18270
+    },
+    {
+      "case_id": "p107-threat_modeling-030",
+      "jaccard": 0.019230769230769232,
+      "train_line": 10849
+    },
+    {
+      "case_id": "p107-code_review-021",
+      "jaccard": 0.03875968992248062,
+      "train_line": 12247
+    },
+    {
+      "case_id": "p107-code_review-022",
+      "jaccard": 0.022388059701492536,
+      "train_line": 9546
+    },
+    {
+      "case_id": "p107-code_review-023",
+      "jaccard": 0.02877697841726619,
+      "train_line": 11458
+    },
+    {
+      "case_id": "p107-code_review-024",
+      "jaccard": 0.013071895424836602,
+      "train_line": 959
+    },
+    {
+      "case_id": "p107-code_review-025",
+      "jaccard": 0.014598540145985401,
+      "train_line": 8324
+    },
+    {
+      "case_id": "p107-code_review-026",
+      "jaccard": 0.010638297872340425,
+      "train_line": 17265
+    },
+    {
+      "case_id": "p107-code_review-027",
+      "jaccard": 0.03076923076923077,
+      "train_line": 19143
+    },
+    {
+      "case_id": "p107-code_review-028",
+      "jaccard": 0.058394160583941604,
+      "train_line": 5918
+    },
+    {
+      "case_id": "p107-code_review-029",
+      "jaccard": 0.011235955056179775,
+      "train_line": 10699
+    },
+    {
+      "case_id": "p107-code_review-030",
+      "jaccard": 0.0967741935483871,
+      "train_line": 100
+    },
+    {
+      "case_id": "p107-multiturn-021",
+      "jaccard": 0.03888888888888889,
+      "train_line": 6127
+    },
+    {
+      "case_id": "p107-multiturn-022",
+      "jaccard": 0.0111731843575419,
+      "train_line": 245
+    },
+    {
+      "case_id": "p107-multiturn-023",
+      "jaccard": 0.012658227848101266,
+      "train_line": 3009
+    },
+    {
+      "case_id": "p107-multiturn-024",
+      "jaccard": 0.006896551724137931,
+      "train_line": 1652
+    },
+    {
+      "case_id": "p107-multiturn-025",
+      "jaccard": 0.006289308176100629,
+      "train_line": 13253
+    },
+    {
+      "case_id": "p107-multiturn-026",
+      "jaccard": 0.0234375,
+      "train_line": 18924
+    },
+    {
+      "case_id": "p107-multiturn-027",
+      "jaccard": 0.006920415224913495,
+      "train_line": 1652
+    },
+    {
+      "case_id": "p107-multiturn-028",
+      "jaccard": 0.020942408376963352,
+      "train_line": 7166
+    },
+    {
+      "case_id": "p107-multiturn-029",
+      "jaccard": 0.00641025641025641,
+      "train_line": 321
+    },
+    {
+      "case_id": "p107-multiturn-030",
+      "jaccard": 0.010471204188481676,
+      "train_line": 19225
+    },
+    {
+      "case_id": "p107-prompt_injection-011",
+      "jaccard": 0.00392156862745098,
+      "train_line": 10753
+    },
+    {
+      "case_id": "p107-prompt_injection-012",
+      "jaccard": 0.014285714285714285,
+      "train_line": 18088
+    },
+    {
+      "case_id": "p107-prompt_injection-013",
+      "jaccard": 0.022556390977443608,
+      "train_line": 7198
+    },
+    {
+      "case_id": "p107-prompt_injection-014",
+      "jaccard": 0.015503875968992248,
+      "train_line": 14627
+    },
+    {
+      "case_id": "p107-prompt_injection-015",
+      "jaccard": 0.007352941176470588,
+      "train_line": 4190
+    },
+    {
+      "case_id": "p107-prompt_injection-016",
+      "jaccard": 0.010775862068965518,
+      "train_line": 9260
+    },
+    {
+      "case_id": "p107-prompt_injection-017",
+      "jaccard": 0.04316546762589928,
+      "train_line": 1711
+    },
+    {
+      "case_id": "p107-prompt_injection-018",
+      "jaccard": 0.06432748538011696,
+      "train_line": 13409
+    },
+    {
+      "case_id": "p107-prompt_injection-019",
+      "jaccard": 0.04807692307692308,
+      "train_line": 15211
+    },
+    {
+      "case_id": "p107-prompt_injection-020",
+      "jaccard": 0.005988023952095809,
+      "train_line": 15019
+    },
+    {
+      "case_id": "p107-prompt_injection-021",
+      "jaccard": 0.011627906976744186,
+      "train_line": 3953
+    },
+    {
+      "case_id": "p107-prompt_injection-022",
+      "jaccard": 0.008333333333333333,
+      "train_line": 6239
+    },
+    {
+      "case_id": "p107-prompt_injection-023",
+      "jaccard": 0.014925373134328358,
+      "train_line": 7385
+    },
+    {
+      "case_id": "p107-prompt_injection-024",
+      "jaccard": 0.05555555555555555,
+      "train_line": 6959
+    },
+    {
+      "case_id": "p107-prompt_injection-025",
+      "jaccard": 0.0410958904109589,
+      "train_line": 1711
+    },
+    {
+      "case_id": "p107-prompt_injection-026",
+      "jaccard": 0.014598540145985401,
+      "train_line": 12984
+    },
+    {
+      "case_id": "p107-prompt_injection-027",
+      "jaccard": 0.00819672131147541,
+      "train_line": 14077
+    },
+    {
+      "case_id": "p107-prompt_injection-028",
+      "jaccard": 0.017142857142857144,
+      "train_line": 16192
+    },
+    {
+      "case_id": "p107-prompt_injection-029",
+      "jaccard": 0.013888888888888888,
+      "train_line": 8611
+    },
+    {
+      "case_id": "p107-prompt_injection-030",
+      "jaccard": 0.05389221556886228,
+      "train_line": 6959
+    },
+    {
+      "case_id": "p107-detection_remediation-031",
+      "jaccard": 0.014925373134328358,
+      "train_line": 9423
+    },
+    {
+      "case_id": "p107-detection_remediation-032",
+      "jaccard": 0.012121212121212121,
+      "train_line": 11603
+    },
+    {
+      "case_id": "p107-detection_remediation-033",
+      "jaccard": 0.013888888888888888,
+      "train_line": 11755
+    },
+    {
+      "case_id": "p107-detection_remediation-034",
+      "jaccard": 0.01639344262295082,
+      "train_line": 5369
+    },
+    {
+      "case_id": "p107-detection_remediation-035",
+      "jaccard": 0.0078125,
+      "train_line": 10727
+    },
+    {
+      "case_id": "p107-detection_remediation-036",
+      "jaccard": 0.012195121951219513,
+      "train_line": 7955
+    },
+    {
+      "case_id": "p107-detection_remediation-037",
+      "jaccard": 0.014423076923076924,
+      "train_line": 992
+    },
+    {
+      "case_id": "p107-detection_remediation-038",
+      "jaccard": 0.014285714285714285,
+      "train_line": 8963
+    },
+    {
+      "case_id": "p107-detection_remediation-039",
+      "jaccard": 0.00909090909090909,
+      "train_line": 1397
+    },
+    {
+      "case_id": "p107-detection_remediation-040",
+      "jaccard": 0.007352941176470588,
+      "train_line": 14838
+    },
+    {
+      "case_id": "p107-threat_modeling-031",
+      "jaccard": 0.023809523809523808,
+      "train_line": 10172
+    },
+    {
+      "case_id": "p107-threat_modeling-032",
+      "jaccard": 0.018633540372670808,
+      "train_line": 17110
+    },
+    {
+      "case_id": "p107-threat_modeling-033",
+      "jaccard": 0.008064516129032258,
+      "train_line": 14123
+    },
+    {
+      "case_id": "p107-threat_modeling-034",
+      "jaccard": 0.01764705882352941,
+      "train_line": 4071
+    },
+    {
+      "case_id": "p107-threat_modeling-035",
+      "jaccard": 0.02145922746781116,
+      "train_line": 40
+    },
+    {
+      "case_id": "p107-threat_modeling-036",
+      "jaccard": 0.011904761904761904,
+      "train_line": 18270
+    },
+    {
+      "case_id": "p107-threat_modeling-037",
+      "jaccard": 0.01098901098901099,
+      "train_line": 7244
+    },
+    {
+      "case_id": "p107-threat_modeling-038",
+      "jaccard": 0.015037593984962405,
+      "train_line": 10209
+    },
+    {
+      "case_id": "p107-threat_modeling-039",
+      "jaccard": 0.04918032786885246,
+      "train_line": 4857
+    },
+    {
+      "case_id": "p107-threat_modeling-040",
+      "jaccard": 0.02564102564102564,
+      "train_line": 7493
+    },
+    {
+      "case_id": "p107-code_review-031",
+      "jaccard": 0.03669724770642202,
+      "train_line": 9701
+    },
+    {
+      "case_id": "p107-code_review-032",
+      "jaccard": 0.05084745762711865,
+      "train_line": 2350
+    },
+    {
+      "case_id": "p107-code_review-033",
+      "jaccard": 0.0425531914893617,
+      "train_line": 19191
+    },
+    {
+      "case_id": "p107-code_review-034",
+      "jaccard": 0.03048780487804878,
+      "train_line": 12364
+    },
+    {
+      "case_id": "p107-code_review-035",
+      "jaccard": 0.03825136612021858,
+      "train_line": 10994
+    },
+    {
+      "case_id": "p107-code_review-036",
+      "jaccard": 0.02185792349726776,
+      "train_line": 11563
+    },
+    {
+      "case_id": "p107-code_review-037",
+      "jaccard": 0.022935779816513763,
+      "train_line": 4168
+    },
+    {
+      "case_id": "p107-code_review-038",
+      "jaccard": 0.015151515151515152,
+      "train_line": 4357
+    },
+    {
+      "case_id": "p107-code_review-039",
+      "jaccard": 0.07006369426751592,
+      "train_line": 6996
+    },
+    {
+      "case_id": "p107-code_review-040",
+      "jaccard": 0.03389830508474576,
+      "train_line": 2350
+    },
+    {
+      "case_id": "p107-multiturn-031",
+      "jaccard": 0.008888888888888889,
+      "train_line": 8549
+    },
+    {
+      "case_id": "p107-multiturn-032",
+      "jaccard": 0.006024096385542169,
+      "train_line": 7532
+    },
+    {
+      "case_id": "p107-multiturn-033",
+      "jaccard": 0.03255813953488372,
+      "train_line": 10994
+    },
+    {
+      "case_id": "p107-multiturn-034",
+      "jaccard": 0.01,
+      "train_line": 8400
+    },
+    {
+      "case_id": "p107-multiturn-035",
+      "jaccard": 0.03543307086614173,
+      "train_line": 5053
+    },
+    {
+      "case_id": "p107-multiturn-036",
+      "jaccard": 0.012195121951219513,
+      "train_line": 19444
+    },
+    {
+      "case_id": "p107-multiturn-037",
+      "jaccard": 0.006666666666666667,
+      "train_line": 18861
+    },
+    {
+      "case_id": "p107-multiturn-038",
+      "jaccard": 0.0037313432835820895,
+      "train_line": 10164
+    },
+    {
+      "case_id": "p107-multiturn-039",
+      "jaccard": 0.006896551724137931,
+      "train_line": 1652
+    },
+    {
+      "case_id": "p107-multiturn-040",
+      "jaccard": 0.008130081300813009,
+      "train_line": 6675
+    },
+    {
+      "case_id": "p107-prompt_injection-031",
+      "jaccard": 0.006535947712418301,
+      "train_line": 11735
+    },
+    {
+      "case_id": "p107-prompt_injection-032",
+      "jaccard": 0.012048192771084338,
+      "train_line": 5936
+    },
+    {
+      "case_id": "p107-prompt_injection-033",
+      "jaccard": 0.006535947712418301,
+      "train_line": 9279
+    },
+    {
+      "case_id": "p107-prompt_injection-034",
+      "jaccard": 0.029535864978902954,
+      "train_line": 7920
+    },
+    {
+      "case_id": "p107-prompt_injection-035",
+      "jaccard": 0.010582010582010581,
+      "train_line": 9598
+    },
+    {
+      "case_id": "p107-prompt_injection-036",
+      "jaccard": 0.016216216216216217,
+      "train_line": 423
+    },
+    {
+      "case_id": "p107-prompt_injection-037",
+      "jaccard": 0.007575757575757576,
+      "train_line": 15508
+    },
+    {
+      "case_id": "p107-prompt_injection-038",
+      "jaccard": 0.015151515151515152,
+      "train_line": 12304
+    },
+    {
+      "case_id": "p107-prompt_injection-039",
+      "jaccard": 0.0049504950495049506,
+      "train_line": 12590
+    },
+    {
+      "case_id": "p107-prompt_injection-040",
+      "jaccard": 0.02702702702702703,
+      "train_line": 321
+    }
+  ],
+  "status": "no_lexical_flags",
+  "limitation": "Triage only; misses semantic paraphrases and partial copies diluted by longer context. No semantic or pretraining contamination certification."
+}
