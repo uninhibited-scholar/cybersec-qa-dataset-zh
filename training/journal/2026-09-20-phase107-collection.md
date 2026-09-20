@@ -285,3 +285,4 @@
 - At22:33 HKT, Low Power Mode remains off (`pmset lowpowermode=0`), training PID43774 remains live at step7200; train loss1.751,0.296 it/s,190.125 tokens/s, peak memory5.475GB. Ongoing training only; no production change.
 - At22:39 HKT, PID43774 remains live at step7300; train loss1.750,0.280 it/s,188.425 tokens/s, trained tokens4,712,881, peak memory5.475GB. Recent throughput is steady near188–190 tokens/s; no production change.
 - At22:45 HKT, PID43774 remains live at step7400; train loss1.687,0.312 it/s,200.018 tokens/s, trained tokens4,777,008, peak memory5.475GB. Low Power Mode remains off; no production change.
+- At22:49 HKT, PID43774 remains live at step7500; train loss1.705,0.318 it/s,204.547 tokens/s, trained tokens4,841,311, peak memory5.475GB. No production change; step8000 is the next backup checkpoint.
