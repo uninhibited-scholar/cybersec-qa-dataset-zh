@@ -57,6 +57,12 @@ def main():
         (directory / "adapter_config.json").symlink_to(config_path)
         model, tokenizer = load(str(args.model), adapter_path=str(directory))
         dataset = CacheDataset(CompletionsDataset(rows, tokenizer, "prompt", "completion", True))
+        for index in range(len(dataset)):
+            tokens, offset = dataset[index]
+            if len(tokens) > manifest["max_seq_length"]:
+                raise ValueError(f"Validation row {index} would be truncated")
+            if offset < 0 or offset >= len(tokens) - 1:
+                raise ValueError(f"Validation row {index} has no usable masked target")
         # Full validation coverage and identical permutation for every checkpoint.
         np.random.seed(manifest["seed"])
         loss = evaluate(model, dataset, batch_size=1, num_batches=-1, max_seq_length=2304)
