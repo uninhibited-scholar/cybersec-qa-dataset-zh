@@ -1,5 +1,5 @@
 # Isolated Phase 108 candidate: one shuffled pass over the user's clean-v2 train split.
-# Validation is sampled deterministically by MLX at fixed intervals; test is evaluated once after training.
+# MLX draws new validation batches at each interval; compare checkpoints on a common validation set afterward.
 model: /Users/jiehan/models/Qwen3-4B-mlx-4bit-phase3-wrapper
 train: true
 data: /Users/jiehan/datasets/cybersec-clean-v2

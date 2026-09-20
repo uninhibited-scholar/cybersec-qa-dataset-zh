@@ -50,15 +50,16 @@ def report(log: Path, directory: Path) -> dict:
             continue
         candidates.append({"step": step, "validation_loss": values[step],
                            "path": str(path), "sha256": digest})
-    candidates.sort(key=lambda item: (item["validation_loss"], item["step"]))
+    candidates.sort(key=lambda item: item["step"])
     return {
-        "status": "invalid" if errors else "ready_for_behavior_evaluation" if candidates else "waiting_for_validated_checkpoint",
+        "status": "invalid" if errors else "requires_common_validation" if candidates else "waiting_for_validated_checkpoint",
         "errors": errors,
         "validated_checkpoints": candidates,
         "checkpoint_steps_without_validation": unmatched,
-        "suggested_for_behavior_evaluation": candidates[0] if candidates and not errors else None,
+        "suggested_for_behavior_evaluation": None,
         "production_approval": False,
-        "limitations": ["Validation loss is only a shortlist criterion, not capability evidence.",
+        "limitations": ["Training-time validation draws new random batches; these losses cannot select a winner fairly.",
+                        "Reevaluate checkpoints on the same validation examples before selecting candidates; behavior evaluation remains required.",
                         "Unnumbered final weights are excluded because their step association is not established.",
                         "Run after training exits for a final inventory; a live run yields a provisional snapshot.",
                         "Test scores are not parsed or used for selection."],

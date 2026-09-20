@@ -22,7 +22,9 @@ class CheckpointReportTests(unittest.TestCase):
     def test_test_loss_does_not_drive_selection(self):
         result = self.check_report("Iter 1000: Val loss 2.0\nIter 2000: Val loss 2.1\nTest loss 0.1",
                                    ["0001000_adapters.safetensors", "0002000_adapters.safetensors"])
-        self.assertEqual(result["suggested_for_behavior_evaluation"]["step"], 1000)
+        self.assertIsNone(result["suggested_for_behavior_evaluation"])
+        self.assertEqual(result["status"], "requires_common_validation")
+        self.assertEqual([item["step"] for item in result["validated_checkpoints"]], [1000, 2000])
         self.assertFalse(result["production_approval"])
 
     def test_conflicting_or_nonfinite_loss_blocks_selection(self):
