@@ -6,6 +6,20 @@ from phase108_hf_adapter_smoke import LoRAProjection
 
 
 class LoRAProjectionTest(unittest.TestCase):
+    def test_meta_adapter_is_rejected(self):
+        base = torch.nn.Linear(4, 4, bias=False)
+        with self.assertRaises(ValueError):
+            LoRAProjection(base, torch.empty(2, 4, device="meta"),
+                           torch.empty(4, 2, device="meta"), 20.0)
+
+    def test_real_adapter_buffers_follow_input_dtype(self):
+        base = torch.nn.Linear(4, 4, bias=False, dtype=torch.float64)
+        a, b = torch.randn(2, 4), torch.randn(4, 2)
+        x = torch.randn(2, 4, dtype=torch.float64)
+        wrapped = LoRAProjection(base, a, b, 20.0)
+        expected = base(x) + 20.0 * ((x @ a.double().T) @ b.double().T)
+        torch.testing.assert_close(wrapped(x), expected)
+
     def test_mlx_factor_orientation_and_scale(self):
         torch.manual_seed(108)
         base = torch.nn.Linear(5, 7, bias=False, dtype=torch.float64)

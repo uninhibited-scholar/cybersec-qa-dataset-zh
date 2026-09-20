@@ -22,14 +22,21 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 class LoRAProjection(nn.Module):
     def __init__(self, base: nn.Module, a: torch.Tensor, b: torch.Tensor, scale: float):
         super().__init__()
+        if a.is_meta or b.is_meta:
+            raise ValueError("Adapter tensors must contain real data, not meta placeholders")
         self.base = base
         self.register_buffer("lora_a", a, persistent=False)  # [rank, in]
         self.register_buffer("lora_b", b, persistent=False)  # [out, rank]
         self.scale = scale
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        low_rank = F.linear(F.linear(x, self.lora_a), self.lora_b)
-        return self.base(x) + self.scale * low_rank
+        # Accelerate may keep base.weight on meta until its forward hook runs.
+        # The new wrapper is outside that hook; its adapter must remain real.
+        base_output = self.base(x)
+        a = self.lora_a.to(device=x.device, dtype=x.dtype)
+        b = self.lora_b.to(device=x.device, dtype=x.dtype)
+        low_rank = F.linear(F.linear(x, a), b)
+        return base_output + (self.scale * low_rank).to(base_output)
 
 
 def attach_adapter(model: nn.Module, adapter_path: Path, scale: float) -> int:
@@ -57,6 +64,8 @@ def attach_adapter(model: nn.Module, adapter_path: Path, scale: float) -> int:
                 f"{base.out_features}) A={tuple(a.shape)} B={tuple(b.shape)}"
             )
         device, dtype = base.weight.device, base.weight.dtype
+        if device.type == "meta":
+            device = torch.device("cpu")
         setattr(parent, attr, LoRAProjection(
             base,
             a.T.contiguous().to(device=device, dtype=dtype),
