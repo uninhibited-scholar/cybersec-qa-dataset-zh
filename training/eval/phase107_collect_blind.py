@@ -17,9 +17,11 @@ import secrets
 import socket
 import subprocess
 import sys
+import threading
 import time
 import urllib.error
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 
@@ -220,7 +222,8 @@ def get_json(url: str, token: str | None = None, timeout: int = 15) -> tuple[int
         return 0, None, type(e).__name__
 
 
-def stream_completion(url: str, payload: dict, token: str | None) -> dict:
+def stream_completion(url: str, payload: dict, token: str | None,
+                      started_event: threading.Event | None = None) -> dict:
     headers = {"Accept": "text/event-stream", "Content-Type": "application/json"}
     if token:
         headers["Authorization"] = "Bearer " + token
@@ -234,6 +237,8 @@ def stream_completion(url: str, payload: dict, token: str | None) -> dict:
     try:
         with urllib.request.urlopen(req, timeout=300) as r:
             status = r.status
+            if started_event is not None:
+                started_event.set()
             for raw in r:
                 line = raw.decode("utf-8", errors="replace").strip()
                 if not line.startswith("data:"):
@@ -264,17 +269,59 @@ def stream_completion(url: str, payload: dict, token: str | None) -> dict:
                 "content": content, "finish_reason": finish, "first_content_s": first_content,
                 "total_s": time.monotonic() - start}
     except urllib.error.HTTPError as e:
+        if started_event is not None:
+            started_event.set()
         return {"transport_status": e.code, "classification": "http_error", "content": "",
                 "finish_reason": finish, "first_content_s": first_content,
                 "total_s": time.monotonic() - start}
     except TimeoutError:
+        if started_event is not None:
+            started_event.set()
         return {"transport_status": status, "classification": "timeout", "content": "".join(chunks),
                 "finish_reason": finish, "first_content_s": first_content,
                 "total_s": time.monotonic() - start}
     except Exception as e:
+        if started_event is not None:
+            started_event.set()
         return {"transport_status": status, "classification": "transport_error:" + type(e).__name__,
                 "content": "".join(chunks), "finish_reason": finish, "first_content_s": first_content,
                 "total_s": time.monotonic() - start}
+
+
+def run_case_request(system: str, case: dict, arm_order: list[str], system_alias: dict[str, str],
+                     endpoints: dict, started_event: threading.Event | None = None) -> dict:
+    url, auth = endpoints[system]
+    messages = list(case["messages"])
+    if system != "phase91":
+        messages = [{"role": "system", "content": SYSTEM_PROMPT}] + messages
+    payload = {"model": "qwen-cyber-agent" if system == "phase91" else "local-reference",
+               "messages": messages, "tools": [], "max_tokens": 700,
+               "temperature": 0.12, "top_p": 0.9, "stream": True}
+    result = stream_completion(url, payload, auth, started_event=started_event)
+    content = result.pop("content")
+    classification = result.get("classification")
+    if result.get("finish_reason") == "length" and classification == "ok":
+        classification = "truncated"
+    return {"case_id": case["id"], "category": case["category"],
+            "alias": system_alias[system], "content": content,
+            "arm_order_for_case": [system_alias[s] for s in arm_order],
+            **result, "classification": classification}
+
+
+def submit_parallel_reference_requests(executor: ThreadPoolExecutor, systems: list[str],
+                                       case: dict, arm_order: list[str],
+                                       system_alias: dict[str, str], endpoints: dict,
+                                       request_runner=run_case_request) -> dict:
+    """Start in randomized order, waiting for each endpoint to accept before starting the next."""
+    futures = {}
+    for system in systems:
+        started_event = threading.Event()
+        future = executor.submit(request_runner, system, case, arm_order,
+                                 system_alias, endpoints, started_event)
+        futures[future] = system
+        if not started_event.wait(timeout=300):
+            raise RuntimeError("reference request did not start within protocol timeout")
+    return futures
 
 
 def main() -> int:
@@ -295,8 +342,12 @@ def main() -> int:
     ap.add_argument("--seed", type=int, default=20260919)
     ap.add_argument("--systems", nargs="+", choices=SYSTEMS, default=list(SYSTEMS),
                     help="Collect selected blinded arms now; later runs can resume into the same outdir.")
+    ap.add_argument("--parallel-reference-arms", action="store_true",
+                    help="Overlap the two stateless reference requests per case after randomized start order; local mode only.")
     args = ap.parse_args()
     requested_systems = set(args.systems)
+    if args.parallel_reference_arms and not args.reference_local:
+        raise SystemExit("parallel reference arms require local reference-server mode")
     OUT_DIR = args.outdir.expanduser().resolve()
     OUT_DIR.mkdir(parents=True, exist_ok=True, mode=0o700)
     os.chmod(OUT_DIR, 0o700)
@@ -352,6 +403,7 @@ def main() -> int:
     completed = {(r["case_id"], r["alias"]) for r in existing}
 
     processes: list[subprocess.Popen] = []
+    executor = None
     try:
         token = None
         if "phase91" in requested_systems and not args.reference_local:
@@ -405,6 +457,8 @@ def main() -> int:
             "phase91_prompt_parity": prompt_parity,
             "reference_top_k": 0, "reference_min_p": 0.0, "reference_dry_multiplier": 0.0,
             "reference_execution_mode": os.getenv("PHASE107_REFERENCE_EXECUTION_MODE", "not_declared"),
+            "reference_request_order": ("randomized start order; two references overlap after the first accepts" if args.parallel_reference_arms
+                                         else "randomized sequential arm order"),
             "tools": [], "client_retries": 0, "timeout_seconds": 300,
             "phase91_streaming_caveat": "full answer emitted in one SSE content chunk; first_content_s is not token-level TTFT",
             "response_file": result_path.name, "alias_map": "sealed-identities.json",
@@ -413,36 +467,34 @@ def main() -> int:
         pending = list(cases); rng.shuffle(pending)
         total = len(cases) * len(requested_systems)
         count = selected_completion_count(completed, aliases, requested_systems)
+        executor = ThreadPoolExecutor(max_workers=2) if args.parallel_reference_arms else None
         for index, case in enumerate(pending, 1):
             order_rng = random.Random(args.seed + int(hashlib.sha256(case["id"].encode()).hexdigest()[:8], 16))
             arm_order = list(SYSTEMS); order_rng.shuffle(arm_order)
+            selected = []
             for system in arm_order:
-                if system not in requested_systems:
+                if system not in requested_systems or (args.reference_local and system == "phase91"):
                     continue
                 alias = system_alias[system]
                 if (case["id"], alias) in completed:
                     continue
-                url, auth = endpoints[system]
-                messages = list(case["messages"])
-                if system != "phase91":
-                    messages = [{"role": "system", "content": SYSTEM_PROMPT}] + messages
-                payload = {"model": "qwen-cyber-agent" if system == "phase91" else "local-reference",
-                           "messages": messages, "tools": [], "max_tokens": 700,
-                           "temperature": 0.12, "top_p": 0.9, "stream": True}
-                result = stream_completion(url, payload, auth)
-                content = result.pop("content")
-                classification = result.get("classification")
-                if result.get("finish_reason") == "length" and classification == "ok":
-                    classification = "truncated"
-                row = {"case_id": case["id"], "category": case["category"], "alias": alias,
-                       "content": content,
-                       "arm_order_for_case": [system_alias[s] for s in arm_order],
-                       **result, "classification": classification}
+                selected.append(system)
+
+            if executor is not None and len(selected) > 1:
+                futures = submit_parallel_reference_requests(
+                    executor, selected, case, arm_order, system_alias, endpoints)
+                rows = (future.result() for future in as_completed(futures))
+            else:
+                rows = (run_case_request(system, case, arm_order, system_alias, endpoints)
+                        for system in selected)
+
+            for row in rows:
+                alias = row["alias"]
                 with result_path.open("a", encoding="utf-8") as f:
                     f.write(json.dumps(row, ensure_ascii=False) + "\n")
                     f.flush(); os.fsync(f.fileno())
                 os.chmod(result_path, 0o600)
-                completed.add((case["id"], alias)); count += 1
+                completed.add((row["case_id"], alias)); count += 1
                 print(f"progress={count}/{total} case={index}/{len(cases)} alias={alias} class={row['classification']}", flush=True)
         atomic_json(OUT_DIR / "sealed-run-details.json", {
             "alias_to_system": aliases,
@@ -465,6 +517,8 @@ def main() -> int:
         print(f"complete={count}/{total}; raw output and mapping remain outside Git", flush=True)
         return 0
     finally:
+        if executor is not None:
+            executor.shutdown(wait=True, cancel_futures=True)
         for p in reversed(processes):
             p.terminate()
             try:
