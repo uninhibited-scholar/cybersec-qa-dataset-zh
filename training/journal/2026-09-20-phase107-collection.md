@@ -190,6 +190,8 @@
 
 ## Phase 108 speed check — 2026-09-20
 
+- Step2000 backup tensor integrity verified with `safetensors.numpy.load_file`:56 tensors, keys and shapes identical to step1000, all finite,56/56 changed by exact array comparison. This is a small CPU file-integrity check, not a GPU inference job or proof of quality. Mini PID43774 remains live at step2,300 (~195.892 tokens/s). Candidate continues isolated; production unchanged.
+
 - Backed up immutable step2000 checkpoint and adapter_config to cluster `/data3/ieug25/zj225/cyber-model-migration/models/phase108-step2000-20260920` (directory0700, files0600). Destination SHA256 matches mini `c15be75c4a07b5e088770b25325c89aed218d5e409207089de5f332a26ed9726`. Source files preserved; backup config retains Mac paths and is not a ready-to-run Linux training config. Weights remain outside Git. This is checkpoint preservation only, not a quality/promotion claim.
 
 - At17:43 HKT, mini PID43774 continues past2,000 microbatches. Logged pre-update sampled validation loss1.828 (32 batches,67.796s); train loss1.713,194.726 tokens/s, peak5.475GB,1,295,464 cumulative tokens. Numbered checkpoint `0002000_adapters.safetensors` exists with SHA256 `c15be75c4a07b5e088770b25325c89aed218d5e409207089de5f332a26ed9726`. The change from step1000 sampled loss1.662 does not establish overfitting because validation draws differ and log/save timing differs. Full common-validation comparison remains necessary; no early stopping or deployment based on these samples. Previous continuations verified the same live process and observed the validation batch progress.
