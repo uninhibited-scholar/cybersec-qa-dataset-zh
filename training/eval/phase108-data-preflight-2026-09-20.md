@@ -65,3 +65,10 @@ The local Phase 3 wrapper tokenizer parsed every clean-v2 row (zero malformed re
 - During the pilot the production API stayed listening on port 18765 under the same PID; the production adapter SHA remained `bfb6901a7aef2c4e5c3b9166a3f0bd982ca7b6ee461ea3e81a6f9a42fe05e37c`. System memory pressure remained 46–55% free while training and returned to 73% free afterward. Pilot outputs are isolated at `/Users/jiehan/models/phase108-mini-pilot-20260920` and will not be deployed.
 - Because the Mac mini pilot proved this path fits while the production API remains up, the full candidate is configured to train locally rather than waiting for A100 scheduling. The A100 smoke-only job `43841` was cancelled (it was owned by `zj225` and had not started).
 - Production API and Phase91 adapter remain unchanged. The full candidate uses a separate output path, one pass over all 19,621 train rows, fixed validation samples during training and the reserved full test split once at the end.
+
+## Full candidate training started — 2026-09-20 15:40 HKT
+
+- Mac mini process PID `43774` is the authoritative Phase108 training process. It loaded the exact Phase91 adapter, reports 1.835M trainable LoRA parameters, and is configured for 19,621 iterations (one shuffled pass, batch 1, gradient accumulation 2) with output `/Users/jiehan/models/phase108-cleanv2-epoch1-20260920`.
+- Initial pre-update validation loss on the fixed 32-batch sample: `1.869` (MLX loss; not a benchmark quality score). At 2026-09-20 15:42 HKT it had completed this baseline evaluation and entered training. No checkpoint has yet been reached.
+- Memory pressure was 47% free after baseline validation; production API PID `17247` remained listening on port 18765. The live Phase91 adapter SHA is still unchanged.
+- Based on the 10-step pilot rate, rough runtime is approximately 21–24 hours including periodic 32-batch validation and one full held-out test-loss pass. This estimate will be recalculated from the first 100-step throughput report. Training may finish without achieving the desired capability; only blind capability evaluation can establish that.
