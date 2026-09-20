@@ -35,19 +35,21 @@ def main():
     parser.add_argument("--dtype", choices=("float16", "float32", "bfloat16"), default="float16")
     parser.add_argument("--max-new-tokens", type=int, default=96)
     parser.add_argument("--probe-id", choices=[p[0] for p in PROBES])
+    parser.add_argument("--base-only", action="store_true")
     args = parser.parse_args()
     if args.output.exists():
         raise SystemExit("Output already exists; refusing overwrite")
     if not torch.cuda.is_available() or torch.cuda.get_device_capability(0) < (7, 0):
         raise SystemExit("Supported CUDA allocation required")
-    digest = hashlib.sha256(args.adapter.read_bytes()).hexdigest()
+    digest = None if args.base_only else hashlib.sha256(args.adapter.read_bytes()).hexdigest()
     model = AutoModelForCausalLM.from_pretrained(
         str(args.base), dtype=getattr(torch, args.dtype), device_map="auto",
         max_memory={0: "6GiB", "cpu": "32GiB"}, trust_remote_code=False,
         local_files_only=True,
     )
     tokenizer = AutoTokenizer.from_pretrained(str(args.base), local_files_only=True)
-    attach_adapter(model, args.adapter, scale=20.0)
+    if not args.base_only:
+        attach_adapter(model, args.adapter, scale=20.0)
     model.eval()
     device = model.get_input_embeddings().weight.device
     with args.output.open("x") as stream:
