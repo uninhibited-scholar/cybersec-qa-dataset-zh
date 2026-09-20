@@ -319,3 +319,4 @@
 - At01:18 HKT Sep21, after step10000 save and backup, PID43774 remains live at step10100; train loss1.761,0.309 it/s,197.416 tokens/s, trained tokens6,539,697, peak allocation5.740GB. This confirms the checkpoint work did not interrupt the running process. No production mutation or candidate selection.
 - At01:23 HKT Sep21, PID43774 remains live at step10200; train loss1.700,0.307 it/s,197.855 tokens/s, trained tokens6,604,155, peak allocation5.740GB. No inference, candidate selection, or production mutation.
 - At01:29 HKT Sep21, PID43774 remains live at step10300; train loss1.710,0.303 it/s,197.829 tokens/s, trained tokens6,669,524, peak allocation5.740GB. Training remains isolated and production/evaluation protocol are unchanged.
+- At01:34 HKT Sep21, PID43774 remains live at step10400; train loss1.708,0.307 it/s,197.219 tokens/s, trained tokens6,733,727, peak allocation5.740GB. No restart, inference, or production change.
