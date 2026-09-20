@@ -11,6 +11,7 @@
 - Iteration 4400 is logged: train loss 1.765, 195.616 tokens/s, peak memory 5.475 GB. PID 43774 remains live; next numbered checkpoint is 5000. Loss variation is expected and not evidence of behavioral regression or improvement by itself.
 - Iteration 4500 is logged: train loss 1.777, 197.323 tokens/s, peak memory 5.475 GB. PID 43774 remains live; next numbered checkpoint is 5000. The training-loss fluctuation alone does not select a checkpoint.
 - Iteration 4600 is logged: train loss 1.728, 193.778 tokens/s, peak memory 5.475 GB. PID 43774 remains live; training continues toward the 5000-step save/validation point.
+- Iteration 4700 is logged: train loss 1.777, 193.673 tokens/s, peak memory 5.475 GB. PID 43774 remains live. Continue toward checkpoint 5000; sampled training loss alone is not a model-quality gate.
 
 ## Live continuation check — 19:13 HKT
 
