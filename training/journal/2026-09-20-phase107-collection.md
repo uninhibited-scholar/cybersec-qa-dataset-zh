@@ -26,6 +26,7 @@
 - Iteration 5900 is logged: train loss 1.722, 198.386 tokens/s, peak memory 5.475 GB. PID 43774 remains live; next event is validation/save at step 6000.
 - Phase 108 checkpoint 6000 completed: pre-update sampled validation loss 1.672 over 32 batches (66.055s); train loss 1.731, 199.241 tokens/s, peak memory 5.475 GB. `/Users/jiehan/models/phase108-cleanv2-epoch1-20260920/0006000_adapters.safetensors` SHA-256 `b6daa3405ebd27d13de359a1c7d01e744252da77e337b0403ec37da57eed6e3e`. All 56 tensors are finite; keys/shapes match step 5000 and every tensor changed. Sampled validation loss is not a common fixed-set comparison and does not pick a winner.
 - Checkpoint and `adapter_config.json` copied to `/data3/ieug25/zj225/cyber-model-migration/models/phase108-step6000-20260920/`; source/destination weight hashes match. Config SHA-256 remains `daab3b77887c40860fd4b73871b6c6ff18657586acac9d4ff5be26a749d7c0df`; cluster directory/files are 0700/0600. Training PID 43774 continues; production unchanged. Full common validation and behavioral gates remain outstanding.
+- Training resumed after checkpoint 6000 and reached iteration 6100: train loss 1.696, 194.463 tokens/s, peak memory 5.475 GB. PID 43774 remains live; production unchanged.
 
 ## Live continuation check — 19:13 HKT
 
