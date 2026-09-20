@@ -154,8 +154,17 @@
 
 ## Phase 108 runtime/data staging update — 2026-09-20
 
-- Confirmed live state again: Phase 91 API on Mac mini remains active; no Phase108 training process or Slurm job is running. An A100 smoke job is pending as Slurm `43841`, scheduler estimate `2026-09-21 16:46:41` HKT.
+- Confirmed live state again: Phase 91 API on Mac mini remains active; no Phase108 training process or Slurm job was running at this point. An A100 smoke job was briefly queued as Slurm `43841`, then cancelled before it started after the Mac mini path passed a pilot.
 - Copied only `cybersec-clean-v2/{train,valid,test}.jsonl` directly from the mini to the private Slurm account directory `/data3/ieug25/zj225/cyber-model-migration/data/phase108-clean-v2`. Source and destination SHA-256 hashes match exactly. Destination directory is mode 0700 and files mode 0600; raw data was not added to Git.
 - Added a no-training CUDA adapter smoke script plus CPU tests for MLX factor orientation/scale. Six Phase108 tests pass. A GPU attempt on Titan X loaded all base shards but cannot execute current PyTorch CUDA kernels because its SM 5.2 is below the build's SM 7.0 minimum; no model conclusion can be drawn from the failed generation. The script now exits early on unsupported GPUs.
-- Full A100 adapter generation remains unverified; therefore no candidate training has started. No changes to API, production model, rubric, or tool permissions.
+- Full A100 BF16 adapter generation remains unverified. The supported RTX 2080 Ti FP16 smoke plus successful local MLX pilot make the Mac mini the active training route; production API, production model, rubric, and tool permissions were not changed.
 - The smoke script and tests, data-copy checksums, Slurm job IDs, and the unsupported-GPU negative result are recorded in this journal and the Phase108 preflight report; the earlier commit `2c3c654` covers the original dataset audit only.
+
+## Phase108 Mac mini training pilot — 2026-09-20
+
+- User asked to run what fits on the Mac mini rather than wait for cluster scheduling. Rechecked the host: 16 GiB unified memory, MLX 0.32.0 / mlx-lm 0.31.3, production API PID 17247 still listening on port 18765, production adapter SHA unchanged. The API stayed running throughout.
+- Created and ran isolated config `training/configs/phase108_mini_pilot.yaml`, loading the Phase91 adapter read-only and writing only to `/Users/jiehan/models/phase108-mini-pilot-20260920`. It used the real `cybersec-clean-v2` training/validation splits, 10 iterations, 2-step gradient accumulation, LR 1e-6, max sequence 2304, no test-set evaluation.
+- Pilot completed normally (PID 43522 exited; 10/10 iterations, no NaN/OOM): 5,755 trained tokens; final reported train loss 1.583; 4-batch validation loss was 2.000 before training, 1.596 at step 5, 2.090 at step 10. Peak MLX memory 3.765 GB. Validation sample is too small/noisy to claim quality improvement; this is strictly a resource/pipeline pilot.
+- Peak system memory pressure remained 46–55% free while the API was up and recovered to 73% after training. Production API PID/port and active adapter checksum were unchanged. Pilot checkpoint remains quarantined and is not the planned full candidate.
+- Full candidate config `phase108_cleanv2_epoch1.yaml` is one shuffled pass over 19,621 training rows, LR 5e-6, 4-layer LoRA resumed from exact Phase91 adapter, max sequence 2304, fixed 32-batch validation every 1,000 steps, saves every 1,000, and one full reserved test-loss evaluation after training. Output path is a new isolated directory `phase108-cleanv2-epoch1-20260920`.
+- Before launch, recheck output path absent, production adapter hash, API health, and memory pressure. The A100 smoke job `43841` is owned by `zj225` and can be cancelled because the MLX route is now validated; don't cancel any other cluster job.

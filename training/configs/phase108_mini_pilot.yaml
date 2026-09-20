@@ -1,0 +1,25 @@
+# Isolated 10-step MLX pipeline/resource pilot only; not a quality candidate.
+model: /Users/jiehan/models/Qwen3-4B-mlx-4bit-phase3-wrapper
+train: true
+data: /Users/jiehan/datasets/cybersec-clean-v2
+fine_tune_type: lora
+mask_prompt: true
+num_layers: 4
+batch_size: 1
+grad_accumulation_steps: 2
+iters: 10
+learning_rate: 1.0e-6
+max_seq_length: 2304
+grad_checkpoint: true
+adapter_path: /Users/jiehan/models/phase108-mini-pilot-20260920
+resume_adapter_file: /Users/jiehan/models/phase99-multiturn-candidate/adapters.safetensors
+save_every: 5
+steps_per_report: 1
+steps_per_eval: 5
+val_batches: 4
+test: false
+seed: 20260920
+lora_parameters:
+  rank: 8
+  scale: 20.0
+  dropout: 0.05

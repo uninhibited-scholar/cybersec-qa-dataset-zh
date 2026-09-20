@@ -1,0 +1,27 @@
+# Isolated Phase 108 candidate: one shuffled pass over the user's clean-v2 train split.
+# Validation is sampled deterministically by MLX at fixed intervals; test is evaluated once after training.
+model: /Users/jiehan/models/Qwen3-4B-mlx-4bit-phase3-wrapper
+train: true
+data: /Users/jiehan/datasets/cybersec-clean-v2
+fine_tune_type: lora
+mask_prompt: true
+num_layers: 4
+batch_size: 1
+grad_accumulation_steps: 2
+iters: 19621
+learning_rate: 5.0e-6
+max_seq_length: 2304
+grad_checkpoint: true
+adapter_path: /Users/jiehan/models/phase108-cleanv2-epoch1-20260920
+resume_adapter_file: /Users/jiehan/models/phase99-multiturn-candidate/adapters.safetensors
+save_every: 1000
+steps_per_report: 100
+steps_per_eval: 1000
+val_batches: 32
+test: true
+test_batches: -1
+seed: 20260920
+lora_parameters:
+  rank: 8
+  scale: 20.0
+  dropout: 0.05
