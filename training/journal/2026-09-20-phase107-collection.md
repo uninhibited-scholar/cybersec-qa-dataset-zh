@@ -40,3 +40,9 @@
 - The first 83 cases include repeated critical candidates in prompt-injection handling, unsupported claims about authentication/current state, fabricated tool/file/log access, invented CVE/source references, and operationally unsafe examples. The reviewers do not fully agree on several borderline items or exact failure category; the rubric requires blind adjudication before these become final labels.
 - No alias-to-system mapping has been read or inferred for reporting. No full aggregate, ranking, or parity conclusion is available yet. Empty/truncated outputs and transport success remain separate outcome fields, not silent quality-score substitutions.
 - Independent review is continuing in 20-case blocks; later cases remain unreviewed. Do not use partial results to train or alter the frozen test/rubric.
+
+## Blind scoring progress — through case 163
+
+- Review coverage now reaches bundle rows 1–163 (163/320 cases). Reviewer A has supplied rubric scores and critical labels for these rows; reviewer B has independently scored/checked through row 143 and is cross-reviewing 144–163; reviewer C has independently screened critical failures through row 163. This provides independent content scores on the bulk of completed rows and at least two critical screens for rows completed by two reviewers.
+- Multiple candidate critical failures have been independently identified across untrusted-instruction handling, fabricated tool/file/log access, unsupported security conclusions, invented identifiers, and unsafe operational/evidence-handling recommendations. Some labels/categories remain contested and must be adjudicated blind. These are preliminary aliases only; no system attribution or aggregate is released.
+- Rows 164–320 remain unreviewed. Scoring outputs are still separately tracked in reviewer task results; private responses/keys remain outside Git. No model improvement or deployment decision has been made from partial evidence.
