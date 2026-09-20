@@ -15,6 +15,19 @@ def run(command: list[str], timeout: int = 30) -> subprocess.CompletedProcess:
     return subprocess.run(command, capture_output=True, text=True, timeout=timeout)
 
 
+def accounting_state(output: str) -> str:
+    """Return the first Slurm accounting state, or unknown when unavailable."""
+    for line in output.splitlines():
+        fields = line.split()
+        if fields:
+            return fields[0].split("+")[0]
+    return "unknown"
+
+
+def is_terminal_state(state: str) -> bool:
+    return state not in {"", "unknown", "PENDING", "CONFIGURING", "RUNNING", "COMPLETING", "SUSPENDED"}
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--job-id", required=True)
@@ -55,6 +68,16 @@ def main() -> int:
         q = run(["ssh", "-o", "BatchMode=yes", args.cluster,
                  f"squeue -h -j {args.job_id} -o %T"], timeout=20)
         if q.returncode != 0:
+            # Slurm commonly returns nonzero plus "Invalid job id" after a
+            # job has left the queue. Consult accounting before treating this
+            # as a transient SSH/controller failure, otherwise the watcher can
+            # retry forever after its exact job has already failed or ended.
+            acct = run(["ssh", "-o", "BatchMode=yes", args.cluster,
+                        f"sacct -n -X -j {args.job_id} --format=State"], timeout=20)
+            terminal = accounting_state(acct.stdout) if acct.returncode == 0 else "unknown"
+            if is_terminal_state(terminal):
+                note(f"slurm_job_not_in_queue_state={terminal}; no_model_prompts_sent")
+                return 3
             note("temporary_slurm_poll_error; will_retry_without_changing_job")
             time.sleep(30)
             continue
@@ -90,7 +113,7 @@ def main() -> int:
         else:
             acct = run(["ssh", "-o", "BatchMode=yes", args.cluster,
                         f"sacct -n -X -j {args.job_id} --format=State"], timeout=20)
-            terminal = next((x.strip().split()[0] for x in acct.stdout.splitlines() if x.strip()), "unknown")
+            terminal = accounting_state(acct.stdout) if acct.returncode == 0 else "unknown"
             note(f"slurm_job_not_in_queue_state={terminal}; no_model_prompts_sent")
             return 4
         time.sleep(30)
