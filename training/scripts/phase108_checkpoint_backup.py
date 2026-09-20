@@ -15,6 +15,7 @@ import json
 import re
 import shlex
 import subprocess
+import uuid
 from pathlib import PurePosixPath
 
 
@@ -51,10 +52,19 @@ def plan(source_host: str, destination_host: str, source: PurePosixPath, destina
 
 def copy(source_host: str, destination_host: str, source: PurePosixPath, destination: PurePosixPath) -> str:
     destination_parent = destination.parent
+    temporary = destination.with_name(f".{destination.name}.partial-{uuid.uuid4().hex}")
     _remote(destination_host, f"umask 077; mkdir -p -- {shlex.quote(str(destination_parent))}; chmod 700 -- {shlex.quote(str(destination_parent))}")
     source_bytes = _remote(source_host, f"cat -- {shlex.quote(str(source))}")
-    _remote(destination_host, f"umask 077; cat > {shlex.quote(str(destination))}; chmod 600 -- {shlex.quote(str(destination))}", input_data=source_bytes)
-    return _sha256(destination_host, destination)
+    try:
+        _remote(destination_host, f"umask 077; cat > {shlex.quote(str(temporary))}; chmod 600 -- {shlex.quote(str(temporary))}", input_data=source_bytes)
+        temporary_hash = _sha256(destination_host, temporary)
+        source_hash = _sha256(source_host, source)
+        if temporary_hash != source_hash:
+            raise RuntimeError("hash mismatch before publishing transfer")
+        _remote(destination_host, f"test ! -e -- {shlex.quote(str(destination))} && mv -- {shlex.quote(str(temporary))} {shlex.quote(str(destination))}")
+        return _sha256(destination_host, destination)
+    finally:
+        _remote(destination_host, f"rm -f -- {shlex.quote(str(temporary))}")
 
 
 def main() -> int:

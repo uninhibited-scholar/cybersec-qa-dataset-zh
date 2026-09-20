@@ -24,12 +24,19 @@ class CheckpointBackupTests(unittest.TestCase):
 
     def test_copy_applies_permissions_and_verifies_destination(self):
         digest = b"c" * 64 + b"  checkpoint\n"
-        with patch.object(backup, "_remote", side_effect=[b"", b"weights", b"", digest]) as remote:
+        with patch.object(
+            backup,
+            "_remote",
+            side_effect=[b"", b"weights", b"", digest, digest, b"", digest, b""],
+        ) as remote:
             copied_hash = backup.copy("mini", "cluster", PurePosixPath("/source/ckpt"), PurePosixPath("/dest/ckpt"))
         self.assertEqual(copied_hash, "c" * 64)
         destination_write = remote.call_args_list[2]
         self.assertEqual(destination_write.kwargs["input_data"], b"weights")
         self.assertIn("chmod 600", destination_write.args[1])
+        self.assertIn(".partial-", destination_write.args[1])
+        self.assertIn("mv --", remote.call_args_list[5].args[1])
+        self.assertIn("rm -f", remote.call_args_list[7].args[1])
 
 
 if __name__ == "__main__":
