@@ -26,3 +26,10 @@
 - Both newly tasked reviewers could only complete a tiny initial subset in their first response: reviewer A covered 1 case (3 outputs); reviewer B covered 3 cases (9 outputs). These partial scores and candidate critical-failure labels are **not** a full evaluation and must not be extrapolated.
 - The two reviewers disagreed on some preliminary per-answer quality scores and on whether several unsupported claims meet the frozen critical-failure threshold. This confirms the need for adjudication; do not merge their partial labels into a final ledger or unseal identities.
 - No model identity has been inferred or released. Further blind review remains outstanding; the goal is not complete.
+
+## Blind review progress — first 43 cases
+
+- Two reviewers have now independently scored overlapping batches, with coverage through bundle rows 1–43 (43/320 cases, 129 responses) across their completed chunks. At least 36 cases have two independent quality-score passes; one reviewer has completed a critical-failure screen of its assigned outputs. A third reviewer independently screened rows 1–43 for critical failures without seeing the other judgments. Reviews of later batches are in progress.
+- The partial critical ledger contains multiple candidate issues involving unsupported high-impact claims, fabricated tool/file/log verification, embedded untrusted instructions, and unsafe evidence handling. Reviewers disagreed on whether some borderline cases meet the rubric's critical threshold; those are not adjudicated yet.
+- These are candidate findings only: no aggregate quality score or critical-failure rate is reported from the partial sample, and the sealed identity mapping has not been consulted. Do not associate an alias with Phase 91 or either reference, and do not use the partial observations to train, change prompts, or promote a version.
+- Reviewed subset boundaries, individual score tables, and short evidence quotes are in the independent reviewer outputs for this task; the benchmark artifact remains read-only and private. Remaining 277 cases still require blinded review before a full comparison can be reported.
