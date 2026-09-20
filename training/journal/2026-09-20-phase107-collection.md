@@ -176,7 +176,8 @@
 - Initial baseline validation completed at iteration 1 with loss 1.869. At 15:42 HKT the process was active after baseline validation. This value is a loss metric only, not capability evidence.
 - At 15:50 HKT, the run reported iteration 100: train loss 1.824, 0.232 it/s (152.507 tokens/s), 65,685 trained tokens, peak MLX memory 5.314 GB. System memory pressure was 54% free; production API PID 17247 remained listening on port 18765. Earlier low-CPU/sleeping samples were consistent with MLX/Metal evaluation, not a dead process.
 - At 15:57 HKT, iteration 200 reported train loss 1.845, 0.216 it/s (150.502 tokens/s), 135,423 cumulative trained tokens, peak MLX memory 5.314 GB. System memory pressure was 48% free; production API PID 17247 remained listening.
-- Re-estimated wall time from the 200-step rate is about 25 hours for 19,621 iterations, plus validation and held-out test overhead (provisional ETA around 2026-09-21 17:30 HKT). Recalculate at later checkpoints. Do not stop the API, replace production, or deploy the candidate. Candidate selection requires benchmark blind/regression gates after training.
+- At 16:04 HKT, iteration 300 reported train loss 1.862, 0.235 it/s (149.767 tokens/s), 199,182 cumulative trained tokens, peak MLX memory 5.314 GB. System memory pressure was 54% free; production API PID 17247 remained listening.
+- Current rate supports a rough 23–25 hour remainder for this one-pass run, plus validation/test overhead (provisional ETA 2026-09-21 afternoon/evening HKT). Recalculate at later checkpoints. Do not stop the API, replace production, or deploy the candidate. Candidate selection requires benchmark blind/regression gates after training.
 - Slurm A100 smoke job `43841` was cancelled before start; no unrelated job was changed.
 
 ## Phase 107 evaluation readiness recheck — 2026-09-20
