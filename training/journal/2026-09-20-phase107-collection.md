@@ -1,5 +1,11 @@
 # 2026-09-20 — Phase 107 v0.2 blind collection complete
 
+## Phase 108 checkpoint 4000
+
+- PID 43774 remains live; iteration 4000 reports train loss 1.788, 194.897 tokens/s, peak memory 5.475 GB. The pre-update sampled validation loss is 1.766 (32 batches, 67.635 seconds); it is not a fixed-sample comparison or deployment gate.
+- Numbered checkpoint `/Users/jiehan/models/phase108-cleanv2-epoch1-20260920/0004000_adapters.safetensors` exists, with stable SHA-256 `3b6a1ba5e9327473debe40f44bb3a77467420acbb9e238e1847206b7202ead36` across two reads. All 56 tensors are finite; keys/shapes match checkpoint 3000 and all 56 tensors changed. No model generation was run concurrently on the mini.
+- Off-device backup of this checkpoint remains pending. Production and prior checkpoints were not changed. Full common validation and behavioral gates are still required.
+
 ## Live continuation check — 19:13 HKT
 
 - SSH recheck confirms PID `43774` remains live (elapsed 03:33:30), and `pmset -g` reports `lowpowermode 0`. No training restart or production change was made.
