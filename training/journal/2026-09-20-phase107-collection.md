@@ -19,3 +19,10 @@
 - No content scores, rankings, parity claim, or identity unsealing have been performed.
 - Next: complete blind scoring per the frozen rubric, record case-level critical-failure labels with evidence quotes, obtain the required independent blind adjudication before opening identities, calculate per-stratum aggregates and paired uncertainty, and only then compare aliases to systems.
 - The current packet is prepared for review but no candidate improvement, training run, canary, or production deployment is authorized by this collection result.
+
+## Initial reviewer process note (not a final score)
+
+- One prior calibration reviewer noticed it had read the calibration report while preparing and withdrew before scoring. The other was interrupted before providing an independent final review. Two newly tasked reviewers with no inherited conversation history were then asked to review the same blind packet.
+- Both newly tasked reviewers could only complete a tiny initial subset in their first response: reviewer A covered 1 case (3 outputs); reviewer B covered 3 cases (9 outputs). These partial scores and candidate critical-failure labels are **not** a full evaluation and must not be extrapolated.
+- The two reviewers disagreed on some preliminary per-answer quality scores and on whether several unsupported claims meet the frozen critical-failure threshold. This confirms the need for adjudication; do not merge their partial labels into a final ledger or unseal identities.
+- No model identity has been inferred or released. Further blind review remains outstanding; the goal is not complete.
