@@ -48,7 +48,7 @@ def report(log: Path, directory: Path) -> dict:
         if (before.st_size, before.st_mtime_ns) != (after.st_size, after.st_mtime_ns):
             errors.append(f"checkpoint_changed_during_read_at_step_{step}")
             continue
-        candidates.append({"step": step, "validation_loss": values[step],
+        candidates.append({"step": step, "pre_update_validation_loss": values[step],
                            "path": str(path), "sha256": digest})
     candidates.sort(key=lambda item: item["step"])
     return {
@@ -59,6 +59,7 @@ def report(log: Path, directory: Path) -> dict:
         "suggested_for_behavior_evaluation": None,
         "production_approval": False,
         "limitations": ["Training-time validation draws new random batches; these losses cannot select a winner fairly.",
+                        "MLX logs validation before the named iteration update but saves after it; logged loss is not a measurement of the saved checkpoint.",
                         "Reevaluate checkpoints on the same validation examples before selecting candidates; behavior evaluation remains required.",
                         "Unnumbered final weights are excluded because their step association is not established.",
                         "Run after training exits for a final inventory; a live run yields a provisional snapshot.",
