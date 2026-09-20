@@ -17,6 +17,7 @@
 - Step 5000 weights and `adapter_config.json` were backed up to `/data3/ieug25/zj225/cyber-model-migration/models/phase108-step5000-20260920/`; source/destination weight hashes match; config SHA-256 is `daab3b77887c40860fd4b73871b6c6ff18657586acac9d4ff5be26a749d7c0df`; directory/files are 0700/0600. Training PID 43774 continues, and production was not touched. Full fixed common validation and behavioral blind gates remain outstanding.
 - Training resumed after the 5000-step save and reached iteration 5100: train loss 1.838, 197.676 tokens/s, peak memory 5.475 GB. PID 43774 remains live; production remains unchanged.
 - Iteration 5200 is logged: train loss 1.843, 198.128 tokens/s, peak memory 5.475 GB. PID 43774 remains live. No behavioral evaluation has yet been run on the 5000-step candidate.
+- Iteration 5300 is logged: train loss 1.769, 197.603 tokens/s, peak memory 5.475 GB. PID 43774 remains live; no production change or capability claim.
 
 ## Live continuation check — 19:13 HKT
 
