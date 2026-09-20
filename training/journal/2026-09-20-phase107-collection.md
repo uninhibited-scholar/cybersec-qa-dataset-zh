@@ -294,3 +294,4 @@
 - At23:24 HKT, after the 8000-step checkpoint, PID43774 remains live at step8100; train loss1.734,0.295 it/s,191.467 tokens/s, trained tokens5,240,407, peak allocation5.740GB. Low Power Mode is still off; no production change.
 - At23:30 HKT, PID43774 remains live at step8200; train loss1.703,0.279 it/s,191.083 tokens/s, trained tokens5,308,848, peak allocation5.740GB. The 8000-step checkpoint remains the latest numbered backup; no production change.
 - At23:36 HKT, PID43774 remains live at step8300; train loss1.772,0.299 it/s,188.249 tokens/s, trained tokens5,371,833, peak allocation5.740GB. No production change.
+- At23:41 HKT, PID43774 remains live at step8400; train loss1.727,0.303 it/s,191.713 tokens/s, trained tokens5,435,019, peak allocation5.740GB. No production change.
