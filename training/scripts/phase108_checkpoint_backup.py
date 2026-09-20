@@ -39,7 +39,7 @@ def _sha256(host: str, path: PurePosixPath) -> str:
 
 def plan(source_host: str, destination_host: str, source: PurePosixPath, destination: PurePosixPath) -> dict[str, str]:
     source_hash = _sha256(source_host, source)
-    exists = _remote(destination_host, f"test ! -e -- {shlex.quote(str(destination))} && echo clear").decode().strip()
+    exists = _remote(destination_host, f"[ ! -e {shlex.quote(str(destination))} ] && echo clear").decode().strip()
     if exists != "clear":
         raise FileExistsError(f"destination already exists: {destination_host}:{destination}")
     return {
@@ -61,7 +61,7 @@ def copy(source_host: str, destination_host: str, source: PurePosixPath, destina
         source_hash = _sha256(source_host, source)
         if temporary_hash != source_hash:
             raise RuntimeError("hash mismatch before publishing transfer")
-        _remote(destination_host, f"test ! -e -- {shlex.quote(str(destination))} && mv -- {shlex.quote(str(temporary))} {shlex.quote(str(destination))}")
+        _remote(destination_host, f"[ ! -e {shlex.quote(str(destination))} ] && mv -- {shlex.quote(str(temporary))} {shlex.quote(str(destination))}")
         return _sha256(destination_host, destination)
     finally:
         _remote(destination_host, f"rm -f -- {shlex.quote(str(temporary))}")
