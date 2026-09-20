@@ -178,3 +178,9 @@
 - At 15:57 HKT, iteration 200 reported train loss 1.845, 0.216 it/s (150.502 tokens/s), 135,423 cumulative trained tokens, peak MLX memory 5.314 GB. System memory pressure was 48% free; production API PID 17247 remained listening.
 - Re-estimated wall time from the 200-step rate is about 25 hours for 19,621 iterations, plus validation and held-out test overhead (provisional ETA around 2026-09-21 17:30 HKT). Recalculate at later checkpoints. Do not stop the API, replace production, or deploy the candidate. Candidate selection requires benchmark blind/regression gates after training.
 - Slurm A100 smoke job `43841` was cancelled before start; no unrelated job was changed.
+
+## Phase 107 evaluation readiness recheck — 2026-09-20
+
+- Verified `phase107-private-cases-v0.2.json` and `phase107-answer-keys-v0.2.json` remain ignored by `training/eval/.gitignore`, untracked, and absent from Git history. The frozen suite contains 320 cases; its prior exact-overlap audit found zero overlaps in the scanned local scope, but does not certify semantic independence or pretraining cleanliness.
+- Read-only SSH to the school cluster could not be re-established from this workstation: direct FQDN attempt returned `Permission denied (publickey,password)` in BatchMode; the short alias had an unrecognized host key; local ssh-agent has no loaded identities. No host key was accepted and no credentials were read. Until access is restored, no new cluster reference outputs are claimed.
+- The Mac mini candidate training remains the active compute path. Production API and adapter are unchanged. Phase107 scoring still requires the frozen protocol, reference outputs, and independent blinded rubric review.
