@@ -4,7 +4,7 @@
 
 - PID 43774 remains live; iteration 4000 reports train loss 1.788, 194.897 tokens/s, peak memory 5.475 GB. The pre-update sampled validation loss is 1.766 (32 batches, 67.635 seconds); it is not a fixed-sample comparison or deployment gate.
 - Numbered checkpoint `/Users/jiehan/models/phase108-cleanv2-epoch1-20260920/0004000_adapters.safetensors` exists, with stable SHA-256 `3b6a1ba5e9327473debe40f44bb3a77467420acbb9e238e1847206b7202ead36` across two reads. All 56 tensors are finite; keys/shapes match checkpoint 3000 and all 56 tensors changed. No model generation was run concurrently on the mini.
-- Off-device backup of this checkpoint remains pending. Production and prior checkpoints were not changed. Full common validation and behavioral gates are still required.
+- Off-device backup copied to `/data3/ieug25/zj225/cyber-model-migration/models/phase108-step4000-20260920/`; source and destination adapter SHA-256 match. `adapter_config.json` was copied alongside (SHA-256 `daab3b77887c40860fd4b73871b6c6ff18657586acac9d4ff5be26a749d7c0df`); cluster directory mode 0700 and files 0600. Production and prior checkpoints were not changed. Full common validation and behavioral gates are still required.
 
 ## Live continuation check — 19:13 HKT
 
