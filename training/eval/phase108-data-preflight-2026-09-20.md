@@ -56,6 +56,8 @@ The local Phase 3 wrapper tokenizer parsed every clean-v2 row (zero malformed re
 
 ## Runtime follow-up — 2026-09-20 15:25 HKT
 
+**Later correction:** CUDA job 43864 detected invalid generation scores in the FP16/CPU-offload production-baseline path after job 43863 produced repeated exclamation marks. The earlier nonempty-generation smoke below proves loading and string emission only, not numerical correctness or usable output. Do not use this CUDA path for capability scoring until numerical correctness is resolved. FP32 probe 43865 is pending; the Mac mini MLX training is a separate runtime.
+
 - The three clean-v2 splits were copied directly from the Mac mini to the Slurm account over an SSH stream; no raw data copy was made in this Git worktree. Cluster destination: `/data3/ieug25/zj225/cyber-model-migration/data/phase108-clean-v2`, directory mode `0700`, JSONL files mode `0600`. All three cluster SHA-256 values exactly match the source hashes above.
 - Added a read-only CUDA smoke script, `training/scripts/phase108_hf_adapter_smoke.py`, which checks the 28-projection / 56-tensor MLX-LoRA mapping, loads the Transformers base, and generates a short answer both without and with the active adapter. CPU unit tests verify the matrix orientation and scale formula against the MLX expression; all six Phase108 script unit tests pass.
 - The first GPU attempt on the idle Titan X loaded all 398 base shards but failed at generation because that device is compute capability 5.2 and the installed PyTorch build supports SM 7.0+. It does not establish model/adapter compatibility. The script now rejects unsupported devices before loading.

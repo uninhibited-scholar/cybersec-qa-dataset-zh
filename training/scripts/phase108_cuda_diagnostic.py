@@ -7,7 +7,7 @@ from pathlib import Path
 import time
 
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoTokenizer, LogitsProcessor
 from phase108_hf_adapter_smoke import attach_adapter
 
 
@@ -19,11 +19,22 @@ PROBES = [
 ]
 
 
+class FiniteScores(LogitsProcessor):
+    def __call__(self, input_ids, scores):
+        if (torch.isnan(scores).any() or torch.isposinf(scores).any()
+                or not torch.isfinite(scores).any(dim=-1).all()):
+            raise RuntimeError("Invalid generation scores; do not interpret output as model quality")
+        return scores
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base", type=Path, required=True)
     parser.add_argument("--adapter", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--dtype", choices=("float16", "float32", "bfloat16"), default="float16")
+    parser.add_argument("--max-new-tokens", type=int, default=96)
+    parser.add_argument("--probe-id", choices=[p[0] for p in PROBES])
     args = parser.parse_args()
     if args.output.exists():
         raise SystemExit("Output already exists; refusing overwrite")
@@ -31,7 +42,7 @@ def main():
         raise SystemExit("Supported CUDA allocation required")
     digest = hashlib.sha256(args.adapter.read_bytes()).hexdigest()
     model = AutoModelForCausalLM.from_pretrained(
-        str(args.base), dtype=torch.float16, device_map="auto",
+        str(args.base), dtype=getattr(torch, args.dtype), device_map="auto",
         max_memory={0: "6GiB", "cpu": "32GiB"}, trust_remote_code=False,
         local_files_only=True,
     )
@@ -42,19 +53,23 @@ def main():
     with args.output.open("x") as stream:
         args.output.chmod(0o600)
         for probe_id, prompt in PROBES:
+            if args.probe_id and args.probe_id != probe_id:
+                continue
             messages = [{"role": "system", "content": "请准确回答用户问题，遵守用户格式要求。未提供的事实请说明无法确认，不得声称执行过工具。"},
                         {"role": "user", "content": prompt}]
             rendered = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
             inputs = tokenizer(rendered, return_tensors="pt").to(device)
             start = time.monotonic()
             with torch.inference_mode():
-                output = model.generate(**inputs, max_new_tokens=96, do_sample=False)
+                output = model.generate(**inputs, max_new_tokens=args.max_new_tokens, do_sample=False,
+                                        logits_processor=[FiniteScores()])
             generated = output[0, inputs["input_ids"].shape[1]:]
             text = tokenizer.decode(generated, skip_special_tokens=True)
             row = {"id": probe_id, "prompt": prompt, "answer": text,
                    "adapter_sha256": digest, "seconds": time.monotonic()-start,
-                   "generated_tokens": len(generated), "max_new_tokens": 96,
-                   "empty": not bool(text.strip()), "hit_token_cap": len(generated) >= 96,
+                   "generated_tokens": len(generated), "max_new_tokens": args.max_new_tokens,
+                   "dtype": args.dtype,
+                   "empty": not bool(text.strip()), "hit_token_cap": len(generated) >= args.max_new_tokens,
                    "evaluation_type": "public_development_diagnostic_not_blind_benchmark"}
             stream.write(json.dumps(row, ensure_ascii=False)+"\n")
             stream.flush()
