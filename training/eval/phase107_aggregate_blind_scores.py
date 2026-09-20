@@ -13,7 +13,7 @@ import json
 import os
 import random
 import statistics
-from collections import Counter, defaultdict
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
@@ -170,7 +170,6 @@ def main() -> None:
     state_counts: dict[str, Counter] = {alias: Counter() for alias in aliases}
     latency: dict[str, list[float]] = {alias: [] for alias in aliases}
     score_cases: dict[str, dict[str, dict[str, float]]] = {category: {alias: {} for alias in aliases} for category in categories}
-    dimension_scores: dict[str, dict[str, list[float]]] = {alias: defaultdict(list) for alias in aliases}
     score_counts = Counter()
 
     for row, case in enumerate(bundle, 1):
@@ -192,8 +191,6 @@ def main() -> None:
             averaged_dims = [(a + b) / 2 for a, b in zip(a_scores, b_scores)]
             case_total = sum(averaged_dims)
             score_cases[case["category"]][alias][case_id] = case_total
-            for dimension, value in enumerate(averaged_dims):
-                dimension_scores[alias][str(dimension + 1)].append(value)
             score_counts[(alias, "double_scored")] += 1
 
     alias_summary = {}
