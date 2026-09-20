@@ -23,6 +23,7 @@
 - Iteration 5600 is logged: train loss 1.728, 193.234 tokens/s, peak memory 5.475 GB. PID 43774 remains live; continue toward the 6000-step save/validation.
 - Iteration 5700 is logged: train loss 1.724, 200.430 tokens/s, peak memory 5.475 GB. PID 43774 remains live; continue toward the 6000-step checkpoint.
 - Iteration 5800 is logged: train loss 1.826, 201.393 tokens/s, peak memory 5.475 GB. PID 43774 remains live; continue toward checkpoint 6000. The loss rise is an optimization metric and alone does not indicate overfitting or behavior change.
+- Iteration 5900 is logged: train loss 1.722, 198.386 tokens/s, peak memory 5.475 GB. PID 43774 remains live; next event is validation/save at step 6000.
 
 ## Live continuation check — 19:13 HKT
 
