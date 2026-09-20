@@ -8,6 +8,7 @@
 - Follow-up process sampling briefly showed the MLX main thread waiting inside GPU evaluation/Metal resource allocation during a long step interval; free memory remained 44% and no kernel GPU/watchdog messages appeared in the queried window. The same live process then advanced to iteration 4100 (train loss 1.742, 196.188 tokens/s), so this was a slow interval, not a confirmed hang. No intervention was needed.
 - Iteration 4200 is now logged: train loss 1.707, 196.621 tokens/s, peak memory 5.475 GB. PID 43774 remains live. Next numbered checkpoint is 5000; this log progress is not a behavioral improvement claim.
 - Iteration 4300 is logged: train loss 1.698, 199.080 tokens/s, peak memory 5.475 GB. PID 43774 remains live. No behavioral evaluation has yet been run on this checkpoint.
+- Iteration 4400 is logged: train loss 1.765, 195.616 tokens/s, peak memory 5.475 GB. PID 43774 remains live; next numbered checkpoint is 5000. Loss variation is expected and not evidence of behavioral regression or improvement by itself.
 
 ## Live continuation check — 19:13 HKT
 
