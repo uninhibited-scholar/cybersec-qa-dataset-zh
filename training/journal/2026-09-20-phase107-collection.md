@@ -1,5 +1,11 @@
 # 2026-09-20 — Phase 107 v0.2 blind collection complete
 
+## Live continuation check — 19:13 HKT
+
+- SSH recheck confirms PID `43774` remains live (elapsed 03:33:30), and `pmset -g` reports `lowpowermode 0`. No training restart or production change was made.
+- Phase 108 reached iteration 3600/19621: training loss 1.776, 0.309 iterations/s, 195.872 tokens/s, 2,329,446 trained tokens, peak memory 5.475 GB. Recent 3500/3600 throughput is 193.081/195.872 tokens/s. This is consistent with the previously observed improvement after disabling low-power mode, not a controlled causal benchmark.
+- Re-read common-validation implementation and reran its two unit tests plus four checkpoint-report tests: all six pass. These are tooling checks, not completed model validation or capability gates. Full common-validation inference and candidate independent behavioral evaluation remain outstanding; sampled in-training losses do not establish checkpoint superiority.
+
 ## Collection outcome
 
 - Slurm job `43800` ran the approved CPU-only reference collection on `a100-2` using the pinned llama.cpp runtime and the frozen Phase 107 protocol. The collector wrote `960/960` response records for 320 v0.2 cases and three sealed aliases per case; its terminal log includes `complete=960/960` and `reference_collection_completed=true`.
