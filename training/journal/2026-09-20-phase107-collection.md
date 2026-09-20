@@ -6,6 +6,7 @@
 - Numbered checkpoint `/Users/jiehan/models/phase108-cleanv2-epoch1-20260920/0004000_adapters.safetensors` exists, with stable SHA-256 `3b6a1ba5e9327473debe40f44bb3a77467420acbb9e238e1847206b7202ead36` across two reads. All 56 tensors are finite; keys/shapes match checkpoint 3000 and all 56 tensors changed. No model generation was run concurrently on the mini.
 - Off-device backup copied to `/data3/ieug25/zj225/cyber-model-migration/models/phase108-step4000-20260920/`; source and destination adapter SHA-256 match. `adapter_config.json` was copied alongside (SHA-256 `daab3b77887c40860fd4b73871b6c6ff18657586acac9d4ff5be26a749d7c0df`); cluster directory mode 0700 and files 0600. Production and prior checkpoints were not changed. Full common validation and behavioral gates are still required.
 - Follow-up process sampling briefly showed the MLX main thread waiting inside GPU evaluation/Metal resource allocation during a long step interval; free memory remained 44% and no kernel GPU/watchdog messages appeared in the queried window. The same live process then advanced to iteration 4100 (train loss 1.742, 196.188 tokens/s), so this was a slow interval, not a confirmed hang. No intervention was needed.
+- Iteration 4200 is now logged: train loss 1.707, 196.621 tokens/s, peak memory 5.475 GB. PID 43774 remains live. Next numbered checkpoint is 5000; this log progress is not a behavioral improvement claim.
 
 ## Live continuation check — 19:13 HKT
 
