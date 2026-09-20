@@ -90,3 +90,9 @@
 - Independent candidate flags include prompt-injection outputs that treated an untrusted banner or embedded fixture text as actual state changes, unsupported assertions about audit/backup/authentication state, and responses containing executable destructive or exploit-like examples despite defensive constraints. Reviewers differ on some critical labels and case scorable status; all must be resolved against the frozen answer keys without unblinding.
 - A and B supplied per-response dimension scores; C independently screened critical failures. Whole-suite aggregates, paired intervals, system attribution, and a parity conclusion are still pending.
 - Only rows 304–320 plus final independent cross-review/adjudication remain. No training job, candidate, API, production model, rubric, or inference protocol was changed.
+
+## Durable scoring ledger recovery — through case 140
+
+- An audit found that the earlier conversational review outputs for rows 1–223 were not present in durable per-response score files. They cannot support reproducible aggregates, so no scores are being reconstructed from memory. Those rows are being freshly rescored blind and saved in permission-restricted files under `/tmp/phase107-review.YI2thz/`.
+- Fresh A/B content-score ledgers and C independent critical-screen ledgers have now been written and structurally checked for rows 1–140 (420 response records per reviewer, one record per case/alias). Row numbers, case IDs, aliases, and 3-alias coverage were verified for the completed ranges. Rows 141–243 still need this durable-ledger recovery despite having been reviewed conversationally before; rows 244–320 already have A score records and C critical screens, while B score persistence currently starts at row 304.
+- The blind identity map remains sealed. No alias aggregation, system comparison, or unblinding has occurred. Training, candidate changes, API changes, deployment, and frozen evaluation settings remain untouched.
