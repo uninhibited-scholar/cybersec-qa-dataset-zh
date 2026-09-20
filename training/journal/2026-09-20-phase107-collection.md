@@ -1,0 +1,21 @@
+# 2026-09-20 — Phase 107 v0.2 blind collection complete
+
+## Collection outcome
+
+- Slurm job `43800` ran the approved CPU-only reference collection on `a100-2` using the pinned llama.cpp runtime and the frozen Phase 107 protocol. The collector wrote `960/960` response records for 320 v0.2 cases and three sealed aliases per case; its terminal log includes `complete=960/960` and `reference_collection_completed=true`.
+- After the collector reported completion, job `43800` was cancelled to stop the reference servers and release the allocation. The later Slurm `FAILED`/exit-6 status is the script's expected “reference server exited unexpectedly” path after explicit cancellation; it occurred after the collector's successful completion marker, not during collection. User job `43670` was not touched.
+- No answer-key or identity-map material was loaded during inference. Production Phase 91 was queried read-only; no model, adapter, API, prompt, protocol, rubric, or deployment setting was changed.
+
+## Integrity and blind packet
+
+- The tracked `phase107_prepare_blind_review.py` validator completed successfully: `review_bundle_ready cases=320 responses=960; identities remain sealed`.
+- It verified 320 unique case IDs, exactly three aliases per case, all 960 distinct `(case_id, alias)` pairs, category alignment, the frozen suite version/hash, frozen protocol settings, and pinned Phase 91 worker/effective-prompt hashes. It loads the answer keys only after coverage validation.
+- The permission-restricted review bundle contains only randomized case presentation, prompts, key anchors, and responses under aliases; it omits run order and identity mapping. Local working copy: `/tmp/phase107-review.YI2thz/bundle/phase107-blind-review-bundle.jsonl` (directory 0700, files 0600). Raw responses and identity mapping remain outside Git on the cluster; do not commit either.
+- Raw response SHA-256: `092cf5875adb534ab69722d694d2ff1341050840482ce45edbdfb5080702f711`. Run manifest SHA-256: `0c39bc438bc4d62564dea2403d6d2bb5a40757c1c13c3ae31a1c1d279fd9de79`. Suite SHA-256 remains `6d75567be1ec32e1599951e98776625e93b4cc1826a269ff8b4f59304306d982`.
+- Across the 960 blinded records, the collector classified 450 as `ok`, 325 as `truncated`, and 185 as `empty`; all had HTTP 200 transport status. Finish reasons were 450 `stop` and 510 `length`. These operational outcomes must be reported separately from content quality and must not be attributed to any system until identities are opened after blind scoring/adjudication.
+
+## Remaining gate
+
+- No content scores, rankings, parity claim, or identity unsealing have been performed.
+- Next: complete blind scoring per the frozen rubric, record case-level critical-failure labels with evidence quotes, obtain the required independent blind adjudication before opening identities, calculate per-stratum aggregates and paired uncertainty, and only then compare aliases to systems.
+- The current packet is prepared for review but no candidate improvement, training run, canary, or production deployment is authorized by this collection result.
