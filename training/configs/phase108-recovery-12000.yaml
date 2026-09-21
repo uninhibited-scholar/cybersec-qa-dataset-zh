@@ -1,0 +1,28 @@
+# Isolated recovery after the original Phase 108 Metal worker stalled after step 12,300.
+# The saved step-12,000 adapter is the only recovery input. This is not represented
+# as an exact optimizer-state resume: it is a separately named candidate run.
+model: /Users/jiehan/models/Qwen3-4B-mlx-4bit-phase3-wrapper
+train: true
+data: /Users/jiehan/datasets/cybersec-clean-v2
+fine_tune_type: lora
+mask_prompt: true
+num_layers: 4
+batch_size: 1
+grad_accumulation_steps: 2
+iters: 7621
+learning_rate: 5.0e-6
+max_seq_length: 2304
+grad_checkpoint: true
+adapter_path: /Users/jiehan/models/phase108-cleanv2-recovery-12000-20260921
+resume_adapter_file: /Users/jiehan/models/phase108-cleanv2-epoch1-20260920/0012000_adapters.safetensors
+save_every: 1000
+steps_per_report: 100
+steps_per_eval: 1000
+val_batches: 32
+# Keep the held-out test split unread; selection will use the fixed validation gate.
+test: false
+seed: 20260920
+lora_parameters:
+  rank: 8
+  scale: 20.0
+  dropout: 0.05
