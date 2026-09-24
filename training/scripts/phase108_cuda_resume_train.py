@@ -27,6 +27,19 @@ from peft import LoraConfig, get_peft_model
 TARGET_MODULES = ("q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj")
 
 
+def mlx_scale_to_peft_alpha(scale: float, rank: int) -> float:
+    """Translate MLX's direct LoRA multiplier to PEFT's alpha/r multiplier.
+
+    MLX applies ``scale * (x @ A @ B)``.  PEFT applies
+    ``(lora_alpha / rank) * (x @ A @ B)``.  Keeping the raw MLX value as
+    ``lora_alpha`` would silently weaken training by ``rank`` and export an
+    adapter that is later over-amplified on MLX inference.
+    """
+    if not scale > 0 or rank < 1:
+        raise ValueError("LoRA scale must be positive and rank must be at least one")
+    return scale * rank
+
+
 def sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as handle:
@@ -182,8 +195,11 @@ def main() -> None:
     model.config.use_cache = False
     model.gradient_checkpointing_enable()
     adapter_layers = mlx_adapter_layers(args.adapter)
+    mlx_lora_scale = 20.0
+    lora_rank = 8
+    peft_lora_alpha = mlx_scale_to_peft_alpha(mlx_lora_scale, lora_rank)
     config = LoraConfig(
-        r=8, lora_alpha=20, lora_dropout=0.05,
+        r=lora_rank, lora_alpha=peft_lora_alpha, lora_dropout=0.05,
         target_modules=list(TARGET_MODULES), layers_to_transform=adapter_layers,
         layers_pattern="layers",
         bias="none", task_type="CAUSAL_LM",
@@ -201,7 +217,14 @@ def main() -> None:
         "data": str(args.data), "train_rows": len(train_rows), "validation_rows_sampled": len(validation_rows),
         "test_split_read": False, "seed": args.seed, "learning_rate": args.learning_rate,
         "max_steps": args.max_steps, "max_length": args.max_length,
-        "lora": {"rank": 8, "alpha": 20, "dropout": 0.05, "layers": adapter_layers},
+        "lora": {
+            "rank": lora_rank,
+            "mlx_scale": mlx_lora_scale,
+            "peft_lora_alpha": peft_lora_alpha,
+            "peft_effective_scale": peft_lora_alpha / lora_rank,
+            "dropout": 0.05,
+            "layers": adapter_layers,
+        },
     }
     (args.output / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
     metrics = (args.output / "metrics.jsonl").open("w", encoding="utf-8")
