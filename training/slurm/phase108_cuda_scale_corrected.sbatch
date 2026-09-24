@@ -3,7 +3,7 @@
 # MLX Phase108 checkpoint but never changes production or an existing candidate.
 # PEFT uses alpha=160 so alpha/rank equals MLX's direct scale=20.
 #SBATCH --job-name=phase108-scale20
-#SBATCH --partition=GPU-MEDIUM
+#SBATCH --partition=GPU-LARGE
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=48G
