@@ -16,7 +16,7 @@ PYTHON=/data3/ieug25/zj225/miniforge3/envs/coevo/bin/python
 BASE="$ROOT/models/base-phase3-dequantized"
 INPUT_ADAPTER="$ROOT/models/phase108-step12000-20260920/0012000_adapters.safetensors"
 DATA="$ROOT/data/phase108-clean-v2"
-OUTPUT="$ROOT/models/phase108-cuda-recovery-scale20-corrected-20260924"
+OUTPUT="$ROOT/models/phase108-cuda-recovery-scale20-corrected-20260924-r2"
 EXPECTED_INPUT_SHA256=3ed1a85e7b021e14198332a525bfa4bb75b336a03579d526f8210f1576317036
 
 test -r "$BASE/config.json"

@@ -9,3 +9,5 @@
 - Output target: `/data3/ieug25/zj225/cyber-model-migration/models/phase108-cuda-recovery-scale20-corrected-20260924`.
 - Production API, existing adapters, evaluation rubric, and tool permissions were not changed.
 - Local no-inference preflight of the downloaded 44114 candidate failed with `malformed LoRA scale provenance`, confirming it remains ineligible for validation or deployment.
+- Job 44299 completed, but its manifest still had the stale `alpha=20` schema because the corrected runner had initially been copied to `data/training/` while the Slurm script invoked `data/training/scripts/`. 44299 is therefore invalid and must not be evaluated.
+- Corrected runner was copied to the invoked `data/training/scripts/` path and verified to contain `peft_lora_alpha=160` and `peft_effective_scale`. New isolated job 44306 targets `...scale20-corrected-20260924-r2`.
