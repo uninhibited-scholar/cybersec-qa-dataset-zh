@@ -8,3 +8,4 @@
 - Resubmitted the same isolated job directly with `sbatch` as 44299 on `GPU-LARGE` (no `--wrap`). It is pending for resources and has not produced a log or output yet.
 - Output target: `/data3/ieug25/zj225/cyber-model-migration/models/phase108-cuda-recovery-scale20-corrected-20260924`.
 - Production API, existing adapters, evaluation rubric, and tool permissions were not changed.
+- Local no-inference preflight of the downloaded 44114 candidate failed with `malformed LoRA scale provenance`, confirming it remains ineligible for validation or deployment.
