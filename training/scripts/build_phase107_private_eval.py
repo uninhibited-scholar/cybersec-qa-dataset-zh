@@ -71,8 +71,19 @@ def to_messages(category, prompt):
     ]
 
 
-def build(require_full=False, cases_path=CASES, keys_path=KEYS):
-    source_bytes = SOURCE.read_bytes()
+def build(require_full=False, cases_path=CASES, keys_path=KEYS, *, source_path=SOURCE,
+          suite_version="phase107-v0.2", id_prefix="p107"):
+    """Build one versioned private suite from an explicitly supplied fixture file.
+
+    Defaults preserve the original Phase107 v0.2 behavior.  A later candidate
+    evaluation must supply a fresh source and a distinct version/id prefix; it
+    must never silently reuse an already-unsealed suite.
+    """
+    if not re.fullmatch(r"phase\d+-v\d+\.\d+", suite_version):
+        raise ValueError("suite_version must look like phaseNN-vN.N")
+    if not re.fullmatch(r"[a-z][a-z0-9_-]*", id_prefix):
+        raise ValueError("id_prefix must contain lowercase letters, digits, _ or -")
+    source_bytes = source_path.read_bytes()
     fixtures = json.loads(source_bytes)
     if not isinstance(fixtures, list) or not fixtures:
         raise ValueError("source fixture file must be a non-empty JSON list")
@@ -103,14 +114,14 @@ def build(require_full=False, cases_path=CASES, keys_path=KEYS):
         seen_prompts.add(n_prompt)
         seen_fixtures.add(row["fixture_id"])
         counts[cat] += 1
-        case_id = f"p107-{cat}-{counts[cat]:03d}"
+        case_id = f"{id_prefix}-{cat}-{counts[cat]:03d}"
         messages = to_messages(cat, prompt)
         message_bytes = json.dumps(messages, ensure_ascii=False, separators=(",", ":")).encode()
         prompt_hash = hashlib.sha256(n_prompt.encode()).hexdigest()
         cases.append({
             "id": case_id,
             "category": cat,
-            "suite_version": "phase107-v0.2",
+            "suite_version": suite_version,
             "prompt": prompt,
             "messages": messages,
             "conversation_sha256": hashlib.sha256(message_bytes).hexdigest(),
@@ -154,6 +165,8 @@ def build(require_full=False, cases_path=CASES, keys_path=KEYS):
     return {
         "status": "draft_not_scored",
         "source_sha256": hashlib.sha256(source_bytes).hexdigest(),
+        "suite_version": suite_version,
+        "id_prefix": id_prefix,
         "case_count": len(cases),
         "category_counts": dict(sorted(counts.items())),
         "unique_normalized_prompts": len(seen_prompts),
@@ -173,8 +186,14 @@ def build(require_full=False, cases_path=CASES, keys_path=KEYS):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--require-full", action="store_true")
+    parser.add_argument("--source", type=Path, default=SOURCE,
+                        help="private source fixture file; defaults to the historical v0.2 source")
     parser.add_argument("--cases-output", type=Path, default=CASES)
     parser.add_argument("--keys-output", type=Path, default=KEYS)
+    parser.add_argument("--suite-version", default="phase107-v0.2")
+    parser.add_argument("--id-prefix", default="p107")
     args = parser.parse_args()
     print(json.dumps(build(require_full=args.require_full, cases_path=args.cases_output,
-                           keys_path=args.keys_output), ensure_ascii=False, indent=2))
+                           keys_path=args.keys_output, source_path=args.source,
+                           suite_version=args.suite_version, id_prefix=args.id_prefix),
+                     ensure_ascii=False, indent=2))

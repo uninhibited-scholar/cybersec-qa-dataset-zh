@@ -43,10 +43,16 @@ def attach_adapter(model: nn.Module, adapter_path: Path, scale: float) -> int:
     state = load_file(str(adapter_path), device="cpu")
     pairs: dict[str, dict[str, torch.Tensor]] = {}
     for key, tensor in state.items():
-        match = re.fullmatch(r"(model\.layers\.\d+\.(?:mlp|self_attn)\.[^.]+)\.lora_([ab])", key)
+        # MLX checkpoints use either `model.layers.N...` or `layers.N...`.
+        # PyTorch's Qwen module tree always uses `model.layers.N...`; accept
+        # both serialized forms, then canonicalize before get_submodule().
+        match = re.fullmatch(r"((?:model\.)?layers\.\d+\.(?:mlp|self_attn)\.[^.]+)\.lora_([ab])", key)
         if not match:
             raise ValueError(f"Unexpected adapter key: {key}")
-        pairs.setdefault(match.group(1), {})[match.group(2)] = tensor
+        module_path = match.group(1)
+        if not module_path.startswith("model."):
+            module_path = "model." + module_path
+        pairs.setdefault(module_path, {})[match.group(2)] = tensor
 
     installed = 0
     for module_path, pair in pairs.items():

@@ -19,7 +19,7 @@ def normalize(text):
     return SPACE.sub("", unicodedata.normalize("NFKC", text)).casefold()
 
 
-def validate(cases, keys, case_bytes=b"", key_bytes=b""):
+def validate(cases, keys, case_bytes=b"", key_bytes=b"", *, expected_suite_version=None):
     errors = []
     counts = Counter(row.get("category") for row in cases)
     ids = [row.get("id") for row in cases]
@@ -38,12 +38,16 @@ def validate(cases, keys, case_bytes=b"", key_bytes=b""):
     seen_prompts = set()
     key_by_id = {row.get("id"): row for row in keys}
     multi_sequences = set()
+    suite_versions = {case.get("suite_version") for case in cases}
+    if expected_suite_version is not None:
+        if suite_versions != {expected_suite_version}:
+            errors.append("unexpected_suite_version")
+    elif len(suite_versions) != 1 or not all(isinstance(v, str) and re.fullmatch(r"phase\d+-v\d+\.\d+", v) for v in suite_versions):
+        errors.append("invalid_or_mixed_suite_version")
     for case in cases:
         cid = case.get("id", "<missing-id>")
         prompt = case.get("prompt")
         messages = case.get("messages")
-        if case.get("suite_version") != "phase107-v0.2":
-            errors.append(f"{cid}:wrong_suite_version")
         if not isinstance(prompt, str) or not prompt.strip():
             errors.append(f"{cid}:empty_audit_prompt")
             prompt = ""
@@ -91,6 +95,7 @@ def validate(cases, keys, case_bytes=b"", key_bytes=b""):
     return {
         "status": "pass" if not errors else "fail",
         "case_count": len(cases),
+        "suite_version": next(iter(suite_versions), None) if len(suite_versions) == 1 else None,
         "answer_key_count": len(keys),
         "category_counts": dict(sorted(counts.items())),
         "structured_multiturn_count": sum(
@@ -111,9 +116,11 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("manifest", type=Path)
     parser.add_argument("answer_keys", type=Path)
+    parser.add_argument("--suite-version", help="require one exact suite version; omit to validate any well-formed single version")
     args = parser.parse_args()
     case_bytes, key_bytes = args.manifest.read_bytes(), args.answer_keys.read_bytes()
-    result = validate(json.loads(case_bytes), json.loads(key_bytes), case_bytes, key_bytes)
+    result = validate(json.loads(case_bytes), json.loads(key_bytes), case_bytes, key_bytes,
+                      expected_suite_version=args.suite_version)
     print(json.dumps(result, ensure_ascii=False, indent=2))
     raise SystemExit(0 if result["status"] == "pass" else 1)
 
