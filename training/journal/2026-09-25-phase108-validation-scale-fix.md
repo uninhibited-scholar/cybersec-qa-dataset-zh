@@ -79,3 +79,34 @@ validation data read itself was still restricted to the frozen 1,089-row
 
 Production API, Phase91 adapter, evaluation rubric/protocol, and tool
 permissions remain unchanged. Candidates remain in the isolated sandbox.
+
+## Corrected full fixed-validation sweep completed — 2026-09-26
+
+- Slurm job `44518` finished `COMPLETED`, exit `0`, elapsed `00:25:24` on
+  `dell3090`. The remote result has 9 records; its SHA-256 is
+  `7a0d59d5b9119270693a680bfd5d7ff5e4f74864f12fff546be854404ef08ade`.
+  The byte-identical local copy is
+  `training/eval/phase108-r2-fixed-scale-validation-44518.jsonl`.
+- Every row reports rank 8, MLX scale 20, PEFT alpha 160, effective scale
+  20.0, 1,089 validation rows, frozen validation SHA-256
+  `44f46f44b6a3653d0acd799d24b4c6d331a13030eaa4f3e6849a84141b18a365`, and
+  `train_split_read=false`, `test_split_read=false`,
+  `production_approval=false`.
+- Results by checkpoint (validation loss; lower is better): step 1
+  `1.7362405706`; 1000 `1.7315177635`; 2000 `1.7267208465`; 3000
+  `1.7226179229`; 4000 `1.7186481314`; 5000 `1.7152950378`; 6000
+  `1.7118153573`; 7000 `1.7081212176`; final adapter `1.7062584871`.
+  The lowest measured loss is the final adapter SHA-256
+  `4e9177c3956aaa0c176929e7d8225b9882a2587b4dadad9cb51c04d905453772`.
+- This repairs the invalid-scale measurement and establishes a monotonic
+  validation-loss trend within this run. It does **not** establish a gain
+  over the exact parent adapter, Phase91/production, or another model family;
+  loss is not behavioral quality. The earlier 16/16 empty-text smoke signal
+  at step 7000 remains an unresolved functional failure signal. No checkpoint
+  is selected for promotion, and no model/API/adapter, rubric, protocol, or
+  tool permission was changed.
+- Next: compare the exact Phase108 input adapter and final candidate under the
+  same fixed validation implementation; then use a fresh, contamination-audited
+  blind holdout and full functional/security gates. Keep serving-model family
+  selection independent: the Phase108 adapter is Qwen-specific, but the
+  cluster's API/Harness need not be.
