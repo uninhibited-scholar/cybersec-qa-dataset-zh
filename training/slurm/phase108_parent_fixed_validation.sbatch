@@ -11,6 +11,7 @@
 #SBATCH --output=/data3/ieug25/zj225/cyber-model-migration/logs/phase108-parent-val20-%j.log
 
 set -euo pipefail
+set -x
 umask 077
 ROOT=/data3/ieug25/zj225/cyber-model-migration
 PYTHON=/data3/ieug25/zj225/miniforge3/envs/coevo/bin/python
@@ -32,15 +33,24 @@ readonly SCALE_UTIL_SHA256=966d35d28d3222950c8b1b955838ce36d87f85e9449b532814553
 
 for path in "$BASE/config.json" "$BASE/model.safetensors.index.json" \
   "$PARENT" "$PARENT_CONFIG" "$VALIDATION" "$RUNNER" "$SCALE_UTIL"; do
+  echo "CHECK_READABLE=$path"
   test -r "$path"
 done
+echo "CHECK_PARENT_SHA"
 test "$(sha256sum "$PARENT" | awk '{print $1}')" = "$PARENT_SHA256"
+echo "CHECK_PARENT_CONFIG_SHA"
 test "$(sha256sum "$PARENT_CONFIG" | awk '{print $1}')" = "$CONFIG_SHA256"
+echo "CHECK_VALIDATION_SHA"
 test "$(sha256sum "$VALIDATION" | awk '{print $1}')" = "$VALIDATION_SHA256"
+echo "CHECK_BASE_CONFIG_SHA"
 test "$(sha256sum "$BASE/config.json" | awk '{print $1}')" = "$BASE_CONFIG_SHA256"
+echo "CHECK_BASE_INDEX_SHA"
 test "$(sha256sum "$BASE/model.safetensors.index.json" | awk '{print $1}')" = "$BASE_INDEX_SHA256"
+echo "CHECK_RUNNER_SHA"
 test "$(sha256sum "$RUNNER" | awk '{print $1}')" = "$RUNNER_SHA256"
+echo "CHECK_SCALE_UTIL_SHA"
 test "$(sha256sum "$SCALE_UTIL" | awk '{print $1}')" = "$SCALE_UTIL_SHA256"
+echo "CHECK_PARENT_CONFIG_METADATA"
 "$PYTHON" - "$PARENT_CONFIG" <<'PY'
 import json, sys
 cfg = json.load(open(sys.argv[1]))
@@ -52,6 +62,7 @@ print("PARENT_CONFIG_PREFLIGHT=PASS rank=8 mlx_scale=20.0; validation runner rea
 PY
 mkdir -p "$ROOT/results"
 test ! -e "$OUT"
+echo "RUN_VALIDATION_ONLY=valid.jsonl"
 "$PYTHON" -u "$RUNNER" \
   --base "$BASE" --adapter "$PARENT" \
   --validation "$VALIDATION" --expected-validation-sha256 "$VALIDATION_SHA256" \
