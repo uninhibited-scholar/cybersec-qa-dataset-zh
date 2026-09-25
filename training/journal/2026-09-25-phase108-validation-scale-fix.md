@@ -279,3 +279,27 @@ permissions remain unchanged. Candidates remain in the isolated sandbox.
   CPU-only revision still needs to be synchronized/hash-verified and its
   no-model private-source preflight run before submission. Production,
   training weights, rubric, protocol, and tools remain unchanged.
+
+## Base-only first-token diagnostic completed — 2026-09-26
+
+- Synchronized the CPU-only runner and SBATCH file to the cluster and verified
+  hashes `3585e9f620ed43cd2d58b77a26ccd65179b21dfff0f0646d821a58fbe329f3ed`
+  and `328d7323213a6e4a6bb0dcffc83b611d1270227bec0a36e67dcb668d0e74d83b`.
+  Remote `py_compile`, `bash -n`, CLI help, and the no-load case-source
+  preflight passed; private source SHA and the exact 16 previously exposed IDs
+  matched. Disk quota remained 280G/479G (58.5%).
+- Slurm job `44542` ran CPU-only on `dell3090` (8 CPUs, 32G requested, no GPU)
+  and completed successfully in 53 seconds. It loaded the exact pinned base
+  config, tokenizer, and both weight shards, then generated one token for each
+  of the 16 known prompts. The metadata-only result reports zero first-token
+  EOS events and one decoded empty string. Result JSONL SHA-256 is
+  `55a19dede9949c1dc3277175ea32858d7b9df3486de1426fffd30702a0fe57f6` and is
+  copied to `training/eval/phase108-v09-base-only-44542.jsonl`; raw prompt and
+  answer text is absent.
+- This argues against the base model immediately selecting EOS under this
+  exact CPU, one-token, fixed-seed probe. It does not yet isolate the empty
+  adapter outputs because the earlier loopback replay used GPU sampling with
+  a continuing RNG stream and only recorded decoded text/finish reason. The
+  exact 16 cases remain exposed, diagnostic-only, unscored, and ineligible for
+  checkpoint selection or promotion. Production API, adapter, training
+  weights, rubric, protocol, and permissions remain unchanged.
