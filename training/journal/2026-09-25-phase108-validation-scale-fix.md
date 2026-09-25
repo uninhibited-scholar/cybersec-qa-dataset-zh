@@ -361,7 +361,7 @@ permissions remain unchanged. Candidates remain in the isolated sandbox.
   `6d69522d979d6121e2ab126144c4e52d28ce514c7a4d622c80a31198395bfd59`).
   Preflight reports expected input hashes and selected exposed IDs matched.
 - The 160 metadata records cover the same 16 already-exposed v0.9 cases for
-  exact parent (`3ed1a85e7b021e1498332a525bfa4bb75b336a03579d526f8210f1576317036`)
+  exact parent (`3ed1a85e7b021e14198332a525bfa4bb75b336a03579d526f8210f1576317036`)
   and corrected-r2 final candidate
   (`4e9177c3956aaa0c176929e7d8225b9882a2587b4dadad9cb51c04d905453772`) at
   scales 0, 2.5, 5, 10, and 20. No prompt or answer text is present. Remote and
