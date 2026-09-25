@@ -57,6 +57,11 @@ validation data read itself was still restricted to the frozen 1,089-row
   and has unit coverage for key normalization and PEFT destination mapping.
   Corrected runner and helper hashes are pinned in a new job submission; no
   validation score from 44517 is usable.
+- Corrected retry `44518` started at `2026-09-25T23:57:31` on `dell3090`.
+  The normalized-key preflight passed and the base shards loaded; at the latest
+  check (1:55 elapsed) it remained RUNNING with no checkpoint-level JSON metric
+  written yet. Its unique output path is
+  `results/phase108-r2-fixed-scale-validation-44518.jsonl`.
 - This correction does not change the Phase107 inference protocol or rubric.
   It corrects a training/selection-time scale mismatch. No checkpoint is
   selected from the invalid 44429 metric.
