@@ -34,3 +34,15 @@ Phase108 training or evaluation job was pending/running; the only job returned
 by `squeue -u zj225` was unrelated `arc2-soar-probe` (PENDING, resources).
 `/data3` usage was 280G / 479G (58.5%). No cluster files, jobs, model services,
 production configuration, or permissions were changed.
+
+## Draft-builder integration audit
+
+Read-only inspection of the uncommitted v0.3 source builder/test found that
+`build_phase108_private_source.py` emits no `scenario_root_id`; its test only
+checks that `scenario_family` strings are unique, but those strings are
+constructed from category and row index and therefore do not establish
+independent roots. The stricter preflight consequently cannot accept this
+builder's output, as intended. The v0.3 draft already has a separate rejection
+record for semantic near-duplicates. Do not patch it with per-row IDs: a
+replacement authoring pipeline must derive root identity from the underlying
+scenario and fail when the same scenario is reused across categories.
