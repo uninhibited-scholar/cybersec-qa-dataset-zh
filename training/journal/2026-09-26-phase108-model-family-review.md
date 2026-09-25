@@ -75,3 +75,50 @@ https://huggingface.co/zai-org/GLM-5.3-Flash
 Generic vendor benchmark claims are motivation for candidate selection only;
 they are not evidence of cybersecurity-specialist performance. Current Phase108
 behavioral blind-evaluation gates remain unresolved.
+
+## Follow-up source check and corrected practical ranking (2026-09-26)
+
+The earlier recommendation treated GLM-4.7-Flash too optimistically for the
+currently documented two-A100 node, and did not compare Mistral Small 3.2's
+explicit dual-GPU serving guidance. Qwen is not a required research choice.
+
+- **First practical non-Qwen challenger: Mistral Small 3.2 24B Instruct.** Its
+  official card says BF16/FP16 inference needs about 55 GB GPU memory and shows
+  vLLM with `--tensor-parallel-size 2`. It is Apache-2.0 and supports 24
+  languages, including Chinese; the vendor reports improved instruction
+  following and function calling over 3.1. These are fit/feature reasons to
+  test it, not evidence that it outperforms Qwen on our cyber tasks.
+  Source: https://huggingface.co/mistralai/Mistral-Small-3.2-24B-Instruct-2506
+- **Chinese/agent challenger, conditional on runtime and allocation: GLM-4.7-
+  Flash.** The official card identifies it as 30B-A3B, MIT-licensed, Chinese
+  capable, and 62.5 GB in the repository. Its current official vLLM example
+  uses TP4 and nightly/main-branch software. Although parameter-file size alone
+  does not mathematically rule out sharding across two 40-GB cards, the
+  documented launch path is not yet verified on our two-card node. Treat it as
+  a compatibility experiment only until an authorized allocation and smoke
+  test demonstrate otherwise.
+  Source: https://huggingface.co/zai-org/GLM-4.7-Flash
+- **Cyber-specialized comparator: Foundation-Sec-8B-Reasoning.** Its official
+  card describes an instruction-tuned security reasoning model, but lists
+  English as its supported language and `other` for the license; inspect its
+  NOTICE/license before adoption. It is useful as a specialist comparator, not
+  automatically our Chinese production base.
+  Source: https://huggingface.co/fdtn-ai/Foundation-Sec-8B-Reasoning
+- **Research-transparency alternative: OLMo-3.1-32B-Instruct.** Apache-2.0 and
+  detailed training releases are attractive for reproducibility, while the
+  model card lists English. Lower priority for our Chinese-first study.
+  Source: https://huggingface.co/allenai/Olmo-3.1-32B-Instruct
+
+Operational decision: retain Qwen only as the existing control lineage; do not
+start a new Qwen training run by inertia. When cluster access is available,
+first compare raw Qwen and Mistral under the same unchanged Harness contract;
+run GLM compatibility only if its serving stack can be tested without changing
+production or evaluation policy. The Phase108 Qwen adapter cannot be transferred
+to another family. Dataset, Harness, API contract, and evaluation infrastructure
+can be reused, but each family needs its own clean adapter and provenance.
+
+At this follow-up, an SSH attempt to `slurmc.ie.cuhk.edu.hk` failed at DNS
+resolution, and a second read-only attempt to the last recorded controller IP
+was closed by the host. No model download, Slurm job, production change, or
+evaluation change was made. Cluster state must be rechecked after connectivity
+returns; the previously logged quota/job snapshot is historical, not current.
