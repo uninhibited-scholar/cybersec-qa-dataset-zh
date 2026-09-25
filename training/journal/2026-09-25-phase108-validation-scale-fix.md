@@ -331,3 +331,23 @@ permissions remain unchanged. Candidates remain in the isolated sandbox.
   this exposed sample before making any training or serving change.
 - No production API/adapter, model weights, evaluation rubric/protocol, or
   tool permission changed.
+
+## Exposed-sample adapter-scale sensitivity — 2026-09-26
+
+- Job `44547` ran a CPU-only, 160-row first-token probe on the same 16 exposed
+  case IDs: parent and corrected-r2 candidate, each at fixed scales 0, 2.5, 5,
+  10, and 20. It completed on `dell3090` in 78 seconds with exit 0 and no GPU
+  GRES. Adapter, base-independent case source, and script hashes passed the
+  remote preflight; the output contains only IDs/token IDs/hashes/lengths and
+  metadata, no prompt or answer text.
+- EOS counts at scales 0 / 2.5 / 5 / 10 / 20 were **0 / 0 / 0 / 2 / 16** for
+  both parent and candidate (16 prompts per scale). At scale 0, both adapter
+  wrappers matched the base's non-EOS first-token behavior. Metadata JSONL SHA:
+  `fe4acb5b0b3c065b82ab26e67d0d09ce81c24b8315b973547c33565b01eab3a7`, copied
+  to `training/eval/phase108-v09-scale-sensitivity-44547.jsonl`.
+- The strong scale association makes scale/wrapper semantics a leading cause
+  to investigate, but does not prove scale 5 is a valid operating point or
+  preserve specialist performance. No scale is being changed in production or
+  selected from this exposed sample. A follow-up 16-token-capped diagnostic
+  is prepared to see whether reduced scales produce any short visible text;
+  it remains functional-only and cannot substitute for fresh blind evaluation.
