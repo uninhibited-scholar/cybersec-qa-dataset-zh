@@ -62,6 +62,12 @@ validation data read itself was still restricted to the frozen 1,089-row
   check (1:55 elapsed) it remained RUNNING with no checkpoint-level JSON metric
   written yet. Its unique output path is
   `results/phase108-r2-fixed-scale-validation-44518.jsonl`.
+- At 5:02 elapsed, the first complete record (step 1) was written with adapter
+  SHA-256 `7f1024dc51019a7114dfa32874b41f513161b3aff59756e59c3f49725ec22759`,
+  validation loss `1.736240570593362`, 1,089 rows, effective scale 20.0, and
+  train/test split access both false. The job remained RUNNING and had moved to
+  the next checkpoint; no selection decision is made until all records and
+  final hashes are verified.
 - This correction does not change the Phase107 inference protocol or rubric.
   It corrects a training/selection-time scale mismatch. No checkpoint is
   selected from the invalid 44429 metric.
