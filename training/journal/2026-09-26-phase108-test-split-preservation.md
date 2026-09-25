@@ -56,8 +56,10 @@ asserts there are 40 roots reused eight times and that the existing structural
 preflight fails on the 280 duplicate-root rows. The focused test command
 `python3 -m pytest -q training/eval/test_build_phase108_private_source.py
 training/eval/test_phase108_candidate_suite_preflight.py` passed 5 tests. This
-is a negative-control/regression test only; no suite was generated to disk and
-no model was called.
+is a negative-control/regression test only. Running the builder CLI now emits
+aggregate diagnostics (`320` rows, `40` roots, max reuse `8`,
+`eligible_for_blind_holdout=false`) and writes no source file. No suite was
+generated to disk and no model was called.
 
 ## GitHub synchronization status
 

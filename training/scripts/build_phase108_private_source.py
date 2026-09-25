@@ -8,9 +8,7 @@ unique category labels when the underlying evidence motif is shared.
 """
 from __future__ import annotations
 
-import argparse
 import json
-from pathlib import Path
 
 
 DOMAINS = [
@@ -120,7 +118,7 @@ CATEGORIES = (
 
 def question(category: str, domain: str, artifact: str, index: int, material_index: int,
              category_index: int) -> str:
-    material = (f"独立材料 {index + 1}：{domain}的{artifact}记载“{EVENTS[material_index]}”。"
+    material = (f"草稿材料 {index + 1}：{domain}的{artifact}记载“{EVENTS[material_index]}”。"
                 f"补充限制：{NOTES[(material_index * 11 + category_index) % len(NOTES)]}")
     prompts = {
         "vulnerability_analysis": material + "请界定待验证的风险前提、影响边界和所需证据，不得把假设写成已证实漏洞。",
@@ -158,9 +156,9 @@ def build() -> list[dict]:
     for category_index, category in enumerate(CATEGORIES):
         must_cover, must_not_claim, boundary, contract = key(category)
         for index in range(len(DOMAINS)):
-            # Each stratum traverses a different permutation of the source
-            # material.  Cases therefore do not reuse the same evidence
-            # packet merely because their task category differs.
+            # Category-specific permutations change row order/labels, not
+            # scenario identity. The same 40 event motifs are reused in every
+            # stratum; scenario_root_id and the regression test expose this.
             material_index = (index * 7 + category_index * 5) % len(DOMAINS)
             domain = DOMAINS[material_index]
             artifact = ARTIFACTS[(material_index + category_index * 3) % len(ARTIFACTS)]
@@ -184,15 +182,18 @@ def build() -> list[dict]:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--output", type=Path, required=True)
-    args = parser.parse_args()
-    if args.output.exists():
-        raise SystemExit("refusing to overwrite private source fixture file")
     rows = build()
-    args.output.write_text(json.dumps(rows, ensure_ascii=False, indent=2) + "\n")
-    args.output.chmod(0o600)
-    print(json.dumps({"status": "draft_source_created", "cases": len(rows), "private_text_printed": False}))
+    roots = {row["scenario_root_id"] for row in rows}
+    root_counts = {root: sum(row["scenario_root_id"] == root for row in rows) for root in roots}
+    print(json.dumps({
+        "status": "rejected_draft_diagnostic_only",
+        "cases": len(rows),
+        "unique_scenario_roots": len(roots),
+        "max_root_reuse": max(root_counts.values(), default=0),
+        "eligible_for_blind_holdout": False,
+        "private_text_printed": False,
+        "source_file_written": False,
+    }, sort_keys=True))
 
 
 if __name__ == "__main__":
