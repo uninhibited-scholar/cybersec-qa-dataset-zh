@@ -382,3 +382,25 @@ permissions remain unchanged. Candidates remain in the isolated sandbox.
   `training/eval/phase108-v09-scale-sensitivity-44550.jsonl`; raw responses
   remain outside Git. Production, rubric/protocol, and permissions are
   unchanged.
+
+## Earlier bare-canary scale evidence reconciled — 2026-09-26
+
+- Rechecked the separate 100%-bare canary adapter at SHA-256
+  `5686ee98e8ed09cd31f3f0228dd4cfec60fd58907090b5ec71372c83571f7da4`; the
+  cluster adapter file and all four isolated sandbox readiness logs agree on
+  that hash. This is **not** the corrected-r2 adapter tested by jobs 44542–44550.
+- On the already-exposed v0.9 sample, job `44462` had 0/16 non-empty responses
+  at the diagnostic default scale 20; scale-zero control `44463` had 16/16
+  non-empty. The same adapter returned 16/16 non-empty in the scale-1 and
+  scale-2.5 compatibility probes (`44467`, `44468`).
+- The separate 320-row response-collection job `44473` used that same bare
+  adapter at scale 1 and recorded 319/320 non-empty responses. Slurm confirms
+  `COMPLETED`, exit 0, elapsed `00:45:57`; its metadata-only result SHA-256 is
+  `f1fd9ddb1e68ff53f8b50be234cccbbcaad7b04dc1faa44eb40b380d78c878f5`. It
+  stores only case IDs, response lengths, empty flags, and response hashes—not
+  answer text—and is not a scored evaluation.
+- These historical diagnostics are consistent with adapter-scale-sensitive
+  termination, but they use a different candidate and the now-exposed v0.9
+  suite. They cannot establish quality at scale 1 or candidate capability.
+  v0.9 remains disqualified as a blind holdout. No inference scale, adapter,
+  model/API, rubric, protocol, or permissions changed.
