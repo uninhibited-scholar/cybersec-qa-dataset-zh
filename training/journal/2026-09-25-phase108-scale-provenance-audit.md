@@ -31,3 +31,14 @@ input-artifact mismatch before fixed validation is scheduled.
 - Jobs 44069–44084 evaluated older candidates, not this corrected-r2 candidate.
 - No capability or deployment claim is supported yet for corrected-r2.
 
+## Isolated blind smoke result
+
+- Slurm job `44430` loaded the candidate on a loopback-only sandbox; the server
+  reported 28 adapter projections and the pinned candidate SHA.
+- The sealed v0.9 case source was sampled inside the job (16 cases; prompts and
+  responses were not written to scheduler logs).
+- All 16 responses were empty (`chars=0`), with the empty-string SHA repeated
+  for every case. This is a deterministic functional failure signal, not a
+  capability pass or a minor score regression.
+- The candidate is rejected for further deployment consideration. Production
+  remains unchanged.
