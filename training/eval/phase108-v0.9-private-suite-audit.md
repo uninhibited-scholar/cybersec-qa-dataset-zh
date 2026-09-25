@@ -58,9 +58,14 @@ or tool permission has changed.
   `6f70e9192b019bc87ba834b903fd4f0aa972a067db1996bd080897600b8a36c6`.
 - A later paired diagnostic on four public probes showed non-empty responses
   from both the exact parent and corrected-r2 final adapter; it did not use
-  v0.9. Therefore the 16/16 result is unresolved and must not be generalized
-  to the final candidate. A same-16 replay is diagnostic-only and must retain
-  outputs outside Git; it cannot restore blind status.
+  v0.9. A follow-up same-16 replay (Slurm job `44530`) found 16/16 empty
+  responses for both the exact parent and corrected-r2 final adapter under a
+  matched loopback API, base, template, and generation settings. This makes the
+  behavior a shared parent/candidate failure on these prompts, not evidence of
+  a Phase108-specific regression; base-only cause is still untested. Output
+  hashes: parent `c2e939ac242be621f825f6d2f1bee615c3e1d4b66f3d3b9fb47d77e901d3c037`,
+  candidate `8ac0ad3510a2f653808436a5f9a37f4120e9673689562d4607e9a9359a3b5ed8`.
+  The replay remains diagnostic-only, unscored, and cannot restore blind status.
 - Any promotion evaluation requires a distinct fresh suite with new source
   material, overlap/semantic-diversity review, frozen hashes, and an
   independently held identity map.

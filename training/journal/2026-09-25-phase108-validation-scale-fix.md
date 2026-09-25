@@ -246,3 +246,18 @@ permissions remain unchanged. Candidates remain in the isolated sandbox.
   `GPU-MEDIUM`. `sacctmgr` returned no association-limit rows. Submitting one
   bounded 1-hour GPU-MEDIUM replay job; it emits metadata/hashes only and does
   not touch production.
+- Slurm job `44530` completed on `dell3090` in `00:00:56`, exit 0. It replayed
+  the exact 16 previously exposed v0.9 IDs against both the pinned parent
+  adapter and corrected-r2 final adapter through the same loopback sandbox API,
+  base, prompt rendering, temperature, token cap, and adapter scale. Both arms
+  returned 16/16 empty strings, each with the SHA-256 of empty bytes; server
+  logs confirmed the correct 28-projection adapter hashes. Result JSONL SHA-256:
+  parent `c2e939ac242be621f825f6d2f1bee615c3e1d4b66f3d3b9fb47d77e901d3c037`,
+  candidate `8ac0ad3510a2f653808436a5f9a37f4120e9673689562d4607e9a9359a3b5ed8`,
+  manifest `927a4f551b7776bf8cc5d72d87802ab32880459eefc381640f24279dd8324c29`.
+  The case source and raw responses remain outside Git. This shows the empty
+  output behavior on these prompts is shared by the exact parent and final
+  candidate; it does not establish whether the cause is the base/template or
+  the shared serving stack. Next diagnostic: same 16 messages, base-only, same
+  tokenizer/template and generation settings. These known prompts remain
+  excluded from blind scoring and model selection.
