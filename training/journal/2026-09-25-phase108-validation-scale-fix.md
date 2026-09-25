@@ -154,3 +154,24 @@ permissions remain unchanged. Candidates remain in the isolated sandbox.
   previous zero-result failed jobs 44521 and 44523 remain documented and were
   not mistaken for model results. Production API/adapter, rubric, protocol,
   and tool permissions remain unchanged.
+
+## Public functional diagnostic queued — 2026-09-26
+
+- To investigate whether the empty-output signal is specific to the previously
+  sampled private prompt forms, submitted Slurm job `44527` for a sequential,
+  tool-free comparison of the exact parent adapter and corrected-r2 final
+  adapter on four fixed public-development probes. This is explicitly not a
+  blind benchmark, score, or promotion gate.
+- Both arms use the same local base, tokenizer/template, `phase108_cuda_diagnostic.py`,
+  `phase108_hf_adapter_smoke.py`, BF16 setting, deterministic decoding, and
+  96-token cap. The pinned parent SHA is
+  `3ed1a85e7b021e14198332a525bfa4bb75b336a03579d526f8210f1576317036`; the
+  corrected-r2 final SHA is
+  `4e9177c3956aaa0c176929e7d8225b9882a2587b4dadad9cb51c04d905453772`.
+- Committed Slurm script SHA-256:
+  `acc5a2d8cc2ec91f3dd8a148f2aeb7cbdb0a389dfd69201eec29a4647a8b8cc7`.
+  Raw outputs are mode-restricted under the unique remote directory
+  `results/phase108-public-diagnostic-44527/` and must stay outside Git. Only
+  hashes and non-textual aggregate findings may be committed. Production,
+  benchmark rubric/protocol, blind-suite artifacts, and tool permissions are
+  unchanged.
