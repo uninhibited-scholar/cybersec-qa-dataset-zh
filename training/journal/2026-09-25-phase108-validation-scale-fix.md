@@ -261,3 +261,14 @@ permissions remain unchanged. Candidates remain in the isolated sandbox.
   the shared serving stack. Next diagnostic: same 16 messages, base-only, same
   tokenizer/template and generation settings. These known prompts remain
   excluded from blind scoring and model selection.
+- Prepared base-only follow-up
+  `training/scripts/phase108_base_only_replay.py` and
+  `training/slurm/phase108_base_only_replay.sbatch`. It runs the same fixed 16
+  known messages without any adapter, using the same tokenizer/template and
+  sampling controls; it sets a fixed seed and stores only case IDs, output
+  hashes, lengths, stop reason, and latency. Raw prompts/answers remain outside
+  Git. The base config/tokenizer and both shard hashes are pinned in the job.
+  Local compile/help/shell/diff checks pass. The job has not been submitted;
+  synchronize and verify all hashes, preflight the source/ID list without model
+  load, then check cluster capacity and dispatch. This is still a diagnostic,
+  not a fresh blind set or promotion gate.
