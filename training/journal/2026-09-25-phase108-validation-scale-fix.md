@@ -175,3 +175,10 @@ permissions remain unchanged. Candidates remain in the isolated sandbox.
   hashes and non-textual aggregate findings may be committed. Production,
   benchmark rubric/protocol, blind-suite artifacts, and tool permissions are
   unchanged.
+- Follow-up on 2026-09-26: Slurm reports `44527` as `FAILED`, exit `1:0`,
+  elapsed 25 seconds. The pinned parent/candidate public diagnostic produced no
+  generations: the shared diagnostic runner passed `dtype=` to this installed
+  Transformers/Qwen3 loader, whose constructor rejected it. This is a runner
+  compatibility failure, not evidence about either model. No output files were
+  present. Do not retry until the runner is patched and locally preflighted;
+  production and evaluation settings remain unchanged.
