@@ -39,3 +39,22 @@ Phase108 has a verified scale-corrected candidate and fixed-validation
 comparison, but no valid independent blind behavioral result. Existing v0.3–v0.9
 private drafts were rejected for exposure/repetition; they must not be recycled
 or cosmetically re-IDed. The independent benchmark gate remains open.
+
+Read-only audit of the current untracked `build_phase108_private_source.py`
+draft found the same design flaw: its eight strata each traverse the same 40
+`EVENTS` motifs (the `index * 7 + category_index * 5` permutation is modulo
+40), while category-specific labels make the scenario-family strings appear
+unique. Its unit test checks unique IDs/family labels and prompt strings, but
+does not assert unique underlying evidence motifs. Do not use this generated
+source as a 320-scenario holdout or send it to any model. A future authoring
+source must start with a genuinely separate bank of distinct roots and have
+independent semantic review.
+
+## GitHub synchronization status
+
+The focused local commit is `32f5820` (`training: preserve Phase108 held-out
+split`). `origin/main` is a different history: local `main` is 525 commits ahead
+and 161 behind, and the remote tree is still at Phase89 without the Phase108
+paths modified by this commit. A normal push was rejected as non-fast-forward.
+No force-push, merge, or mass-history push was attempted. The local commit is
+preserved; remote synchronization needs a deliberate history reconciliation.
