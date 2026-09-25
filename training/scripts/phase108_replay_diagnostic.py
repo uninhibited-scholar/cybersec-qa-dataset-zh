@@ -39,8 +39,6 @@ def main() -> None:
     parser.add_argument("--expected-cases-sha256", required=True)
     parser.add_argument("--preflight-only", action="store_true")
     args = parser.parse_args()
-    if args.output.exists():
-        raise SystemExit("refusing to overwrite diagnostic output")
     case_sha = hashlib.sha256(args.cases.read_bytes()).hexdigest()
     if case_sha != args.expected_cases_sha256:
         raise SystemExit("private case source hash mismatch")
@@ -56,6 +54,8 @@ def main() -> None:
         return
     if args.output is None or args.url is None:
         raise SystemExit("--output and --url are required unless --preflight-only is set")
+    if args.output.exists():
+        raise SystemExit("refusing to overwrite diagnostic output")
 
     args.output.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
     with args.output.open("x", encoding="utf-8") as stream:

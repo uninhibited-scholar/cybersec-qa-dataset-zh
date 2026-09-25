@@ -232,3 +232,9 @@ permissions remain unchanged. Candidates remain in the isolated sandbox.
   compilation, CLI parsing, SBATCH syntax, and `git diff --check` pass. The
   job has not yet been submitted; scripts must be synchronized and remote hashes
   verified first. This does not change the frozen rubric/protocol or production.
+- The first remote, no-model-load preflight exposed a collector bug: it checked
+  `args.output.exists()` before honoring `--preflight-only`. Moved the output
+  path check after preflight; no model loaded and no case was generated. The
+  runner hash is now pinned as
+  `c4b3744cb951f24c3d51fe087c8fb36b8953e8d7391baf3862967a56508118ea`; rerun
+  local/remote preflight and hash checks before any job submission.
