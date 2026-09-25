@@ -39,7 +39,16 @@ class Handler(BaseHTTPRequestHandler):
         length = int(self.headers.get("Content-Length", "0"))
         request = json.loads(self.rfile.read(length))
         messages = request.get("messages", [])
-        prompt = TOKENIZER.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+        # Qwen3's default chat template enables a <think> channel.  This local
+        # fallback is intended to be a directly consumable chat API, so ask the
+        # tokenizer for its non-thinking form instead of returning internal
+        # reasoning text as the user-facing completion.
+        prompt = TOKENIZER.apply_chat_template(
+            messages,
+            tokenize=False,
+            add_generation_prompt=True,
+            enable_thinking=False,
+        )
         inputs = TOKENIZER(prompt, return_tensors="pt")
         limit = min(int(request.get("max_tokens", request.get("max_new_tokens", 256))), 512)
         started = time.monotonic()

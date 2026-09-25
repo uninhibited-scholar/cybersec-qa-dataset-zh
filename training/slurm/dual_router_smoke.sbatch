@@ -39,8 +39,8 @@ python data/training/dual_model_router.py >"$tmpdir/router.log" 2>&1 &
 router_pid=$!
 
 for _ in $(seq 1 60); do
-  if curl -fsS "http://127.0.0.1:${small_port}/health" >/dev/null && \
-     curl -fsS "http://127.0.0.1:${router_port}/health" >/dev/null; then
+  if curl -fsS "http://127.0.0.1:${small_port}/health" >/dev/null 2>&1 && \
+     curl -fsS "http://127.0.0.1:${router_port}/health" >/dev/null 2>&1; then
     break
   fi
   sleep 2
@@ -55,4 +55,9 @@ curl -fsS -D "$tmpdir/router.headers" -H 'Content-Type: application/json' \
   "http://127.0.0.1:${router_port}/v1/chat/completions" | tee "$tmpdir/response.json"
 grep -qi 'X-Model-Route: small_fallback' "$tmpdir/router.headers"
 grep -q '"choices"' "$tmpdir/response.json"
+grep -q '"content": "' "$tmpdir/response.json"
+if grep -Eqi '<think>|</think>' "$tmpdir/response.json"; then
+  echo "DUAL_ROUTER_SMOKE=FAIL reason=reasoning_channel_leaked"
+  exit 1
+fi
 echo "DUAL_ROUTER_SMOKE=PASS route=small_fallback production_port=18765 untouched"
