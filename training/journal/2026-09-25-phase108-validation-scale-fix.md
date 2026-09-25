@@ -238,3 +238,11 @@ permissions remain unchanged. Candidates remain in the isolated sandbox.
   runner hash is now pinned as
   `c4b3744cb951f24c3d51fe087c8fb36b8953e8d7391baf3862967a56508118ea`; rerun
   local/remote preflight and hash checks before any job submission.
+- Local and remote compilation now pass, the collector CLI parses, all four
+  cluster code hashes match the committed sources, and the no-load preflight
+  confirms the v0.9 case-source hash and exact prior 16-ID sequence. Cluster
+  state before dispatch: `/data3` 280G/479G (58.5%); two existing GPU-LARGE
+  jobs are pending, no user job is running, and `dell3090` is idle in
+  `GPU-MEDIUM`. `sacctmgr` returned no association-limit rows. Submitting one
+  bounded 1-hour GPU-MEDIUM replay job; it emits metadata/hashes only and does
+  not touch production.
