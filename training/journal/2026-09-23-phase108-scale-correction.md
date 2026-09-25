@@ -40,7 +40,7 @@ cluster `coevo` environment.
 
 - Slurm job: `44108` (`phase108-scale20`)
 - Input adapter (read-only) SHA-256:
-  `3ed1a85e7b021e1498332a525bfa4bb75b336a03579d526f8210f1576317036`
+  `3ed1a85e7b021e14198332a525bfa4bb75b336a03579d526f8210f1576317036`
 - Target output directory:
   `/data3/ieug25/zj225/cyber-model-migration/models/phase108-cuda-recovery-scale20-20260923`
 - Data: existing `phase108-clean-v2`; its test split is present but the runner

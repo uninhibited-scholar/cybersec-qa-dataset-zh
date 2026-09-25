@@ -23,7 +23,7 @@ RUNNER="$ROOT/data/training/scripts/phase108_cuda_full_validation.py"
 SCALE_UTIL="$ROOT/data/training/scripts/phase108_scale_utils.py"
 OUT="$ROOT/results/phase108-parent-fixed-scale-validation-$SLURM_JOB_ID.jsonl"
 
-readonly PARENT_SHA256=3ed1a85e7b021e1498332a525bfa4bb75b336a03579d526f8210f1576317036
+readonly PARENT_SHA256=3ed1a85e7b021e14198332a525bfa4bb75b336a03579d526f8210f1576317036
 readonly CONFIG_SHA256=daab3b77887c40860fd4b73871b6c6ff18657586acac9d4ff5be26a749d7c0df
 readonly VALIDATION_SHA256=44f46f44b6a3653d0acd799d24b4c6d331a13030eaa4f3e6849a84141b18a365
 readonly BASE_CONFIG_SHA256=260a51b7a10e45b682d6f4b3535b6fca3a7e42e1e55361c177e2c9f3ade27650

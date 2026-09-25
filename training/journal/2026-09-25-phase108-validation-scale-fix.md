@@ -113,11 +113,18 @@ permissions remain unchanged. Candidates remain in the isolated sandbox.
 - To establish the direct parent baseline before judging the continuation,
   submitted isolated Slurm job `44521` on 2026-09-26. It evaluates only the
   exact Phase108 input adapter (SHA-256
-  `3ed1a85e7b021e1498332a525bfa4bb75b336a03579d526f8210f1576317036`) on the
+  `3ed1a85e7b021e14198332a525bfa4bb75b336a03579d526f8210f1576317036`) on the
   same frozen 1,089-row validation split, same base, runner, sequence limit,
-  and effective LoRA scale 20. The committed job file is
+  and effective LoRA scale 20. The first attempt failed at its pinned SHA
+  preflight due to a transcription typo in the job script, before model load
+  or inference; it emitted no result. The log identified expected-vs-observed
+  hash mismatch, and the exact remote parent/manifest hashes were independently
+  rechecked. A one-minute Slurm GPU diagnostic (44522) passed on `dell3090`
+  with `CUDA_VISIBLE_DEVICES=0` and visible RTX 3090, ruling out node/GPU
+  allocation as the cause. The committed job file is
   `training/slurm/phase108_parent_fixed_validation.sbatch` (SHA-256
-  `29d5480adc6c77a0a4a036f07dc8ac2d63319e2bc7d6be2d54ec5d62b44b683a`); the
-  unique result will be
-  `results/phase108-parent-fixed-scale-validation-44521.jsonl`. This is a
-  validation-loss baseline only, not a behavioral score or promotion decision.
+  `17fc4ca7891e5ba7c05b33692d4e19cd3bed57fcc75921b31e55cabc6d1be652`). A
+  second attempt (44523) confirmed the same preflight typo and also produced no
+  inference/result. The corrected script is to be re-hashed and submitted as
+  a new job ID; prior failed artifacts are preserved. This is a validation-loss
+  baseline only, not a behavioral score or promotion decision.

@@ -16,13 +16,17 @@ adapter, evaluation rubric, validation data, or tool permissions.
 - The no-inference preflight passes when supplied the directly observed input
   hash.
 
-## Blocking discrepancy
+## Hash transcription discrepancy — resolved
 
-The previously sealed expected hash was
-`3ed1a85e7b021e1498332a525bfa4bb75b336a03579d526f8210f1576317036`, which
-differs from the directly observed file hash. The discrepancy is not silently
-overridden. It must be reconciled as a provenance-record correction or an
-input-artifact mismatch before fixed validation is scheduled.
+- The directly computed source adapter hash is
+  `3ed1a85e7b021e14198332a525bfa4bb75b336a03579d526f8210f1576317036`.
+- The candidate manifest records this same hash, and the read-only follow-up
+  recomputed the source hash again with the same result. The alternate string
+  `3ed1a85e7b021e1498332a525bfa4bb75b336a03579d526f8210f1576317036` in an
+  earlier note was a transcription typo, not an input-artifact mismatch.
+- The corrected-r2 input lineage is therefore consistent across the parent
+  adapter bytes, candidate manifest, and training preflight. No candidate
+  weights were changed.
 
 ## Validation status
 
