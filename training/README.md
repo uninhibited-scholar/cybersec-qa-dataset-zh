@@ -11,7 +11,15 @@
 
 ## Mac mini 路径约定
 
-### 当前状态（2026-09-20 16:25 HKT 实机核验）
+### Phase108 集群后续实验状态（2026-09-26）
+
+- Phase108 scale-corrected candidate 在学校集群的隔离目录完成训练；Slurm job `44306` 正常结束。候选目录：`/data3/ieug25/zj225/cyber-model-migration/models/phase108-cuda-recovery-scale20-corrected-20260924-r2`；最终 adapter SHA-256：`4e9177c3956aaa0c176929e7d8225b9882a2587b4dadad9cb51c04d905453772`。
+- 训练来源 adapter SHA-256：`3ed1a85e7b021e1498332a525bfa4bb75b336a03579d526f8210f1576317036`；manifest 记录 rank 8、MLX scale 20、PEFT alpha 160/effective scale 20、19,621 条训练行、未读取 test split。固定验证 1,089 条，candidate loss 1.70626，对照 parent loss 1.73623；这是 token-loss 结果，不能单独证明生成能力或网安专业能力提升。
+- 功能诊断尚未闭环：已暴露的 v0.9 题面上 parent 与 candidate 都出现 16/16 空输出；4 条公开开发探针两者均正常输出。它们都不是有效盲测分数，不能据此晋级。
+- v0.3–v0.9 题库不可作为新鲜独立盲测：存在场景重复或既往暴露。v0.3 生成器还缺少全局 `scenario_root_id`，仅用类别/序号构造唯一 family 字符串；不要给旧行补随机 ID 规避预检。新题库必须先重建真实场景根，再完成污染/近重复扫描与独立语义审查。
+- 集群最近只读核验：无 Phase108 作业；`/data3` 为 280G/479G（58.5%）。生产 API/adapter、评分 rubric、推理 protocol 和工具权限未更改。详细来源与历史失败见 [Phase108 scale-correction journal](journal/2026-09-25-phase108-validation-scale-fix.md) 和 [预检加固记录](journal/2026-09-26-phase108-suite-preflight-hardening.md)。
+
+### 最近一次 Mac mini 实机核验（2026-09-20 16:25 HKT；之后未重新检查）
 
 - 主机：`jiehan@192.168.31.212`；生产 API 端口 `18765`。
 - Phase 91 生产链路的基座：`/Users/jiehan/models/Qwen3-4B-mlx-4bit-phase3-wrapper`。
