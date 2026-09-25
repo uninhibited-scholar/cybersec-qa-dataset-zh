@@ -351,3 +351,34 @@ permissions remain unchanged. Candidates remain in the isolated sandbox.
   selected from this exposed sample. A follow-up 16-token-capped diagnostic
   is prepared to see whether reduced scales produce any short visible text;
   it remains functional-only and cannot substitute for fresh blind evaluation.
+
+## Exposed-sample 16-token scale diagnostic completed — 2026-09-26
+
+- Slurm job `44550` completed on `dell3090`, exit 0, elapsed `00:13:39`;
+  CPU-only allocation (4 CPUs/20G, no GPU GRES). The remote runner and SBATCH
+  hashes matched the committed/pinned values
+  (`9edb367ba8255c86164c87e61dd0f6e283e211d78899a4191c3676284758833b` and
+  `6d69522d979d6121e2ab126144c4e52d28ce514c7a4d622c80a31198395bfd59`).
+  Preflight reports expected input hashes and selected exposed IDs matched.
+- The 160 metadata records cover the same 16 already-exposed v0.9 cases for
+  exact parent (`3ed1a85e7b021e1498332a525bfa4bb75b336a03579d526f8210f1576317036`)
+  and corrected-r2 final candidate
+  (`4e9177c3956aaa0c176929e7d8225b9882a2587b4dadad9cb51c04d905453772`) at
+  scales 0, 2.5, 5, 10, and 20. No prompt or answer text is present. Remote and
+  local result SHA-256 both equal
+  `06512ee70a87da55f4eb2ce6d56223f5aca513694810c90374d13771bf7254d1`.
+- For both parent and candidate, first-token EOS/decoded-empty counts were
+  0/16 at scales 0, 2.5, and 5; 2/16 at scale 10; and 16/16 at scale 20.
+  At scales 0–5 every sample generated the full 16-token cap, so “non-empty”
+  here only means visible tokens before truncation; response quality was not
+  assessed. At scale 10, the two EOS cases stopped at token 1; the remaining
+  fourteen reached the cap. At scale 20, all stopped immediately at EOS.
+- This strengthens the observed association between adapter scale and early
+  termination on this *exposed diagnostic sample*, and shows the exact parent
+  and candidate have the same pattern. It does not identify the underlying
+  mechanism, prove reduced-scale specialist capability, or justify changing
+  inference scale. No score, blind claim, candidate selection, or promotion
+  decision is made. The metadata-only result is stored at
+  `training/eval/phase108-v09-scale-sensitivity-44550.jsonl`; raw responses
+  remain outside Git. Production, rubric/protocol, and permissions are
+  unchanged.
