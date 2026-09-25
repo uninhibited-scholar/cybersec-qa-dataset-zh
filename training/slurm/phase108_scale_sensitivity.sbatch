@@ -25,7 +25,7 @@ OUT="$ROOT/results/phase108-v09-scale-sensitivity-$SLURM_JOB_ID.jsonl"
 readonly CASES_SHA256=9a4d398893034b922cc67582089642c553733c856ab2812088b398a2546fbb6b
 readonly PARENT_SHA256=3ed1a85e7b021e14198332a525bfa4bb75b336a03579d526f8210f1576317036
 readonly CANDIDATE_SHA256=4e9177c3956aaa0c176929e7d8225b9882a2587b4dadad9cb51c04d905453772
-readonly RUNNER_SHA256=623acd60f2ecc63d0b1174d5b34e228d97301cd3ce67785e173dcc408e00b6ce
+readonly RUNNER_SHA256=9edb367ba8255c86164c87e61dd0f6e283e211d78899a4191c3676284758833b
 readonly REPLAY_SHA256=c4b3744cb951f24c3d51fe087c8fb36b8953e8d7391baf3862967a56508118ea
 readonly HELPER_SHA256=00ef5d3b1aaada8285b711a68f47c9e00a4fb9dbbd993e8eaf8eefd7426fa371
 
@@ -47,7 +47,8 @@ echo "SCALE_SENSITIVITY_DIAGNOSTIC=true blind=false score=false promotion=false 
 "$PYTHON" -u "$RUNNER" --base "$BASE" --parent "$PARENT" --candidate "$CANDIDATE" \
   --cases "$CASES" --expected-cases-sha256 "$CASES_SHA256" \
   --expected-parent-sha256 "$PARENT_SHA256" \
-  --expected-candidate-sha256 "$CANDIDATE_SHA256" --device cpu --output "$OUT"
+  --expected-candidate-sha256 "$CANDIDATE_SHA256" --device cpu \
+  --max-new-tokens 16 --output "$OUT"
 chmod 600 "$OUT"
 sha256sum "$OUT" >"$OUT.sha256"
 chmod 600 "$OUT.sha256"

@@ -38,6 +38,7 @@ def main() -> None:
     p.add_argument("--expected-parent-sha256", required=True)
     p.add_argument("--expected-candidate-sha256", required=True)
     p.add_argument("--scales", default="0,2.5,5,10,20")
+    p.add_argument("--max-new-tokens", type=int, choices=(1, 16), default=1)
     p.add_argument("--device", choices=("cpu", "cuda:0"), default="cpu")
     p.add_argument("--preflight-only", action="store_true")
     args = p.parse_args()
@@ -94,7 +95,8 @@ def main() -> None:
                 start = time.monotonic()
                 with torch.inference_mode():
                     result = model.generate(
-                        **inputs, max_new_tokens=1, do_sample=True,
+                        **inputs, max_new_tokens=args.max_new_tokens, do_sample=True,
+                        # Keep this a short functional diagnostic, never a score.
                         temperature=0.12, top_p=0.9, repetition_penalty=1.12,
                     )
                 tokens = result[0, inputs["input_ids"].shape[1]:]
@@ -106,7 +108,8 @@ def main() -> None:
                     "first_token_eos": token_id in stop_ids if token_id is not None else False,
                     "decoded_empty": not bool(text.strip()),
                     "response_sha256": hashlib.sha256(text.encode()).hexdigest(),
-                    "generated_tokens": len(tokens), "device": args.device,
+                    "generated_tokens": len(tokens),
+                    "max_new_tokens": args.max_new_tokens, "device": args.device,
                     "seed": seed, "seconds": round(time.monotonic() - start, 3),
                     "diagnostic_only": True, "blind": False,
                 })
