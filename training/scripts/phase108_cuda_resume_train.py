@@ -22,22 +22,10 @@ from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import LoraConfig, get_peft_model
+from phase108_scale_utils import mlx_scale_to_peft_alpha
 
 
 TARGET_MODULES = ("q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj")
-
-
-def mlx_scale_to_peft_alpha(scale: float, rank: int) -> float:
-    """Translate MLX's direct LoRA multiplier to PEFT's alpha/r multiplier.
-
-    MLX applies ``scale * (x @ A @ B)``.  PEFT applies
-    ``(lora_alpha / rank) * (x @ A @ B)``.  Keeping the raw MLX value as
-    ``lora_alpha`` would silently weaken training by ``rank`` and export an
-    adapter that is later over-amplified on MLX inference.
-    """
-    if not scale > 0 or rank < 1:
-        raise ValueError("LoRA scale must be positive and rank must be at least one")
-    return scale * rank
 
 
 def sha256(path: Path) -> str:

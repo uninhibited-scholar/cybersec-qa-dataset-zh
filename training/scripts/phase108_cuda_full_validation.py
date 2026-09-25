@@ -19,6 +19,7 @@ from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import LoraConfig, get_peft_model
+from phase108_scale_utils import mlx_scale_to_peft_alpha
 
 
 TARGET_MODULES = ("q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj")
@@ -110,6 +111,7 @@ def main() -> None:
     parser.add_argument("--expected-validation-sha256", required=True)
     parser.add_argument("--expected-adapter-sha256", required=True)
     parser.add_argument("--max-length", type=int, default=2304)
+    parser.add_argument("--mlx-scale", type=float, default=20.0)
     args = parser.parse_args()
     if not torch.cuda.is_available():
         raise SystemExit("CUDA allocation required")
@@ -124,8 +126,10 @@ def main() -> None:
     encoded = [encode(row, tokenizer, args.max_length) for row in rows]
     loader = DataLoader(encoded, batch_size=1, shuffle=False, collate_fn=lambda batch: collate(batch, tokenizer.pad_token_id))
     model = AutoModelForCausalLM.from_pretrained(str(args.base), torch_dtype=torch.bfloat16, trust_remote_code=False)
+    rank = 8
+    peft_alpha = mlx_scale_to_peft_alpha(args.mlx_scale, rank)
     model = get_peft_model(model, LoraConfig(
-        r=8, lora_alpha=20, lora_dropout=0.05, target_modules=list(TARGET_MODULES),
+        r=rank, lora_alpha=peft_alpha, lora_dropout=0.05, target_modules=list(TARGET_MODULES),
         layers_to_transform=adapter_layers(adapter), layers_pattern="layers", bias="none", task_type="CAUSAL_LM",
     ))
     install_mlx_adapter(model, adapter)
@@ -145,6 +149,8 @@ def main() -> None:
         "status": "complete", "validation_rows": len(rows), "validation_loss": loss,
         "validation_sha256": args.expected_validation_sha256, "adapter_sha256": before_hash,
         "base": str(args.base.resolve()), "max_length": args.max_length,
+        "mlx_scale": args.mlx_scale, "lora_rank": rank,
+        "peft_lora_alpha": peft_alpha, "effective_scale": peft_alpha / rank,
         "test_split_read": False, "train_split_read": False, "production_approval": False,
     }, sort_keys=True))
 

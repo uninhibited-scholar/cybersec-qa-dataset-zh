@@ -1,6 +1,6 @@
 import unittest
 
-from phase108_cuda_resume_train import mlx_scale_to_peft_alpha
+from training.scripts.phase108_scale_utils import mlx_scale_to_peft_alpha
 
 
 class MlxPeftScaleTest(unittest.TestCase):
@@ -15,6 +15,10 @@ class MlxPeftScaleTest(unittest.TestCase):
             mlx_scale_to_peft_alpha(0.0, 8)
         with self.assertRaises(ValueError):
             mlx_scale_to_peft_alpha(20.0, 0)
+        with self.assertRaises(ValueError):
+            mlx_scale_to_peft_alpha(float("inf"), 8)
+        with self.assertRaises(ValueError):
+            mlx_scale_to_peft_alpha(20.0, True)
 
 
 if __name__ == "__main__":
