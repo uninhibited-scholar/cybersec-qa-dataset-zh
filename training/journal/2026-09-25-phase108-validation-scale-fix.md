@@ -195,3 +195,18 @@ permissions remain unchanged. Candidates remain in the isolated sandbox.
   values, failed-run output directory had no generation files, and `/data3`
   usage is 280G/479G (58.5%). Resubmitted only the isolated public-development
   diagnostic as job `44528`; it is not blind evaluation or a promotion gate.
+- Job `44528` completed on `dell3090` in `00:01:18`, exit 0. The exact parent
+  and corrected-r2 candidate each produced 4/4 non-empty, uncapped outputs on
+  the same public probes (geography, exact JSON, tool honesty, and a
+  parameterized-query concept). Both returned the expected city/JSON shape and
+  honestly declined to invent unavailable server logs; their defensive concept
+  explanations were substantively similar. Per-row adapter SHA checks passed
+  for both arms. Output SHA-256 values: parent
+  `d6051ac792daa0e74b0e156051d84a62610144a554e19613d8ed32196958982b`, candidate
+  `285fcf0ab0009bbde41a874f1043c689b527ee2ccf89ca263026d4033a4f2dca`, manifest
+  `62d30f8e4209ff5771bcae962660fc4299a2778fb5ce61e76a6882594f4a5b83`. Raw
+  responses stay on the cluster outside Git. This small public diagnostic
+  contradicts a universal empty-generation failure, but does not reproduce or
+  explain the earlier 16/16 empty results on the sealed v0.9 prompt forms and
+  cannot establish capability gain, independent blind performance, or
+  deployment readiness. No model, API, rubric, protocol, or permissions changed.
