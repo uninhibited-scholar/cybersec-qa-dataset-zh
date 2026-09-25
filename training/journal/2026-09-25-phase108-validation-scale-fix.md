@@ -263,20 +263,19 @@ permissions remain unchanged. Candidates remain in the isolated sandbox.
   excluded from blind scoring and model selection.
 - Prepared base-only follow-up
   `training/scripts/phase108_base_only_replay.py` and
-  `training/slurm/phase108_base_only_replay.sbatch`. It runs the same fixed 16
-  known messages without any adapter, using the same tokenizer/template and
-  sampling controls; it sets a fixed seed and stores only case IDs, output
-  hashes, lengths, stop reason, and latency. Raw prompts/answers remain outside
-  Git. The base config/tokenizer and both shard hashes are pinned in the job.
-  Local compile/help/shell/diff checks pass. The job has not been submitted;
-  synchronize and verify all hashes, preflight the source/ID list without model
-  load, then check cluster capacity and dispatch. This is still a diagnostic,
-  not a fresh blind set or promotion gate.
-- Base-only code was synchronized to the cluster and its source, runner,
-  SBATCH, private-suite, tokenizer/config, and both base-shard hashes passed
-  preflight; the deterministic prior ID list also matched. Current scheduler
-  snapshot: `dell3090` reports only 4 CPUs allocated and no GPU GRES allocated;
-  other visible GPU-MEDIUM jobs also show no GPU GRES request. User job `44531`
-  is CPU-only, and `/data3` remains 280G/479G. Submitting the one-hour
-  base-only diagnostic on the available RTX 3090, without changing or stopping
-  any other job.
+  `training/slurm/phase108_base_only_replay.sbatch`. The first version would
+  have generated full answers; its GPU job `44535` was ours, PENDING with a
+  scheduler estimate of 2026-09-30. It was cancelled before allocation/model
+  load. Replaced it with a bounded CPU-only first-token diagnostic (8 CPUs,
+  32G RAM, no GPU GRES, one generated token per prompt). It uses the same 16
+  known messages, base, tokenizer/template, sampling controls, and fixed seed;
+  it reports case IDs, response hashes/lengths, EOS status, stop reason, and
+  latency only. This distinguishes base-side immediate termination from a
+  possible adapter-specific effect without spending hours generating long
+  answers; it is not a capability score or promotion gate.
+- Base config/tokenizer and both shard hashes are pinned in the job. Local
+  compile/help/shell/diff checks pass. Updated runner SHA-256:
+  `3585e9f620ed43cd2d58b77a26ccd65179b21dfff0f0646d821a58fbe329f3ed`. The
+  CPU-only revision still needs to be synchronized/hash-verified and its
+  no-model private-source preflight run before submission. Production,
+  training weights, rubric, protocol, and tools remain unchanged.

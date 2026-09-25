@@ -3,10 +3,9 @@
 # No prompts/answers in logs; output contains IDs, hashes, lengths, timings.
 #SBATCH --job-name=p108-base-only
 #SBATCH --partition=GPU-MEDIUM
-#SBATCH --gres=gpu:RTX-3090:1
-#SBATCH --cpus-per-task=4
+#SBATCH --cpus-per-task=8
 #SBATCH --mem=32G
-#SBATCH --time=01:00:00
+#SBATCH --time=00:45:00
 #SBATCH --output=/data3/ieug25/zj225/cyber-model-migration/logs/phase108-base-only-%j.log
 
 set -euo pipefail
@@ -21,7 +20,7 @@ OUT="$ROOT/results/phase108-v09-base-only-$SLURM_JOB_ID.jsonl"
 
 readonly CASES_SHA256=9a4d398893034b922cc67582089642c553733c856ab2812088b398a2546fbb6b
 readonly REPLAY_SHA256=c4b3744cb951f24c3d51fe087c8fb36b8953e8d7391baf3862967a56508118ea
-readonly BASE_RUNNER_SHA256=4d65b94ccac9b8372f30ef712250eca28f3c6afcd850a64e7fdf7656622e9cbc
+readonly BASE_RUNNER_SHA256=3585e9f620ed43cd2d58b77a26ccd65179b21dfff0f0646d821a58fbe329f3ed
 readonly BASE_CONFIG_SHA256=260a51b7a10e45b682d6f4b3535b6fca3a7e42e1e55361c177e2c9f3ade27650
 readonly TOKENIZER_JSON_SHA256=aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4
 readonly TOKENIZER_CONFIG_SHA256=1089e6487eb96a3c3827ecd2c90c705c6da169ebd1124d59c82f1ff06b8e9f73
@@ -47,9 +46,9 @@ mkdir -p "$ROOT/results"
 
 echo "BASE_ONLY_REPLAY_DIAGNOSTIC=true blind=false score=false promotion=false tools=[]"
 echo "base_config_sha256=$BASE_CONFIG_SHA256 shard1=$SHARD1_SHA256 shard2=$SHARD2_SHA256"
-nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
 "$PYTHON" -u "$BASE_RUNNER" --base "$BASE" --cases "$CASES" \
-  --expected-cases-sha256 "$CASES_SHA256" --output "$OUT"
+  --expected-cases-sha256 "$CASES_SHA256" --output "$OUT" \
+  --device cpu --max-new-tokens 1
 chmod 600 "$OUT"
 sha256sum "$OUT" >"$OUT.sha256"
 chmod 600 "$OUT.sha256"

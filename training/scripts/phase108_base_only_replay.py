@@ -17,6 +17,8 @@ def main() -> None:
     parser.add_argument("--base", type=Path, required=True)
     parser.add_argument("--cases", type=Path, required=True)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--device", choices=("cpu", "cuda:0"), default="cuda:0")
+    parser.add_argument("--max-new-tokens", type=int, default=500)
     parser.add_argument("--expected-cases-sha256", required=True)
     parser.add_argument("--preflight-only", action="store_true")
     args = parser.parse_args()
@@ -42,15 +44,21 @@ def main() -> None:
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
     torch.manual_seed(20260925)
-    torch.cuda.manual_seed_all(20260925)
+    if args.device.startswith("cuda"):
+        torch.cuda.manual_seed_all(20260925)
     tokenizer = AutoTokenizer.from_pretrained(
         str(args.base), local_files_only=True, trust_remote_code=False
     )
     model = AutoModelForCausalLM.from_pretrained(
-        str(args.base), torch_dtype=torch.bfloat16, device_map="cuda:0",
+        str(args.base), torch_dtype=torch.bfloat16, device_map=args.device,
         low_cpu_mem_usage=True, local_files_only=True, trust_remote_code=False,
     )
     model.eval()
+    eos_ids = model.generation_config.eos_token_id or tokenizer.eos_token_id
+    if isinstance(eos_ids, int):
+        eos_ids = {eos_ids}
+    else:
+        eos_ids = set(eos_ids)
     args.output.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
     with args.output.open("x", encoding="utf-8") as stream:
         args.output.chmod(0o600)
@@ -58,24 +66,32 @@ def main() -> None:
             rendered = tokenizer.apply_chat_template(
                 row["messages"], tokenize=False, add_generation_prompt=True
             )
-            inputs = tokenizer(rendered, return_tensors="pt").to("cuda:0")
+            inputs = tokenizer(rendered, return_tensors="pt").to(args.device)
             started = time.monotonic()
             with torch.inference_mode():
                 generated = model.generate(
-                    **inputs, max_new_tokens=500, do_sample=True,
+                    **inputs, max_new_tokens=args.max_new_tokens, do_sample=True,
                     temperature=0.12, top_p=0.9, repetition_penalty=1.12,
                 )
             tokens = generated[0, inputs["input_ids"].shape[1]:]
             text = tokenizer.decode(tokens, skip_special_tokens=True)
+            first_token_id = tokens[0].item() if len(tokens) else None
+            first_token_eos = first_token_id in eos_ids if first_token_id is not None else False
             record = {
                 "case_id": row["id"],
                 "response_sha256": hashlib.sha256(text.encode()).hexdigest(),
                 "chars": len(text),
                 "generated_tokens": len(tokens),
+                "max_new_tokens": args.max_new_tokens,
+                "first_token_eos": first_token_eos,
                 "empty": not bool(text.strip()),
-                "finish_reason": "length" if len(tokens) >= 500 else "stop",
+                "finish_reason": "stop" if first_token_eos else (
+                    "length" if len(tokens) >= args.max_new_tokens else "stop"
+                ),
                 "elapsed_seconds": round(time.monotonic() - started, 3),
                 "seed": 20260925,
+                "device": args.device,
+                "dtype": "bfloat16",
                 "adapter": None,
                 "blind": False,
                 "diagnostic_only": True,
