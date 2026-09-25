@@ -303,3 +303,31 @@ permissions remain unchanged. Candidates remain in the isolated sandbox.
   exact 16 cases remain exposed, diagnostic-only, unscored, and ineligible for
   checkpoint selection or promotion. Production API, adapter, training
   weights, rubric, protocol, and permissions remain unchanged.
+
+## Parent/candidate/base first-token comparison — 2026-09-26
+
+- Added a sealed-hash-pinned, CPU-only diagnostic over the same exposed 16
+  cases. Each case was evaluated once with the base, exact parent adapter, and
+  corrected-r2 final adapter, using identical tokenizer/template, per-case
+  seed, sampling controls, and one-token cap. The script writes only case IDs,
+  token IDs/EOS flags, text hashes/lengths, and timings; no prompt/answer text.
+- Slurm job `44545` completed `COMPLETED`, exit 0, in 46 seconds on `dell3090`;
+  no GPU GRES was requested. Parent SHA, candidate SHA, private-source SHA,
+  code hashes, and exact sampled ID sequence all passed preflight.
+- Result: base `0/16` first-token EOS and `0/16` decoded-empty; parent `16/16`
+  first-token EOS and `16/16` decoded-empty; corrected-r2 candidate `16/16`
+  first-token EOS and `16/16` decoded-empty. Every arm generated exactly one
+  token. The metadata-only JSONL SHA-256 is
+  `abdde95d1aac7be71e15f999f3adaf887c0e6962dcf2daa98e43e03c471a6e63`, copied
+  to `training/eval/phase108-v09-first-token-44545.jsonl`.
+- This isolates the immediate-EOS behavior to the adapter-enabled path for
+  this exposed diagnostic sample under the tested wrapper/settings. Since the
+  exact parent and candidate behave identically, Phase108 did not introduce
+  this measured failure. It does not establish behavior on unseen prompts or
+  identify whether scale, adapter training targets, prompt distribution, or
+  conversion semantics are the root cause. This is a blocking functional
+  signal, not a benchmark score; v0.9 remains ineligible for blind scoring or
+  checkpoint selection. Next, run a metadata-only scale sensitivity probe on
+  this exposed sample before making any training or serving change.
+- No production API/adapter, model weights, evaluation rubric/protocol, or
+  tool permission changed.
