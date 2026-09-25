@@ -43,7 +43,8 @@ def main():
         raise SystemExit("Supported CUDA allocation required")
     digest = None if args.base_only else hashlib.sha256(args.adapter.read_bytes()).hexdigest()
     model = AutoModelForCausalLM.from_pretrained(
-        str(args.base), dtype=getattr(torch, args.dtype), device_map="auto",
+        str(args.base), torch_dtype=getattr(torch, args.dtype), device_map="auto",
+        low_cpu_mem_usage=True,
         max_memory={0: "6GiB", "cpu": "32GiB"}, trust_remote_code=False,
         local_files_only=True,
     )

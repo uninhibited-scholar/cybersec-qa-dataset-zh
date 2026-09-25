@@ -182,3 +182,10 @@ permissions remain unchanged. Candidates remain in the isolated sandbox.
   compatibility failure, not evidence about either model. No output files were
   present. Do not retry until the runner is patched and locally preflighted;
   production and evaluation settings remain unchanged.
+- Repair: changed the diagnostic loader to the `torch_dtype=` spelling used by
+  the already exercised Phase108 CUDA adapter smoke loader, and enabled
+  `low_cpu_mem_usage=True`. Local Python compilation, SBATCH shell syntax, and
+  `git diff --check` pass. The runner source SHA-256 is
+  `2ce538b6f70d00fe407894c7516a648bf84ab78032dc1c3c9e8b4d9f53be855c`; the
+  SBATCH script pins this exact hash. This is an infrastructure repair only;
+  no model weights, data, prompts, rubric, protocol, or production state changed.
