@@ -129,6 +129,28 @@ permissions remain unchanged. Candidates remain in the isolated sandbox.
   `a5a6674f50023788decdda9e14fa45fb7b49ff318fbece0af68fce988184a7f1`;
   corrected job `44525` started on `dell3090` and passed all pinned artifact,
   config, and data preflights before loading the base. Its result path is
-  `results/phase108-parent-fixed-scale-validation-44525.jsonl`. The run is
-  isolated and monitored; prior failed artifacts are preserved. This is a
+  `results/phase108-parent-fixed-scale-validation-44525.jsonl`. This is a
   validation-loss baseline only, not a behavioral score or promotion decision.
+
+## Exact parent baseline completed — 2026-09-26
+
+- Job `44525` completed on `dell3090` with exit code `0` in `00:03:39`; its
+  output contains exactly one complete record. Remote and local JSONL SHA-256:
+  `a68e6b69f224ac51c0200ecd37bab9fa28b89dd781002d4250753dbc30423a5c`.
+- The row verifies the exact parent adapter SHA-256
+  `3ed1a85e7b021e14198332a525bfa4bb75b336a03579d526f8210f1576317036`, rank
+  8, MLX scale 20, PEFT alpha 160/effective scale 20, validation SHA-256
+  `44f46f44b6a3653d0acd799d24b4c6d331a13030eaa4f3e6849a84141b18a365`, 1,089
+  rows, `train_split_read=false`, and `test_split_read=false`.
+- Exact parent full-validation loss is `1.7362299831336085`. Against the
+  corrected-r2 final adapter's `1.7062584870555622`, this is an absolute
+  reduction of `0.0299714960780463` (about 1.73% relative). The split, base,
+  runner, token limit, LoRA rank/scale, and masking are matched. This supports
+  a lower held-out token loss for this specific source split, but not improved
+  generation, security-task capability, or deployment readiness. The separate
+  step-7000 16/16 empty-output diagnostic remains a blocking functional signal.
+- Result copy committed at
+  `training/eval/phase108-parent-fixed-scale-validation-44525.jsonl`; the
+  previous zero-result failed jobs 44521 and 44523 remain documented and were
+  not mistaken for model results. Production API/adapter, rubric, protocol,
+  and tool permissions remain unchanged.
