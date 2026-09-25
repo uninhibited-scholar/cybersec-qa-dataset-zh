@@ -24,7 +24,7 @@ EXPECTED = {
 }
 REQUIRED = {
     "category", "prompt", "fixture_id", "must_cover", "must_not_claim",
-    "evidence_boundary", "scenario_family", "artifact_kind", "decision_focus",
+    "evidence_boundary", "scenario_root_id", "scenario_family", "artifact_kind", "decision_focus",
     "independence_rationale",
 }
 
@@ -40,7 +40,7 @@ def preflight(path: Path, *, expected_suite_version: str) -> dict:
     if not isinstance(rows, list):
         return {"status": "fail", "errors": ["source_not_json_list"], "private_text_printed": False}
     counts = Counter()
-    fixture_ids, prompts = set(), set()
+    fixture_ids, prompts, scenario_roots = set(), set(), set()
     dimensions: dict[str, dict[str, set[str]]] = defaultdict(lambda: defaultdict(set))
     triplets: set[tuple[str, str, str, str]] = set()
     for index, row in enumerate(rows, 1):
@@ -56,7 +56,7 @@ def preflight(path: Path, *, expected_suite_version: str) -> dict:
             errors.append(f"row_{index}:unknown_category")
             continue
         counts[category] += 1
-        for key in ("fixture_id", "prompt", "scenario_family", "artifact_kind", "decision_focus", "independence_rationale"):
+        for key in ("fixture_id", "prompt", "scenario_root_id", "scenario_family", "artifact_kind", "decision_focus", "independence_rationale"):
             if not isinstance(row[key], str) or not row[key].strip():
                 errors.append(f"row_{index}:invalid_{key}")
         if not all(isinstance(row[key], list) and row[key] for key in ("must_cover", "must_not_claim")):
@@ -70,6 +70,11 @@ def preflight(path: Path, *, expected_suite_version: str) -> dict:
             if canonical in prompts:
                 errors.append(f"row_{index}:duplicate_normalized_prompt")
             prompts.add(canonical)
+        if isinstance(row.get("scenario_root_id"), str) and row["scenario_root_id"].strip():
+            root = normalize(row["scenario_root_id"])
+            if root in scenario_roots:
+                errors.append(f"row_{index}:duplicate_scenario_root_across_suite")
+            scenario_roots.add(root)
         if all(isinstance(row.get(key), str) and row[key].strip() for key in ("scenario_family", "artifact_kind", "decision_focus")):
             key = (category, row["scenario_family"], row["artifact_kind"], row["decision_focus"])
             if key in triplets:
@@ -95,6 +100,7 @@ def preflight(path: Path, *, expected_suite_version: str) -> dict:
         "category_counts": dict(sorted(counts.items())),
         "unique_fixture_ids": len(fixture_ids),
         "unique_normalized_prompts": len(prompts),
+        "unique_scenario_roots": len(scenario_roots),
         "diversity": {category: {name: len(values) for name, values in sorted(dimensions[category].items())}
                       for category in sorted(EXPECTED)},
         "error_count": len(errors),
@@ -102,6 +108,7 @@ def preflight(path: Path, *, expected_suite_version: str) -> dict:
         "private_text_printed": False,
         "limitations": [
             "Structural diversity is not a semantic-duplicate proof.",
+            "Scenario-root IDs are author-supplied identifiers; uniqueness does not prove the underlying scenarios are distinct.",
             "A clean scan cannot prove absence of pretraining contamination.",
             "A passed source remains draft until independent review freezes its hashes.",
         ],

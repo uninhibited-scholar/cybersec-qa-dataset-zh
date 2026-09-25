@@ -13,6 +13,7 @@ def fixture(category, index):
         "category": category,
         "fixture_id": f"fresh-{category}-{index}",
         "prompt": f"独立防守评测 {category} 场景 {index}，请基于给定材料区分事实、推断和未知。",
+        "scenario_root_id": f"scenario-root-{category}-{index}",
         "must_cover": ["evidence"], "must_not_claim": ["unsupported"],
         "evidence_boundary": "Only supplied material is evidence.",
         "scenario_family": f"family-{index % 20}",
@@ -45,3 +46,24 @@ def test_preflight_rejects_repeated_scenario_triplet(tmp_path):
     result = preflight(path, expected_suite_version="phase108-v0.3")
     assert result["status"] == "fail"
     assert any("duplicate_scenario_artifact_decision" in error for error in result["errors"])
+
+
+def test_preflight_rejects_same_scenario_root_across_categories(tmp_path):
+    rows = full_source()
+    rows[40]["scenario_root_id"] = rows[0]["scenario_root_id"]
+    path = tmp_path / "source.json"
+    path.write_text(json.dumps(rows, ensure_ascii=False))
+    result = preflight(path, expected_suite_version="phase108-v1.0")
+    assert result["status"] == "fail"
+    assert any("duplicate_scenario_root_across_suite" in error for error in result["errors"])
+    assert result["unique_scenario_roots"] == 319
+
+
+def test_preflight_rejects_missing_scenario_root_id(tmp_path):
+    rows = full_source()
+    del rows[0]["scenario_root_id"]
+    path = tmp_path / "source.json"
+    path.write_text(json.dumps(rows, ensure_ascii=False))
+    result = preflight(path, expected_suite_version="phase108-v1.0")
+    assert result["status"] == "fail"
+    assert any("missing_scenario_root_id" in error for error in result["errors"])
