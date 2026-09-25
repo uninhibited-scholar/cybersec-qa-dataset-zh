@@ -210,3 +210,25 @@ permissions remain unchanged. Candidates remain in the isolated sandbox.
   explain the earlier 16/16 empty results on the sealed v0.9 prompt forms and
   cannot establish capability gain, independent blind performance, or
   deployment readiness. No model, API, rubric, protocol, or permissions changed.
+
+## Previously exposed empty-output sample replay prepared — 2026-09-26
+
+- Corrected the v0.9 private-suite audit: Slurm job `44430` sampled 16 cases
+  from it, so v0.9 is not an untouched blind holdout. The only prior retained
+  response data are case IDs, SHA-256, and character counts; the raw prompts
+  and answers remain outside Git. The original output SHA is
+  `6f70e9192b019bc87ba834b903fd4f0aa972a067db1996bd080897600b8a36c6`.
+- Prepared an exact-sample diagnostic replay against the parent and corrected-r2
+  final adapter, using the same local-only sandbox API and sampling settings as
+  job 44430. It first verifies the private source SHA
+  `9a4d398893034b922cc67582089642c553733c856ab2812088b398a2546fbb6b` and the
+  exact prior case-ID sequence before loading models. Output contains only
+  IDs, response hashes, character counts, finish reasons, and timings; raw
+  prompts/answers are never written. The job is explicitly diagnostic-only,
+  unscored, and ineligible for candidate selection or promotion.
+- Added replay collector
+  `training/scripts/phase108_replay_diagnostic.py` and isolated Slurm job
+  `training/slurm/phase108_reproduce_empty_output.sbatch`. Local Python
+  compilation, CLI parsing, SBATCH syntax, and `git diff --check` pass. The
+  job has not yet been submitted; scripts must be synchronized and remote hashes
+  verified first. This does not change the frozen rubric/protocol or production.
