@@ -125,6 +125,10 @@ permissions remain unchanged. Candidates remain in the isolated sandbox.
   `training/slurm/phase108_parent_fixed_validation.sbatch` (SHA-256
   `17fc4ca7891e5ba7c05b33692d4e19cd3bed57fcc75921b31e55cabc6d1be652`). A
   second attempt (44523) confirmed the same preflight typo and also produced no
-  inference/result. The corrected script is to be re-hashed and submitted as
-  a new job ID; prior failed artifacts are preserved. This is a validation-loss
-  baseline only, not a behavioral score or promotion decision.
+  inference/result. The corrected script SHA-256 is
+  `a5a6674f50023788decdda9e14fa45fb7b49ff318fbece0af68fce988184a7f1`;
+  corrected job `44525` started on `dell3090` and passed all pinned artifact,
+  config, and data preflights before loading the base. Its result path is
+  `results/phase108-parent-fixed-scale-validation-44525.jsonl`. The run is
+  isolated and monitored; prior failed artifacts are preserved. This is a
+  validation-loss baseline only, not a behavioral score or promotion decision.
