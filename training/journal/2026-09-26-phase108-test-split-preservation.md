@@ -50,6 +50,15 @@ source as a 320-scenario holdout or send it to any model. A future authoring
 source must start with a genuinely separate bank of distinct roots and have
 independent semantic review.
 
+The draft builder now emits `scenario_root_id` from the actual event-motif
+identity and labels every row as a rejected, non-independent draft. Its test
+asserts there are 40 roots reused eight times and that the existing structural
+preflight fails on the 280 duplicate-root rows. The focused test command
+`python3 -m pytest -q training/eval/test_build_phase108_private_source.py
+training/eval/test_phase108_candidate_suite_preflight.py` passed 5 tests. This
+is a negative-control/regression test only; no suite was generated to disk and
+no model was called.
+
 ## GitHub synchronization status
 
 The focused local commit is `32f5820` (`training: preserve Phase108 held-out
