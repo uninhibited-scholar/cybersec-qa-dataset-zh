@@ -19,7 +19,7 @@ from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import LoraConfig, get_peft_model
-from phase108_scale_utils import mlx_scale_to_peft_alpha
+from phase108_scale_utils import canonical_mlx_lora_key, mlx_key_to_peft_state_key, mlx_scale_to_peft_alpha
 
 
 TARGET_MODULES = ("q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj")
@@ -52,14 +52,17 @@ def read_validation(path: Path, expected_hash: str) -> list[dict[str, str]]:
 
 
 def adapter_layers(adapter: Path) -> list[int]:
+    state = load_file(str(adapter), device="cpu")
     layers: set[int] = set()
-    for key in load_file(str(adapter), device="cpu"):
-        parts = key.split(".")
-        if len(parts) < 5 or parts[:2] != ["model", "layers"]:
-            raise ValueError(f"unexpected MLX adapter key: {key}")
-        layers.add(int(parts[2]))
+    factors: dict[str, set[str]] = {}
+    for key in state:
+        module_path, layer, factor = canonical_mlx_lora_key(key)
+        layers.add(layer)
+        factors.setdefault(module_path, set()).add(factor)
     if layers != {32, 33, 34, 35}:
         raise ValueError(f"unexpected adapter layer topology: {sorted(layers)}")
+    if len(factors) != 28 or any(pair != {"a", "b"} for pair in factors.values()) or len(state) != 56:
+        raise ValueError("expected 28 paired LoRA projections / 56 tensors")
     return sorted(layers)
 
 
@@ -68,12 +71,7 @@ def install_mlx_adapter(model, adapter: Path) -> None:
     state = model.state_dict()
     installed = 0
     for key, value in source.items():
-        if key.endswith(".lora_a"):
-            destination = "base_model.model." + key[:-7] + ".lora_A.default.weight"
-        elif key.endswith(".lora_b"):
-            destination = "base_model.model." + key[:-7] + ".lora_B.default.weight"
-        else:
-            raise ValueError(f"unexpected MLX adapter tensor: {key}")
+        destination = mlx_key_to_peft_state_key(key)
         if destination not in state or tuple(value.T.shape) != tuple(state[destination].shape):
             raise ValueError(f"adapter shape/path mismatch: {key}")
         state[destination].copy_(value.T.to(dtype=state[destination].dtype))
@@ -120,17 +118,19 @@ def main() -> None:
     if before_hash != args.expected_adapter_sha256:
         raise ValueError("adapter SHA-256 mismatch before evaluation")
     rows = read_validation(args.validation.resolve(strict=True), args.expected_validation_sha256)
+    # Reject incompatible MLX serialization before loading the multi-GB base.
+    layers = adapter_layers(adapter)
+    rank = 8
+    peft_alpha = mlx_scale_to_peft_alpha(args.mlx_scale, rank)
     tokenizer = AutoTokenizer.from_pretrained(str(args.base), trust_remote_code=False)
     if tokenizer.pad_token_id is None:
         tokenizer.pad_token = tokenizer.eos_token
     encoded = [encode(row, tokenizer, args.max_length) for row in rows]
     loader = DataLoader(encoded, batch_size=1, shuffle=False, collate_fn=lambda batch: collate(batch, tokenizer.pad_token_id))
     model = AutoModelForCausalLM.from_pretrained(str(args.base), torch_dtype=torch.bfloat16, trust_remote_code=False)
-    rank = 8
-    peft_alpha = mlx_scale_to_peft_alpha(args.mlx_scale, rank)
     model = get_peft_model(model, LoraConfig(
         r=rank, lora_alpha=peft_alpha, lora_dropout=0.05, target_modules=list(TARGET_MODULES),
-        layers_to_transform=adapter_layers(adapter), layers_pattern="layers", bias="none", task_type="CAUSAL_LM",
+        layers_to_transform=layers, layers_pattern="layers", bias="none", task_type="CAUSAL_LM",
     ))
     install_mlx_adapter(model, adapter)
     device = torch.device("cuda")

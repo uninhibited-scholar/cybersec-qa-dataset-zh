@@ -48,6 +48,15 @@ validation data read itself was still restricted to the frozen 1,089-row
   Result JSONL is expected at
   `results/phase108-r2-fixed-scale-validation-44517.jsonl`; the Slurm log is
   `logs/phase108-r2-valscale20-44517.log`.
+- Job 44517 then failed after 1:07 before producing any validation metric:
+  its loader expected `model.layers.*`, while this candidate serializes keys as
+  `layers.*`. The result path exists but is empty (0 bytes) and is retained as
+  a failure artifact. The base model was loaded before this key mismatch was
+  noticed. The evaluator now normalizes both supported prefixes, validates
+  28 A/B projection pairs and layer topology before loading the multi-GB base,
+  and has unit coverage for key normalization and PEFT destination mapping.
+  Corrected runner and helper hashes are pinned in a new job submission; no
+  validation score from 44517 is usable.
 - This correction does not change the Phase107 inference protocol or rubric.
   It corrects a training/selection-time scale mismatch. No checkpoint is
   selected from the invalid 44429 metric.
