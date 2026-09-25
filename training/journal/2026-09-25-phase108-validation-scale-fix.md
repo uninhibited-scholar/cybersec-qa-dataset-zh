@@ -272,3 +272,11 @@ permissions remain unchanged. Candidates remain in the isolated sandbox.
   synchronize and verify all hashes, preflight the source/ID list without model
   load, then check cluster capacity and dispatch. This is still a diagnostic,
   not a fresh blind set or promotion gate.
+- Base-only code was synchronized to the cluster and its source, runner,
+  SBATCH, private-suite, tokenizer/config, and both base-shard hashes passed
+  preflight; the deterministic prior ID list also matched. Current scheduler
+  snapshot: `dell3090` reports only 4 CPUs allocated and no GPU GRES allocated;
+  other visible GPU-MEDIUM jobs also show no GPU GRES request. User job `44531`
+  is CPU-only, and `/data3` remains 280G/479G. Submitting the one-hour
+  base-only diagnostic on the available RTX 3090, without changing or stopping
+  any other job.
