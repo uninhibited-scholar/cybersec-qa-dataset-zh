@@ -404,3 +404,35 @@ permissions remain unchanged. Candidates remain in the isolated sandbox.
   suite. They cannot establish quality at scale 1 or candidate capability.
   v0.9 remains disqualified as a blind holdout. No inference scale, adapter,
   model/API, rubric, protocol, or permissions changed.
+
+## Current cluster recheck — 2026-09-26
+
+- Reconnected to the CUHK login node using the existing SSH identity and
+  checked `squeue`/`sacct` plus the candidate directory. There are no Phase108
+  training or evaluation jobs currently pending/running. Training job `44306`
+  is recorded as `COMPLETED`, exit `0`, elapsed `01:01:25` on `a100-1`.
+- Recomputed SHA-256 for the final corrected-r2 adapter:
+  `4e9177c3956aaa0c176929e7d8225b9882a2587b4dadad9cb51c04d905453772`.
+  This matches the manifest, training log, prior fixed-validation report, and
+  prior behavioral diagnostics. All numbered snapshots 1,000 through 7,000
+  were present and had distinct recorded hashes; the final adapter is the
+  exact artifact used by jobs 44430 and 44530.
+- Candidate manifest records the sealed Phase108 step-12,000 input adapter
+  SHA, rank 8, MLX scale 20, PEFT alpha 160, effective scale 20, and
+  `test_split_read=false`. Fixed validation job `44518` evaluated all 1,089
+  frozen validation rows for eight numbered snapshots and final weights with
+  those scale fields; the lowest loss was final weights at `1.7062584871`.
+- This loss result does not clear the behavior gate: the exact parent and
+  corrected-r2 adapter both emitted immediate EOS on all 16 already-exposed
+  v0.9 diagnostic prompts at scale 20, while the base-only arm did not. Scale
+  0/2.5/5 suppressed immediate EOS on that exposed sample, but quality was not
+  measured, so no inference scale is selected from it.
+- The latest independent scenario audit rejects v0.8 as 320 independent cases
+  because it repeats 40 core motifs across eight strata. v0.9 was previously
+  exposed and is not a blind holdout. Therefore no fresh blind score or
+  checkpoint promotion is supported. The next gate is a materially distinct
+  replacement suite plus contamination and independent semantic review; do
+  not submit another behavior evaluation until that gate is met.
+- `/data3` was 280G/479G (58.5%), below the repository's 95% stop threshold.
+  Production API, adapter, benchmark rubric/protocol, and tool permissions
+  remain unchanged.
