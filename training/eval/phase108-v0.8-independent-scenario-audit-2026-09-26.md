@@ -77,3 +77,23 @@ near-duplicate, and independent semantic review. Freeze source/case/key hashes
 only after every gate passes. Keep all model outputs, Phase91 production
 settings, adapter weights, scoring rubric, inference protocol, and permissions
 unchanged until then.
+
+## v0.9 follow-up — semantic audit also rejected
+
+Two independent reviewers, neither of whom authored v0.9, separately audited
+the private source fixtures, case manifest, answer keys, and lexical-audit
+report without inspecting model outputs, scores, or system identities. Both
+found the same construction flaw: the same 40 incident motifs recur across
+all eight strata. Category-specific prompts, artifacts, decisions, and unique
+IDs do not make those 320 rows 320 distinct underlying scenarios. The
+multi-turn stratum also reuses motifs, including a pair that composes the same
+two motifs in reverse order.
+
+Decision: reject v0.9 as a 320-independent-scenario holdout. Its prior 16-case
+exposure is an additional disqualifier, not the only reason. Do not repair it
+by simply replacing those 16 exposed prompts; all 320 cases need distinct
+scenario roots for the required claim. The repeated construction pattern in
+both v0.8 and v0.9 means the next builder must start from a genuinely separate
+bank of at least 300 scenario roots, then derive category-appropriate tasks
+without reusing an incident across strata. This semantic review says nothing
+about exact-overlap freshness or pretraining contamination.

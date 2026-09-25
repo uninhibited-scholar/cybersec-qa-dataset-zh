@@ -433,6 +433,13 @@ permissions remain unchanged. Candidates remain in the isolated sandbox.
   checkpoint promotion is supported. The next gate is a materially distinct
   replacement suite plus contamination and independent semantic review; do
   not submit another behavior evaluation until that gate is met.
+- Two independent, non-author reviewers then audited v0.9's private fixtures,
+  case manifest, answer keys, and lexical flags without model outputs, scores,
+  or identities. Both found the same 40 scenario motifs repeated across the
+  eight strata (including reused multi-turn motifs), so v0.9 also fails the
+  required 320-independent-scenario claim. Replacing only its 16 exposed cases
+  would not repair this construction flaw; all 320 scenario roots must be
+  distinct in the next suite.
 - `/data3` was 280G/479G (58.5%), below the repository's 95% stop threshold.
   Production API, adapter, benchmark rubric/protocol, and tool permissions
   remain unchanged.
