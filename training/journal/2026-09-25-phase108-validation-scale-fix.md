@@ -39,6 +39,15 @@ validation data read itself was still restricted to the frozen 1,089-row
   checkpoint SHA, runner SHA, base-config SHA, input-adapter SHA, and validation
   SHA is checked before evaluation. Only the validation split is read; no
   generation outputs are emitted or stored.
+- Sweep job `44517` started at `2026-09-25T23:49:58` on `dell3090` (GPU-MEDIUM).
+  Its no-inference scale preflight passed. The base shard SHA-256 values
+  observed inside the allocation are `model-00001-of-00002.safetensors`:
+  `25094f7fbaef4769da447cb6ebf4a39d99ccc5043856cce1b4f8fc2f91ed9115` and
+  `model-00002-of-00002.safetensors`:
+  `a2fd70328fc4fb518bb40ac806e8c05f21ad12e228648684775f67c28104815d`.
+  Result JSONL is expected at
+  `results/phase108-r2-fixed-scale-validation-44517.jsonl`; the Slurm log is
+  `logs/phase108-r2-valscale20-44517.log`.
 - This correction does not change the Phase107 inference protocol or rubric.
   It corrects a training/selection-time scale mismatch. No checkpoint is
   selected from the invalid 44429 metric.
