@@ -110,3 +110,14 @@ permissions remain unchanged. Candidates remain in the isolated sandbox.
   blind holdout and full functional/security gates. Keep serving-model family
   selection independent: the Phase108 adapter is Qwen-specific, but the
   cluster's API/Harness need not be.
+- To establish the direct parent baseline before judging the continuation,
+  submitted isolated Slurm job `44521` on 2026-09-26. It evaluates only the
+  exact Phase108 input adapter (SHA-256
+  `3ed1a85e7b021e1498332a525bfa4bb75b336a03579d526f8210f1576317036`) on the
+  same frozen 1,089-row validation split, same base, runner, sequence limit,
+  and effective LoRA scale 20. The committed job file is
+  `training/slurm/phase108_parent_fixed_validation.sbatch` (SHA-256
+  `29d5480adc6c77a0a4a036f07dc8ac2d63319e2bc7d6be2d54ec5d62b44b683a`); the
+  unique result will be
+  `results/phase108-parent-fixed-scale-validation-44521.jsonl`. This is a
+  validation-loss baseline only, not a behavioral score or promotion decision.
