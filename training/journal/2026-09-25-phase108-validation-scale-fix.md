@@ -189,3 +189,9 @@ permissions remain unchanged. Candidates remain in the isolated sandbox.
   `2ce538b6f70d00fe407894c7516a648bf84ab78032dc1c3c9e8b4d9f53be855c`; the
   SBATCH script pins this exact hash. This is an infrastructure repair only;
   no model weights, data, prompts, rubric, protocol, or production state changed.
+- Re-copied the repaired runner and SBATCH script to the cluster and verified
+  their SHA-256 values match Git; remote `py_compile` passed. Confirmed the
+  pinned parent and corrected-r2 adapter hashes still match their expected
+  values, failed-run output directory had no generation files, and `/data3`
+  usage is 280G/479G (58.5%). Resubmitted only the isolated public-development
+  diagnostic as job `44528`; it is not blind evaluation or a promotion gate.
