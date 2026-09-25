@@ -18,13 +18,15 @@
 - CPU fallback 服务现已以该参数渲染聊天模板；健康轮询的预期启动错误也被静默处理。
 - 作业 44504：`COMPLETED`, exit `0`。健康结果为 `big=false, small=true`；请求路由标记 `small_fallback`；返回 `The fallback test has been confirmed.`，8 个 completion tokens，推理耗时约 3.23 秒；响应无 `<think>` 标记；最终 `DUAL_ROUTER_SMOKE=PASS`。
 - 为接入代码 Agent 所需的 SSE 与 `/v1/models`，新增 CUDA Transformers 后端和双模型端到端隔离 smoke；本地编译与 shell 语法检查通过，脚本 SHA-256 已在集群核对一致。
-- 作业 44505 已提交 GPU-LARGE，用于同一 A100 allocation 内同时验证 14B BF16 SSE 主路由和 1.7B CPU SSE 回退。提交时间 `2026-09-25T23:13:06`，当前状态 `PENDING (Resources)`；Slurm 当前估计启动 `2026-09-27T18:49:18`，此估计可能变化。未提交重复作业。
+- 复核烟测时发现 14B 后端此前只实现非流式 JSON，而排队中的脚本已请求 SSE；本地 `py_compile` 也发现主服务一处缩进错误。为避免把兼容性失败带到 GPU 队列，在隔离后端补上 Transformers `TextIteratorStreamer` SSE 实现，并令烟测分别覆盖两模型的流式/非流式路径。
+- 新增不依赖模型权重的 router 协议单测：大模型正常流式与非流式、主路由连接失败后的 CPU fallback、流协议不匹配时返回 502 且不伪装成 fallback；4/4 通过。Python 编译、SBATCH shell 语法和 diff 检查通过。
+- 原 44505 作业已被旧 smoke 脚本标记为 superseded；如它仍在排队，先取消再以修正版提交。旧作业不作为 API 稳定性证据。
 - 14B BF16 模型索引 SHA-256 与之前下载核验一致：`62d7ad35757bae5e7baa452cb1483178b7daa50e869e923226b8da10871f7ebc`。
 - 生产端口 18765 未被调用或修改。
 
 ## 当前闸门
 
-1. 等待作业 44505；不为绕开队列重复提交同一 smoke。
+1. 取消仍排队的旧 44505，并只提交一个修正版隔离 smoke；不为绕开队列重复提交。
 2. 验证 `/health`、`/v1/models`、主模型 OpenAI Chat Completions（含 SSE）和明确触发的小模型回退（含 SSE）。
 3. 核验返回的模型/路由标记、非空输出、错误语义、SSE 结束帧、断连清理与日志；主模型服务失败时不得报成功或静默冒充。
 4. 只有隔离烟测通过后，才整理 Kimi Code 客户端接入参数；生产端口/API 与 Phase108 adapter 继续保持不变，接入前先验证鉴权、并发、超时和资源清理。
@@ -33,6 +35,10 @@
 ## 文件变更
 
 - `training/scripts/cpu_small_model_server.py`：生成时关闭 Qwen3 思考通道。
+- `training/scripts/qwen_gpu_model_server.py`：隔离 CUDA Transformers OpenAI 服务，支持非流式 JSON 和 SSE。
+- `training/scripts/dual_model_router.py`：上游 SSE 断流时以流内错误终止，避免错误地开始第二个响应并隐藏模型来源。
+- `training/scripts/test_dual_model_router.py`：无需模型权重的 router 协议测试。
+- `training/slurm/qwen14b_dual_api_smoke.sbatch`：隔离端到端 smoke 覆盖两个模型的流式和非流式调用。
 - `training/slurm/dual_router_smoke.sbatch`：验证回退响应非空且不泄露思考通道，并抑制启动轮询期间的预期连接错误噪声。
 
 ## 结论与后续

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import os
+import socket
 import time
 import urllib.error
 import urllib.request
@@ -53,7 +54,10 @@ class Handler(BaseHTTPRequestHandler):
         self._send(404, b'{"error":"not_found"}')
 
     def _proxy(self, base: str, payload: bytes, timeout: float, route: str, streaming: bool) -> None:
-        request = urllib.request.Request(base + self.path, data=payload, headers={"Content-Type": "application/json"})
+        headers = {"Content-Type": "application/json"}
+        if streaming:
+            headers["Accept"] = "text/event-stream"
+        request = urllib.request.Request(base + self.path, data=payload, headers=headers)
         with urllib.request.urlopen(request, timeout=timeout) as response:
             if not streaming:
                 try:
@@ -63,8 +67,13 @@ class Handler(BaseHTTPRequestHandler):
                     return
                 self._send(response.status, body, route)
                 return
+            content_type = response.headers.get("Content-Type", "")
+            if "text/event-stream" not in content_type.lower():
+                body = response.read()
+                self._send(502, json.dumps({"error": "upstream_stream_protocol_mismatch", "route": route, "content_type": content_type, "body": body[:512].decode("utf-8", "replace")}).encode(), route)
+                return
             self.send_response(response.status)
-            self.send_header("Content-Type", response.headers.get("Content-Type", "text/event-stream"))
+            self.send_header("Content-Type", content_type)
             self.send_header("Cache-Control", "no-cache")
             self.send_header("Connection", "close")
             self.send_header("X-Model-Route", route)
@@ -79,7 +88,19 @@ class Handler(BaseHTTPRequestHandler):
                         break
                     self.wfile.write(chunk)
                     self.wfile.flush()
-            except (BrokenPipeError, ConnectionResetError, OSError):
+            except (BrokenPipeError, ConnectionResetError):
+                self.close_connection = True
+            except (OSError, TimeoutError, socket.timeout) as exc:
+                # Once SSE headers are committed, switching upstreams would
+                # corrupt the response and hide which model produced it.
+                # Return a terminal stream error instead of pretending that a
+                # transparent fallback occurred.
+                try:
+                    error = json.dumps({"error": {"message": "upstream_stream_interrupted", "route": route, "detail": type(exc).__name__}})
+                    self.wfile.write(("data: " + error + "\n\ndata: [DONE]\n\n").encode())
+                    self.wfile.flush()
+                except OSError:
+                    pass
                 self.close_connection = True
 
     def do_POST(self) -> None:  # noqa: N802

@@ -10,7 +10,7 @@ import uuid
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoTokenizer, TextIteratorStreamer
 
 MODEL_PATH = os.environ["MODEL_PATH"]
 MODEL_ID = os.environ.get("MODEL_ID", "qwen3-14b-bf16")
@@ -77,6 +77,9 @@ class Handler(BaseHTTPRequestHandler):
                 generation["temperature"] = temperature
                 generation["top_p"] = float(request.get("top_p", 1.0))
             started = time.monotonic()
+            if request.get("stream") is True:
+                self._stream(request, inputs, generation)
+                return
             with GENERATION_LOCK, torch.inference_mode():
                 output = MODEL.generate(**inputs, **generation)
             elapsed = time.monotonic() - started
@@ -94,6 +97,53 @@ class Handler(BaseHTTPRequestHandler):
             self.send_json(400, {"error": {"message": str(exc), "type": "invalid_request_error"}})
         except Exception as exc:
             self.send_json(500, {"error": {"message": type(exc).__name__, "type": "server_error"}})
+
+    def _stream(self, request: dict, inputs: dict, generation: dict) -> None:
+        streamer = TextIteratorStreamer(TOKENIZER, skip_prompt=True, skip_special_tokens=True, timeout=300)
+        generation = {**generation, "streamer": streamer}
+        errors: list[Exception] = []
+
+        def generate() -> None:
+            try:
+                with GENERATION_LOCK, torch.inference_mode():
+                    MODEL.generate(**inputs, **generation)
+            except Exception as exc:
+                errors.append(exc)
+                # Ensure the response iterator unblocks if generation fails.
+                streamer.end()
+
+        response_id = "chatcmpl-" + uuid.uuid4().hex[:16]
+        created = int(time.time())
+        self.send_response(200)
+        self.send_header("Content-Type", "text/event-stream; charset=utf-8")
+        self.send_header("Cache-Control", "no-cache")
+        self.send_header("Connection", "close")
+        self.end_headers()
+        self.close_connection = True
+
+        def emit(data: dict | str) -> None:
+            body = data if isinstance(data, str) else json.dumps(data, ensure_ascii=False)
+            self.wfile.write(("data: " + body + "\n\n").encode())
+            self.wfile.flush()
+
+        emit({"id": response_id, "object": "chat.completion.chunk", "created": created, "model": MODEL_ID, "choices": [{"index": 0, "delta": {"role": "assistant"}, "finish_reason": None}]})
+        worker = threading.Thread(target=generate, daemon=True)
+        worker.start()
+        try:
+            for piece in streamer:
+                if piece:
+                    emit({"id": response_id, "object": "chat.completion.chunk", "created": created, "model": MODEL_ID, "choices": [{"index": 0, "delta": {"content": piece}, "finish_reason": None}]})
+        except (BrokenPipeError, ConnectionResetError, OSError):
+            # Generation is not cancellable through this minimal smoke server;
+            # wait so its lock and GPU work are released before accepting the
+            # next request as healthy.
+            worker.join()
+            return
+        worker.join()
+        if errors:
+            emit({"error": {"message": type(errors[0]).__name__, "type": "server_error"}})
+        emit({"id": response_id, "object": "chat.completion.chunk", "created": created, "model": MODEL_ID, "choices": [{"index": 0, "delta": {}, "finish_reason": "stop"}]})
+        emit("[DONE]")
 
     def log_message(self, *_args: object) -> None:
         return

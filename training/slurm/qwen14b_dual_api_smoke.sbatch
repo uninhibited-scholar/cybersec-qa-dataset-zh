@@ -44,18 +44,26 @@ for _ in $(seq 1 90); do
 done
 
 # Verify fallback while the large model is absent.
-cat >"$tmpdir/request.json" <<'JSON'
+cat >"$tmpdir/stream.json" <<'JSON'
 {"model":"qwen3-14b-bf16","messages":[{"role":"user","content":"Reply with exactly one short sentence confirming the model endpoint is responding."}],"max_tokens":32,"temperature":0,"stream":true}
 JSON
-curl -fsS -D "$tmpdir/fallback.headers" -H 'Content-Type: application/json' --data-binary "@$tmpdir/request.json" \
+cat >"$tmpdir/nonstream.json" <<'JSON'
+{"model":"qwen3-14b-bf16","messages":[{"role":"user","content":"Reply with exactly one short sentence confirming the model endpoint is responding."}],"max_tokens":32,"temperature":0,"stream":false}
+JSON
+curl -fsS -N -D "$tmpdir/fallback-stream.headers" -H 'Content-Type: application/json' --data-binary "@$tmpdir/stream.json" \
+  "http://127.0.0.1:${router_port}/v1/chat/completions" >"$tmpdir/fallback-stream.txt"
+curl -fsS -D "$tmpdir/fallback-json.headers" -H 'Content-Type: application/json' --data-binary "@$tmpdir/nonstream.json" \
   "http://127.0.0.1:${router_port}/v1/chat/completions" >"$tmpdir/fallback.json"
 curl -fsS "http://127.0.0.1:${router_port}/v1/models" >"$tmpdir/models.json"
 grep -q 'qwen3-14b-bf16' "$tmpdir/models.json"
-grep -qi 'X-Model-Route: small_fallback' "$tmpdir/fallback.headers"
+grep -qi 'Content-Type: text/event-stream' "$tmpdir/fallback-stream.headers"
+grep -qi 'X-Model-Route: small_fallback' "$tmpdir/fallback-stream.headers"
+grep -q 'data: \[DONE\]' "$tmpdir/fallback-stream.txt"
+grep -Eqi '"content"[[:space:]]*:' "$tmpdir/fallback-stream.txt"
+grep -qi 'X-Model-Route: small_fallback' "$tmpdir/fallback-json.headers"
 grep -q '"choices"' "$tmpdir/fallback.json"
 grep -q '"content":' "$tmpdir/fallback.json"
-grep -q 'data: \[DONE\]' "$tmpdir/fallback.json"
-if grep -Eqi '<think>|</think>' "$tmpdir/fallback.json"; then
+if grep -Eqi '<think>|</think>' "$tmpdir/fallback.json" "$tmpdir/fallback-stream.txt"; then
   echo "DUAL_API_SMOKE=FAIL reason=fallback_reasoning_leak"
   exit 1
 fi
@@ -83,14 +91,19 @@ if [[ "$ready" != 1 ]]; then
   exit 1
 fi
 
-curl -fsS -D "$tmpdir/big.headers" -H 'Content-Type: application/json' --data-binary "@$tmpdir/request.json" \
+curl -fsS -N -D "$tmpdir/big-stream.headers" -H 'Content-Type: application/json' --data-binary "@$tmpdir/stream.json" \
+  "http://127.0.0.1:${router_port}/v1/chat/completions" >"$tmpdir/big-stream.txt"
+curl -fsS -D "$tmpdir/big-json.headers" -H 'Content-Type: application/json' --data-binary "@$tmpdir/nonstream.json" \
   "http://127.0.0.1:${router_port}/v1/chat/completions" >"$tmpdir/big.json"
-grep -qi 'X-Model-Route: big' "$tmpdir/big.headers"
+grep -qi 'Content-Type: text/event-stream' "$tmpdir/big-stream.headers"
+grep -qi 'X-Model-Route: big' "$tmpdir/big-stream.headers"
+grep -q 'data: \[DONE\]' "$tmpdir/big-stream.txt"
+grep -Eqi '"content"[[:space:]]*:' "$tmpdir/big-stream.txt"
+grep -qi 'X-Model-Route: big' "$tmpdir/big-json.headers"
 grep -q '"choices"' "$tmpdir/big.json"
 grep -q '"content":' "$tmpdir/big.json"
-grep -q 'data: \[DONE\]' "$tmpdir/big.json"
-if grep -Eqi '<think>|</think>' "$tmpdir/big.json"; then
+if grep -Eqi '<think>|</think>' "$tmpdir/big.json" "$tmpdir/big-stream.txt"; then
   echo "DUAL_API_SMOKE=FAIL reason=big_reasoning_leak"
   exit 1
 fi
-echo "DUAL_API_SMOKE=PASS fallback=small_fallback big=qwen3-14b-bf16 production_port=18765 untouched"
+echo "DUAL_API_SMOKE=PASS fallback=small_fallback big=qwen3-14b-bf16 modes=nonstream,sse production_port=18765 untouched"
