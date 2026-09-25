@@ -26,3 +26,11 @@ changed.
 - Test: `python -m pytest -q training/eval/test_phase108_candidate_suite_preflight.py`
 - Result: 4 passed.
 - `git diff --check`: clean before commit.
+
+## Read-only cluster status
+
+On 2026-09-26, SSH verification returned host `slurmc` and user `zj225`. No
+Phase108 training or evaluation job was pending/running; the only job returned
+by `squeue -u zj225` was unrelated `arc2-soar-probe` (PENDING, resources).
+`/data3` usage was 280G / 479G (58.5%). No cluster files, jobs, model services,
+production configuration, or permissions were changed.
