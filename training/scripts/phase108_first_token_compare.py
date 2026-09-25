@@ -44,6 +44,7 @@ def main() -> None:
     parser.add_argument("--expected-cases-sha256", required=True)
     parser.add_argument("--expected-parent-sha256", required=True)
     parser.add_argument("--expected-candidate-sha256", required=True)
+    parser.add_argument("--device", choices=("cpu", "cuda:0"), default="cpu")
     parser.add_argument("--preflight-only", action="store_true")
     args = parser.parse_args()
 
@@ -58,7 +59,8 @@ def main() -> None:
         "candidate": args.expected_candidate_sha256,
     }
     if hashes != expected:
-        raise SystemExit("sealed input hash mismatch")
+        mismatched = sorted(key for key in hashes if hashes[key] != expected[key])
+        raise SystemExit(f"sealed input hash mismatch: {','.join(mismatched)}")
     rows = json.loads(args.cases.read_text())
     selected = random.Random(20260925).sample(rows, 16)
     if [row["id"] for row in selected] != EXPECTED_CASE_IDS:
@@ -82,7 +84,7 @@ def main() -> None:
     records = []
     for arm, adapter in arms:
         model = AutoModelForCausalLM.from_pretrained(
-            str(args.base), torch_dtype=torch.bfloat16, device_map="cuda:0",
+            str(args.base), torch_dtype=torch.bfloat16, device_map=args.device,
             low_cpu_mem_usage=True, local_files_only=True, trust_remote_code=False,
         )
         model.eval()
@@ -92,11 +94,12 @@ def main() -> None:
         for index, row in enumerate(selected):
             seed = 20260925 + index
             torch.manual_seed(seed)
-            torch.cuda.manual_seed_all(seed)
+            if args.device.startswith("cuda"):
+                torch.cuda.manual_seed_all(seed)
             rendered = tokenizer.apply_chat_template(
                 row["messages"], tokenize=False, add_generation_prompt=True
             )
-            inputs = tokenizer(rendered, return_tensors="pt").to("cuda:0")
+            inputs = tokenizer(rendered, return_tensors="pt").to(args.device)
             start = time.monotonic()
             with torch.inference_mode():
                 generated = model.generate(
@@ -115,10 +118,12 @@ def main() -> None:
                 "empty_after_decode": not bool(text.strip()),
                 "response_sha256": hashlib.sha256(text.encode()).hexdigest(),
                 "elapsed_seconds": round(time.monotonic() - start, 3),
-                "seed": seed, "diagnostic_only": True, "blind": False,
+                "seed": seed, "device": args.device,
+                "diagnostic_only": True, "blind": False,
             })
         del model
-        torch.cuda.empty_cache()
+        if args.device.startswith("cuda"):
+            torch.cuda.empty_cache()
 
     with args.output.open("x", encoding="utf-8") as stream:
         args.output.chmod(0o600)
