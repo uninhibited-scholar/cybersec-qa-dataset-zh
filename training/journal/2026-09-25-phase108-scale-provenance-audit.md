@@ -42,3 +42,12 @@ input-artifact mismatch before fixed validation is scheduled.
   capability pass or a minor score regression.
 - The candidate is rejected for further deployment consideration. Production
   remains unchanged.
+
+## Follow-up scale diagnostic
+
+Three isolated compatibility probes at inference scales 1, 2.5, and 20 all
+produced non-empty output for the standard smoke prompt. Therefore the 16/16
+empty responses are not explained by a universal adapter loader or scale
+failure; they are specific to the sealed multi-category blind prompts (or a
+candidate behavior regression on those prompt forms). This does not rescue the
+candidate: the blind functional gate remains failed.
