@@ -1,0 +1,68 @@
+#!/bin/bash
+# Frozen raw-weight comparison on the reviewed Phase108 v1.8-rev2 holdout.
+# This collects blinded outputs only; it does not score or promote a model.
+#SBATCH --job-name=p108-v18r2-blind
+#SBATCH --partition=GPU-TITANX
+#SBATCH --gres=gpu:TITANX:1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=32G
+#SBATCH --time=1-00:00:00
+#SBATCH --output=/data3/ieug25/zj225/cyber-model-migration/logs/phase108-v18r2-blind-%j.log
+
+set -euo pipefail
+umask 077
+
+ROOT=/data3/ieug25/zj225/cyber-model-migration
+PYTHON=/data3/ieug25/zj225/miniforge3/envs/coevo/bin/python
+BASE="$ROOT/models/base-phase3-dequantized"
+PARENT="$ROOT/models/phase108-step12000-20260920/0012000_adapters.safetensors"
+CANDIDATE="$ROOT/models/phase108-cuda-recovery-scale20-corrected-20260924-r2/adapters.safetensors"
+CASES="$ROOT/data/phase108-eval-private-v18r2/phase108-private-cases-v1.8-rev2.json"
+FREEZE="$ROOT/data/phase108-eval-private-v18r2/freeze-v1.8-rev2.json"
+SCRIPT="$ROOT/data/training/phase108_blind_collection_v18r2.py"
+LOADER="$ROOT/data/training/phase108_hf_adapter_smoke.py"
+TESTS="$ROOT/data/training/test_phase108_blind_collection_v18r2.py"
+RUN_DIR="$ROOT/results/phase108-v18r2-blind-$SLURM_JOB_ID"
+
+EXPECTED_CASES_SHA=c028b564d2273fc6779f248918511fa2bff0fe73abc4c7bb4ab6051ecc3b91c9
+EXPECTED_FREEZE_SHA=1dd603084fe3f026954ead8cb55004514b1c5b43a3b3219b0b10b0489ac0d5bf
+EXPECTED_PARENT_SHA=3ed1a85e7b021e1498332a525bfa4bb75b336a03579d526f8210f1576317036
+EXPECTED_CANDIDATE_SHA=4e9177c3956aaa0c176929e7d8225b9882a2587b4dadad9cb51c04d905453772
+EXPECTED_COLLECTOR_SHA=d053e15a08bafa5673892daf3ae861a9bdccad2441d8e0c62c5ba6050c71282d
+EXPECTED_LOADER_SHA=00ef5d3b1aaada8285b711a68f47c9e00a4fb9dbbd993e8eaf8eefd7426fa371
+EXPECTED_TEST_SHA=cac7f304a693f0571d7d493210197ae267f95e8e8d1ece4b95444c51e10a214d
+
+check_hash() {
+  test -r "$1"
+  test "$(sha256sum "$1" | awk '{print $1}')" = "$2"
+}
+
+check_hash "$CASES" "$EXPECTED_CASES_SHA"
+check_hash "$FREEZE" "$EXPECTED_FREEZE_SHA"
+check_hash "$PARENT" "$EXPECTED_PARENT_SHA"
+check_hash "$CANDIDATE" "$EXPECTED_CANDIDATE_SHA"
+check_hash "$SCRIPT" "$EXPECTED_COLLECTOR_SHA"
+check_hash "$LOADER" "$EXPECTED_LOADER_SHA"
+check_hash "$TESTS" "$EXPECTED_TEST_SHA"
+test -r "$BASE/config.json"
+test -r "$BASE/model.safetensors.index.json"
+test -r "$SCRIPT"
+test -r "$LOADER"
+test ! -e "$RUN_DIR"
+mkdir -m 700 "$RUN_DIR"
+
+export PYTHONPATH="$ROOT/data/training${PYTHONPATH:+:$PYTHONPATH}"
+cd "$ROOT/data/training"
+"$PYTHON" -m unittest test_phase108_blind_collection_v18r2 -v
+cd "$ROOT"
+"$PYTHON" -u "$SCRIPT" \
+  --base "$BASE" \
+  --parent-adapter "$PARENT" \
+  --candidate-adapter "$CANDIDATE" \
+  --cases "$CASES" \
+  --freeze "$FREEZE" \
+  --job-script "$0" \
+  --adapter-loader "$LOADER" \
+  --output-dir "$RUN_DIR"
+
+echo "blind_collection_complete=true scored=false promotion_eligible=false production_changed=false run_dir=$RUN_DIR"
