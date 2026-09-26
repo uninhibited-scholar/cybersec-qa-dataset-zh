@@ -38,3 +38,15 @@ session stalled. Remote termination could not be confirmed before SSH access
 again timed out. No model inference or training was launched on the login node.
 Do not repeat file hashing or other CPU work there; perform checks within an
 allocated compute job or use already recorded artifact hashes.
+
+## Corrected validation resubmission
+
+The corrected batch script was copied to the distinct remote filename
+`data/training/slurm/phase108_followup_fixed_validation_19ad85d.sbatch`, leaving
+the original remote file untouched. Remote `bash -n` passed and the pinned
+parent SHA matched the local canonical record. The single planned validation
+was submitted as Slurm job `44615`; the first authoritative status check showed
+`PENDING (Priority)` and `sacct` showed no execution time yet. No duplicate
+Phase108 fixed-validation job was present before submission. The existing local
+heartbeat was updated to monitor job `44615` and verify provenance/results;
+no blind evaluation or deployment was launched.
