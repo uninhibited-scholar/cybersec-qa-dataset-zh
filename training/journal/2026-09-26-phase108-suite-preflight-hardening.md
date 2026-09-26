@@ -168,3 +168,49 @@ selected inference scale, or candidate promotion. In particular, the prior
 functional signal. The temporary API exited with the Slurm job; no persistent
 endpoint or SSH tunnel was established. The Phase91 production API/adapter,
 rubric, protocol, tool permissions, and candidate weights remain unchanged.
+
+## Paired public API functional screen for Phase108 follow-up candidates — 2026-09-26
+
+To avoid treating the corrected-r2 smoke result as sufficient, ran a matched,
+metadata-only functional screen on the formatmix and bare-canary adapters,
+with corrected-r2 re-run as a same-job control. Slurm job `44588` was an
+initial candidate-only screen; job `44589` ran all three adapters sequentially
+on the same NVIDIA TITAN V/FP16 sandbox API at scale 20. Both jobs completed
+successfully (`44588`: 00:02:03; `44589`: 00:01:32). Each candidate received
+the same four fixed, benign public-development probes; tools were absent and
+the explicit tool-request check was rejected with HTTP 400. The HTTP health,
+model-list, and four chat requests returned 200 for every candidate.
+
+All three adapters yielded 4/4 non-empty responses on this narrow probe set:
+
+- formatmix: adapter SHA-256
+  `3c87564c97b003990242b988c72cd8c76a9ccf0f8bfbf1058a106f53e26ef461`;
+  empty count 0; summary SHA-256
+  `fcf68691decd38b52bf998f652fb0a0f829acc2463bd5dfa9a59dfcdef9ae197`.
+- bare-canary: adapter SHA-256
+  `5686ee98e8ed09cd31f3f0228dd4cfec60fd58907090b5ec71372c83571f7da4`;
+  empty count 0; summary SHA-256
+  `aa35cb7bea41248ede7061d2c244861d22338461eb152f63c06822726ee5a9b9`.
+- corrected-r2 control: adapter SHA-256
+  `4e9177c3956aaa0c176929e7d8225b9882a2587b4dadad9cb51c04d905453772`;
+  empty count 0; summary SHA-256
+  `ec4ad316e99aec9a3339338fa38800434a731d61abb5afb15a368f95a5efbf9e`.
+
+Result summaries are committed under
+`training/journal/phase108-public-functional-44589/`; they contain probe IDs
+and response metadata only, not prompt or generated text. The job and client
+SHA-256 values were respectively
+`a3ec1ec17d63149c324b36d6ebb29a6cab9e8067a03de14bdf9013eef9e888c1` and
+`ccb520086ed240b8321ef4e948f62f48052f4cb5fc55337a0233f9bdc40c88c6`; the
+server SHA-256 was
+`df1484bd0b01ee72e3b41dbb2a7ceda7b384d1e08f99239ffde68357338f83f7`.
+Post-run weight hashes matched the pinned values, and process inspection found
+no lingering candidate API process.
+
+This says only that these candidates can serve non-empty output for four
+specific development probes under this GPU/runtime and sampling setup. It
+does not assess answer correctness, professional capability, stability under
+other prompts, or eligibility for blind evaluation/promotion. The separate
+scale-20 immediate-EOS issue on the previously exposed 16-prompt diagnostic
+remains unresolved. No persistent endpoint, SSH tunnel, production setting,
+adapter weight, rubric, protocol, permission, or blind-suite content changed.
