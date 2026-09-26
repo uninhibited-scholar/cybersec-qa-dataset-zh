@@ -6,6 +6,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_phase108_v11_suite import CATEGORIES, build, write_new
+from phase107_suite_validate import validate
 
 
 def row(category: str, index: int) -> dict:
@@ -55,6 +56,19 @@ def test_builds_exact_320_case_and_separate_key_package(tmp_path):
     assert all(len(item["messages"]) >= 3 for item in cases if item["category"] == "multiturn")
     assert all("must_cover" not in item for item in cases)
     assert all("messages" not in item for item in keys)
+    assert all(item["scoring_status"] == "draft_unfrozen" for item in keys)
+    result = validate(cases, keys, expected_suite_version="phase108-v1.1")
+    assert result["status"] == "pass", result["errors"]
+
+
+def test_supports_versioned_draft_and_validator_hash_contract(tmp_path):
+    cases, keys, metadata = build(list(sources(tmp_path)), suite_version="phase108-v1.3")
+    assert metadata["suite_version"] == "phase108-v1.3"
+    assert cases[0]["id"].startswith("p108v13-")
+    assert all(case["source_row_sha256"] for case in cases)
+    assert all(case["conversation_sha256"] for case in cases)
+    result = validate(cases, keys, expected_suite_version="phase108-v1.3")
+    assert result["status"] == "pass", result["errors"]
 
 
 def test_rejects_cross_category_root_or_fact_reuse(tmp_path):

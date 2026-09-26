@@ -58,9 +58,11 @@ def _validate_messages(row: dict, index: int) -> list[dict]:
     return messages
 
 
-def build(source_paths: list[Path]) -> tuple[list[dict], list[dict], dict]:
+def build(source_paths: list[Path], suite_version: str = VERSION) -> tuple[list[dict], list[dict], dict]:
     if len(source_paths) != 2:
         raise ValueError("exactly two independent source banks are required")
+    if not re.fullmatch(r"phase108-v\d+\.\d+", suite_version):
+        raise ValueError("suite version must look like phase108-vN.N")
     all_rows: list[dict] = []
     source_hashes = []
     for path in source_paths:
@@ -132,17 +134,24 @@ def build(source_paths: list[Path]) -> tuple[list[dict], list[dict], dict]:
     keys: list[dict] = []
     for category in CATEGORIES:
         for ordinal, row in enumerate(grouped[category], 1):
-            case_id = f"p108v11-{category}-{ordinal:03d}"
+            version_tag = suite_version.removeprefix("phase108-v").replace(".", "")
+            case_id = f"p108v{version_tag}-{category}-{ordinal:03d}"
             source_fingerprint = sha256(json.dumps(row, ensure_ascii=False, sort_keys=True,
                                                    separators=(",", ":")).encode())
+            messages = _validate_messages(row, len(cases) + 1)
+            serialized_messages = json.dumps(messages, ensure_ascii=False,
+                                             separators=(",", ":")).encode()
+            prompt_fingerprint = sha256(normalize(row["prompt"]).encode())
             cases.append({
                 "id": case_id,
-                "suite_version": VERSION,
+                "suite_version": suite_version,
                 "category": category,
-                "messages": _validate_messages(row, len(cases) + 1),
+                "messages": messages,
                 "prompt": row["prompt"],
                 "rubric_ref": "phase107-rubric-v0.1",
-                "fixture_hash": source_fingerprint,
+                "fixture_hash": prompt_fingerprint,
+                "source_row_sha256": source_fingerprint,
+                "conversation_sha256": sha256(serialized_messages),
                 "provenance": {
                     "fixture_id": row["fixture_id"],
                     "scenario_root_id": row["scenario_root_id"],
@@ -159,11 +168,11 @@ def build(source_paths: list[Path]) -> tuple[list[dict], list[dict], dict]:
                 "must_not_claim": row["must_not_claim"],
                 "evidence_boundary": row["evidence_boundary"],
                 "format_contract": row["format_contract"],
-                "fixture_hash": source_fingerprint,
-                "scoring_status": "unscored",
+                "fixture_hash": prompt_fingerprint,
+                "scoring_status": "draft_unfrozen",
             })
     metadata = {
-        "suite_version": VERSION,
+        "suite_version": suite_version,
         "case_count": len(cases),
         "category_counts": dict(sorted(counts.items())),
         "unique_scenario_roots": len(roots),
@@ -191,10 +200,11 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("source_a", type=Path)
     parser.add_argument("source_b", type=Path)
+    parser.add_argument("--suite-version", default=VERSION)
     parser.add_argument("--cases", type=Path, required=True)
     parser.add_argument("--keys", type=Path, required=True)
     args = parser.parse_args()
-    cases, keys, metadata = build([args.source_a, args.source_b])
+    cases, keys, metadata = build([args.source_a, args.source_b], suite_version=args.suite_version)
     case_sha = write_new(args.cases, cases)
     try:
         key_sha = write_new(args.keys, keys)
