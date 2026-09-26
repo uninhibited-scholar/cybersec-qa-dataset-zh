@@ -15,6 +15,7 @@
 - Phase 107 multi-turn schema correction: `2026-09-19-phase107-multiturn-schema.md`.
 - Phase 107 manifest/key validator: `training/scripts/phase107_suite_validate.py`.
 - Phase 107 reference chat API smoke: `training/eval/phase107_openai_api_smoke.sbatch` and `2026-09-19-phase107-api-smoke.md`.
+- Cluster-serving connectivity recheck: `2026-09-26-cluster-ssh-recheck.md`.
 - Phase 107 suite audit: `training/eval/phase107-private-suite-audit.md`.
 - Phase 107 scoring rubric draft: `training/eval/phase107-rubric-v0.1-draft.md`.
 - Phase 107 inference protocol draft: `training/eval/phase107-inference-protocol-v0.1-draft.md`.
