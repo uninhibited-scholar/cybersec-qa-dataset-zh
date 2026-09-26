@@ -50,8 +50,45 @@ storing response text.
   wrong order. The pinned suite hash was correct, and the selected ID *set*
   matches the earlier exposed sample. No model output or inference result was
   produced. The expected ordering is corrected to match the existing
-  44550 metadata; the job will be resubmitted only after the pinned
-  hash-and-ID preflight passes on the compute host.
+  44550 metadata; the corrected job was resubmitted as `44610` only after the
+  pinned hash-and-ID preflight passed on the compute host.
+
+## Completed result — job 44610
+
+The corrected script passed the remote ID/hash preflight and job `44610`
+completed on `titanv1` in 10m44s (`COMPLETED`, exit 0). Its three summary
+files independently pin the parent and corrected-r2 adapter hashes, base
+config/index hashes, server/client/job-script hashes, and the exposed-suite
+hash. The summaries were hash-checked before copying; raw response files were
+not transferred.
+
+All 16 cases per arm were non-empty at the 128-token cap:
+
+| Arm | Scale | Empty | Non-empty | Finish reason |
+|---|---:|---:|---:|---|
+| Scale-zero control | 0 | 0/16 | 16/16 | length 16/16 |
+| Parent adapter | 5 | 0/16 | 16/16 | length 16/16 |
+| Corrected-r2 adapter | 5 | 0/16 | 16/16 | length 16/16 |
+
+Every arm hit the 128-token limit on every case. This confirms only that scale
+5 avoided immediate EOS within the cap on this already-exposed sample; it does
+not show complete answers or their correctness. Since even the base control
+hit the cap, the short run cannot distinguish normal long responses from
+runaway/repetitive output. No inference scale was selected and no model was
+promoted.
+
+Aggregate summary SHA-256 values:
+
+- base control: `76d9a7bf25e24a7a201c11a0c9ec0f2637bf6a08096aeb5a0d79a9e2a53e88ff`
+- parent scale 5: `342341bc64e0f83699631e702c19f28317d714f513109112dbd3481f6dce014e`
+- corrected-r2 scale 5: `565a17aa26a0a6e419cc791e026c2b6d82e836f151955d5cd2c736894086cffd`
+
+The three JSON summaries in `phase108-exposed-scale5-44610/` contain aggregate
+metadata only and match their cluster SHA-256 values. The next behavior test
+must use an appropriately longer generation cap and, before any capability
+claim, the replacement independent blind suite; exposed v0.9 remains
+disqualified. A100 validation job `44593` and separate Qwen14B service job
+`44601` remain independent and queued.
 
 ## Interpretation boundary
 
