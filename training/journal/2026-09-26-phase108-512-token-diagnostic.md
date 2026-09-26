@@ -45,15 +45,21 @@ selection, or promotion gate.
 - `git diff --check` — passed after the final script edit.
 - Remote pinned server, replay client, sample, and adapter hashes were checked
   at the controller before job submission; all matched the values above.
-- At journal creation, this run has not yet been submitted. A first attempt to
-  hash the large base shards from the login node was interrupted after noticing
-  the active process; the child process is confirmed stopped. Reuse the
-  previously recorded hashes above and perform the checks only inside the
-  compute job. Record the
-  authoritative Slurm ID, state, elapsed time, output hashes, and aggregate
-  result only after the job completes. If the runtime exceeds its 2-hour cap,
-  preserve partial logs and report it as a diagnostic failure, not a model
-  result.
+- Job `44624` was submitted only after the idle Titan V node and the disk quota
+  (280G / 479G, 58.5%) were checked. It started on `titanv1` at 22:50:48 HKT
+  with a two-hour limit. The remote copy of the script has the exact SHA above;
+  `bash -n` and the remote sample-hash preflight passed. At 22:52 HKT it had
+  loaded the base and started its first arm; no aggregate output was complete
+  yet. Slurm log path:
+  `logs/phase108-scale5-512diag-44624.log`; unique output directory:
+  `results/phase108-exposed-scale5-512diag-44624/`.
+- A manual attempt to hash base shards on the login node was stopped as soon
+  as the running process was noticed. Its PID was confirmed gone. The job
+  itself reuses the previously recorded compute-allocation hashes and performs
+  those checks inside its scheduled allocation, before model loading.
+- Record terminal Slurm state, elapsed time, output hashes, and aggregate
+  result after completion. If the runtime exceeds its two-hour cap, preserve
+  partial logs and report it as a diagnostic failure, not a model result.
 
 ## Interpretation rule
 
