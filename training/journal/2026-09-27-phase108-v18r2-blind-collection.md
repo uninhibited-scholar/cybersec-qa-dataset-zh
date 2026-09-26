@@ -84,6 +84,13 @@ parent-SHA pin described below. After correcting the pin, rerun the cluster
 unit tests and hash checks, then submit under a new job ID. No model-quality
 result exists yet.
 
+Correction verified; the exact pinned inputs and three synthetic-token unit
+tests passed on the cluster. SLURM job `44799` started on `titanv1` at
+2026-09-27 02:18:40 HKT. All seven content/script hashes passed in the compute
+wrapper; its mode-0700 result directory is
+`results/phase108-v18r2-blind-44799`. At the latest check it was still
+`RUNNING`; no response collection aggregate exists yet.
+
 ## Dispatch failures and corrected hash pin
 
 Collection jobs `44796` and `44797` both failed before creating a run
