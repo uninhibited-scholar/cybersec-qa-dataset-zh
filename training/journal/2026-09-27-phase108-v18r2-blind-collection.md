@@ -23,7 +23,7 @@ protocol; its SHA is `8ece8f47d1fcdca21bdcc8174539ad29182bbaaaf3eb7b303d5536aaaf
   `5e699a61da09415f33a625885364d3889a80acb6ab88aedaf6e195b2612addf4`.
 - Base weight shard SHA values are embedded in the collector and are verified
   from inside the scheduled compute allocation before model loading.
-- Parent adapter: `3ed1a85e7b021e1498332a525bfa4bb75b336a03579d526f8210f1576317036`.
+- Parent adapter: `3ed1a85e7b021e14198332a525bfa4bb75b336a03579d526f8210f1576317036`.
 - Corrected-r2 final adapter: `4e9177c3956aaa0c176929e7d8225b9882a2587b4dadad9cb51c04d905453772`.
 - Candidate trained for 7,621 steps from the parent adapter; frozen validation
   on 1,089 rows reported loss 1.7062584871 vs parent 1.7362299831. This is
@@ -68,33 +68,41 @@ Git after the job is verified.
   inference runs on the login node. Output path is unique per job ID and mode
   0700. The active general Qwen service job is not modified.
 - Cluster copies matched local hashes: collector
-  `d053e15a08bafa5673892daf3ae861a9bdccad2441d8e0c62c5ba6050c71282d`, tests
+  `8ce85906bd41c097ca9c8a2296bdb73f43ee2a468640a54be1506a66c5788c6e`, tests
   `f3003eaf0d64e0d7a33f4b57407af150acfa839e0c00eaba79598a22924d7161`, SLURM
-  wrapper `9c3c08c46d665ced01795300a114c4434ee86fdd0392c98e1f72e5ee36f0a9d7`,
+  wrapper `45f45edd874d5c8b7fdbb27acf13787a26063a8f0fbc01e1e596d5dcc438c0ca`,
   and adapter loader `00ef5d3b1aaada8285b711a68f47c9e00a4fb9dbbd993e8eaf8eefd7426fa371`.
 - Cluster-side `bash -n`, `py_compile`, and the three collector unit tests
   passed before scheduling; the tests exercised only synthetic tokens/tensors.
 
 ## Dispatch and results
 
-Pending pre-dispatch test, synchronized-file hash verification, job ID,
-terminal status, result hashes, and alias-blind aggregate findings.
+The first three submissions (`44796`–`44798`) terminated during wrapper
+preflight; no inference or result directory was created. The first two logs
+were insufficiently diagnostic; job `44798` surfaced the incorrect local
+parent-SHA pin described below. After correcting the pin, rerun the cluster
+unit tests and hash checks, then submit under a new job ID. No model-quality
+result exists yet.
 
-## First dispatch failure and diagnostic correction
+## Dispatch failures and corrected hash pin
 
-The first collection dispatch (`44796`) failed immediately with exit `1:0`
-before producing a result. Its SLURM stdout file was empty and `scontrol`
-reported no explicit stderr path, so the failure was not a model result and
-the cause could not be observed from that job. The wrapper now directs stderr
-to a separate job-specific file and prints a start marker plus a failing line
-number; this is observability-only. The job did not touch model weights,
-production, evaluation standards, or tools. Any retry uses a new job ID and a
-new output directory; the failed job is retained in SLURM accounting.
+Collection jobs `44796` and `44797` both failed before creating a run
+directory; neither performed inference. The second attempt emitted only its
+wrapper-start marker. Job `44798` then made the preflight error explicit: I
+had transcribed the expected parent SHA incorrectly in the new collector and
+SLURM wrapper. This was a local pin error, not a mismatch in the training
+input or candidate artifact. The authoritative Phase108 training-start log
+(`phase108-scale20-44306.log`, SHA-256
+`12e3001df6c0b048f7c1e9af6b303da22c8feea81b7a2b4d2cf16dd1dfb950b9`) records
+input path `phase108-step12000-20260920/0012000_adapters.safetensors` and SHA
+`3ed1a85e7b021e14198332a525bfa4bb75b336a03579d526f8210f1576317036`. The
+current source file, the candidate manifest's `input_mlx_adapter_sha256`, and
+the training-start log all agree on that exact hash; its mtime precedes job
+44306. The candidate's final adapter SHA and manifest remain unchanged. The
+collector/wrapper pin is corrected to the verified value; the failed jobs
+remain in SLURM accounting and their unique result directories are absent.
 
-The next diagnostic attempt (`44797`) also failed immediately with exit `1:0`.
-It wrote the wrapper-start marker but no stdout/stderr after that; its unique
-result directory was absent, confirming no model collection started. Hash
-checks and `bash -n` passed on the controller, so the wrapper now emits each
-successful hash and explicit failure context to distinguish a compute-node
-filesystem/preflight issue from Python/GPU execution. This failure remains
-infrastructure-only evidence.
+The historical candidate manifest does not include a training-script hash,
+so it is not fully reproducible from that manifest alone. The run-start log
+and source file do verify the source path/hash; the provenance gap is retained
+as a limitation rather than silently repaired retroactively.
