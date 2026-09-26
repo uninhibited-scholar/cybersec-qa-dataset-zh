@@ -63,3 +63,12 @@ multiturn role pattern, and the category/family/artifact/decision uniqueness
 check did not show violations in this inspection. The builder created no
 partial output. This is a draft-quality failure, not a benchmark result; source
 A is being revised and independently reviewed. No model was queried.
+
+The independent semantic review of source A rejected all 160 rows: 160 were
+underspecified and shared templated framing, despite the minimum-length fix.
+Therefore source A is being replaced with case-specific scenarios rather than
+accepted by length alone. Source B was structurally normalized by removing the
+`messages` field from its 120 non-multiturn rows; its structural checks now
+pass (40/category, required fields and IDs present, prompt minimum met), but it
+still awaits independent semantic review. Neither bank is frozen and no model
+has seen these cases.
