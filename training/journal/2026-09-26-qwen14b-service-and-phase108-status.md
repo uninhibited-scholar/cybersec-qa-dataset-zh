@@ -49,3 +49,23 @@ or candidate weights were modified. Continue `44617` fixed validation only
 when the scheduler allocates it; do not treat validation loss, the scale-5
 diagnostic, or the separate Qwen14B API smoke as proof that Phase108 is
 deployable.
+
+## Follow-up readiness check — 2026-09-26 23:23 HKT
+
+The scheduler still reports `44617` as `PENDING (Resources)` with an estimated
+start of 2026-09-27 08:32 HKT; all GPU-MEDIUM resources were allocated in the
+observed snapshot. GPU-LARGE nodes also had active allocations, so no partition
+change was made. Storage was 282G/479G (58.9%).
+
+Local checks passed: 8 Phase108 scale/provenance/preflight unit tests,
+`py_compile` for the pinned validator/preflight/scale utilities, and `bash -n`
+for the pending fixed-validation wrapper. The broad repository-wide
+`git diff --check` did not return promptly; only that diagnostic process was
+interrupted. No files were removed or altered by the interruption. A scoped
+`git diff --check` for the Phase108 validator, scale utilities, Slurm wrapper,
+and this journal completed successfully.
+
+Blind-evaluation readiness remains blocked on a fresh, independently reviewed
+suite: v0.9 was exposed to model inference and the current format-coverage
+audit found insufficient diversity. No capability scoring or unblinding was
+performed.
