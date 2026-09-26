@@ -27,6 +27,20 @@ were changed.
   remains **unknown**. Historical records are not substituted for a fresh
   scheduler check.
 
+## Follow-up after VPN UI inspection
+
+- The GlobalProtect UI initially showed `Disconnected` / `连接已中断`, despite
+  the running process and residual `utun11` route. This corrects the earlier
+  inference that the campus VPN was active based on process/interface alone.
+- On a later UI refresh GlobalProtect showed `Connected` to `IENet_GW`, and the
+  campus hostname resolved to `172.16.5.179`.
+- With that reported-connected state, TCP/22 accepted a connection but SSH was
+  again closed before key exchange (`kex_exchange_identification`). A hostname
+  SSH attempt timed out. Thus DNS/VPN state improved, but no authenticated SSH
+  session or scheduler data was obtained; the remaining failure is at or before
+  the SSH server's handshake, not an observed account-key rejection.
+- No credentials were entered and no scheduler command reached the cluster.
+
 ## Next safe step
 
 Re-establish a verified SSH handshake to the login node, then immediately read
