@@ -55,5 +55,8 @@ run_candidate formatmix \
 run_candidate bare-canary \
   "$ROOT/models/phase108-bare-canary-20260925/adapters.safetensors" \
   5686ee98e8ed09cd31f3f0228dd4cfec60fd58907090b5ec71372c83571f7da4 21821
+run_candidate corrected-r2-control \
+  "$ROOT/models/phase108-cuda-recovery-scale20-corrected-20260924-r2/adapters.safetensors" \
+  4e9177c3956aaa0c176929e7d8225b9882a2587b4dadad9cb51c04d905453772 21822
 
 echo "public_functional_complete=true job=$SLURM_JOB_ID blind=false production=false tools=[] raw_prompts_saved=false raw_responses_saved=false"
