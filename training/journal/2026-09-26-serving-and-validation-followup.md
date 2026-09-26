@@ -58,6 +58,31 @@ priority/resource availability. A lightweight process check after reconnect
 found no `sha256sum` worker from the interrupted login-node command (the only
 matching `pgrep` line was the inspection shell itself).
 
+## Live serving state re-check
+
+At 2026-09-26 21:43 HKT, a fresh `squeue`/`scontrol` query confirmed job
+`44601` was still `RUNNING` on `a100-3` and job `44615` was still
+`PENDING (Priority)`. The running job's ready manifest identifies its primary
+as `qwen3-14b-bf16`, fallback as `qwen3-1.7b-cpu`, and explicitly records
+`phase108_adapter_loaded=false`. From inside allocation `44601`, live
+`/health` returned both backends healthy and `/v1/models` listed only
+`qwen3-14b-bf16`. This is a bounded, loopback-only general Qwen endpoint, not
+the Phase108 model.
+
+The separate `p108-r2-sandbox` job `44611` completed in 1m02s. Its isolated
+smoke artifacts report `/health` 200, chat 200 with non-empty output, model id
+`phase108-candidate`, adapter scale 20.0, tools rejected with 400, and
+`promotion_eligible=false`. This was a temporary candidate compatibility
+smoke, not a persistent or user-reachable service and not a capability or
+deployment approval.
+
+Therefore, as of this check, the cluster has a running general-model API and a
+previously completed Phase108 sandbox smoke, but no continuously served
+Phase108 API. Do not promote or replace the generic endpoint: fixed validation
+`44615` and the independent blind/regression gates remain outstanding. A
+later SSH retry experienced a banner-exchange timeout; the successful live
+allocation health check above is the most recent authoritative service probe.
+
 ## Private v1.1 suite source preflight
 
 The two private source banks remain gitignored. Aggregate structural inspection
