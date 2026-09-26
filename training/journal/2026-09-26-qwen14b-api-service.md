@@ -61,11 +61,24 @@ diagnostic.
 
 ## Current state
 
-The service script is prepared for synchronization and Slurm submission. No
-service is yet running and no endpoint/tunnel is claimed as available. At the
-latest authoritative cluster query, disk usage was 280G/479G (58.5%); jobs
-44573 and 44593 were pending; 44598 was running on `dell3090`; and the
-A100-40G nodes had active jobs. The next action is to sync the committed
-scripts, verify remote hashes/syntax, and submit this explicitly named
-48-hour API service job. After it starts, verify the actual node, health, both
-routes, and SSH tunnel before handing out a base URL.
+The service scripts are committed and synchronized to the cluster. Remote
+hashes match the local commit:
+
+- `dual_model_api_smoke.py`:
+  `d3d0d93ebfc06174792da6e578e4995584390fda8b8d92be512a771bf40af622`
+- `qwen14b_dual_api_service.sbatch`:
+  `65ede30f4aaac0c754c64de45c029a09856dff6c7cd1734358a5f7c7543c3955`
+
+Remote bash syntax and Python AST checks passed. The named service job was
+submitted as Slurm job `44601`, requesting one A100-40G, 12 CPUs, 64G host RAM,
+and the partition maximum of 48 hours. Authoritative `squeue`/`scontrol` state
+at the latest check is `PENDING (Priority)`, with no assigned node or start
+time. Thus **there is still no running API endpoint and no tunnel to use**.
+
+At that same check, disk usage was 280G/479G (58.5%); job 44593 remained a
+separate pending Phase108 validation; 44573 was another user-owned pending
+job; 44598 was running on `dell3090`; and A100-40G nodes had active jobs. The
+next step is to monitor job 44601, then verify actual startup, non-empty
+primary/fallback responses, JSON/SSE routing and the SSH tunnel before handing
+out a base URL. The current service is a general Qwen base-model endpoint,
+explicitly not the Phase108 specialist candidate.
