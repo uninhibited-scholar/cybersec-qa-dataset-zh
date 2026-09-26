@@ -13,8 +13,8 @@ selection, or promotion gate.
 
 ## Pinned inputs and reproducibility
 
-- Slurm script SHA-256:
-  `c31e5b1c6202cb91f778724b18398dbe738ce2a3efe8439f9679c83511ca58cf`.
+- Final Slurm script SHA-256:
+  `ef2a8a6f9981a59e6144ac82660232a7ea07d98d44a18664c6aa1c507c54a0b9`.
 - Replay client SHA-256:
   `f503bc795cb7ad3dee3d88bf09f7527aec06261ce43a1fb8c966a7f66c59b6f1`.
 - Loopback sandbox API SHA-256:
@@ -25,9 +25,14 @@ selection, or promotion gate.
   `3ed1a85e7b021e14198332a525bfa4bb75b336a03579d526f8210f1576317036`.
 - Corrected-r2 final adapter SHA-256:
   `4e9177c3956aaa0c176929e7d8225b9882a2587b4dadad9cb51c04d905453772`.
-- Base config/index SHA-256 values are pinned in the script and checked before
-  model loading. Each output directory is unique and mode 0700; result files
-  are mode 0600. No production endpoint or model weights are written.
+- Base config/index SHA-256 values are pinned in the script. Base weight shard
+  hashes, previously measured inside a compute allocation, are
+  `25094f7fbaef4769da447cb6ebf4a39d99ccc5043856cce1b4f8fc2f91ed9115` and
+  `a2fd70328fc4fb518bb40ac806e8c05f21ad12e228648684775f67c28104815d`; the
+  script verifies both from inside its Slurm allocation before model loading.
+  Do not hash the multi-GB shards on the login node. Each output directory is
+  unique and mode 0700; result files are mode 0600. No production endpoint or
+  model weights are written.
 - Existing corrected-r2 fixed-validation sweep `44617` remains untouched and
   queued; the diagnostic requests only an idle TITANX allocation.
 
@@ -37,10 +42,14 @@ selection, or promotion gate.
   passed.
 - `python3 -m unittest training.scripts.test_phase108_greedy_exposed_replay
   -v` — 3 tests passed.
-- `git diff --check` — passed.
+- `git diff --check` — passed after the final script edit.
 - Remote pinned server, replay client, sample, and adapter hashes were checked
   at the controller before job submission; all matched the values above.
-- At journal creation, this run has not yet been submitted. Record the
+- At journal creation, this run has not yet been submitted. A first attempt to
+  hash the large base shards from the login node was interrupted after noticing
+  the active process; the child process is confirmed stopped. Reuse the
+  previously recorded hashes above and perform the checks only inside the
+  compute job. Record the
   authoritative Slurm ID, state, elapsed time, output hashes, and aggregate
   result only after the job completes. If the runtime exceeds its 2-hour cap,
   preserve partial logs and report it as a diagnostic failure, not a model
