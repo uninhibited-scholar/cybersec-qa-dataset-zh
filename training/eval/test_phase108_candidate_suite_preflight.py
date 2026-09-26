@@ -21,6 +21,7 @@ def fixture(category, index):
         "artifact_kind": f"artifact-{index % 4}",
         "decision_focus": f"decision-{index % 8}",
         "independence_rationale": "New offline synthetic fixture, separately authored for candidate evaluation.",
+        "scenario_facts": [f"{category}-evidence-atom-{index}", f"{category}-decision-atom-{index}"],
     }
 
 
@@ -78,6 +79,26 @@ def test_preflight_rejects_missing_format_contract(tmp_path):
     result = preflight(path, expected_suite_version="phase108-v1.0")
     assert result["status"] == "fail"
     assert any("missing_format_contract" in error for error in result["errors"])
+
+
+def test_preflight_rejects_reused_fact_atom_even_with_unique_roots(tmp_path):
+    rows = full_source()
+    rows[40]["scenario_facts"][0] = rows[0]["scenario_facts"][0]
+    path = tmp_path / "source.json"
+    path.write_text(json.dumps(rows, ensure_ascii=False))
+    result = preflight(path, expected_suite_version="phase108-v1.0")
+    assert result["status"] == "fail"
+    assert any("scenario_fact_reused_from_" in error for error in result["errors"])
+
+
+def test_preflight_rejects_repeated_fact_inside_case(tmp_path):
+    rows = full_source()
+    rows[0]["scenario_facts"][1] = rows[0]["scenario_facts"][0]
+    path = tmp_path / "source.json"
+    path.write_text(json.dumps(rows, ensure_ascii=False))
+    result = preflight(path, expected_suite_version="phase108-v1.0")
+    assert result["status"] == "fail"
+    assert any("duplicate_scenario_fact_within_case" in error for error in result["errors"])
 
 
 @pytest.mark.parametrize("field", ["must_cover", "must_not_claim"])

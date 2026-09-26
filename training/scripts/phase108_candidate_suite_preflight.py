@@ -25,7 +25,7 @@ EXPECTED = {
 REQUIRED = {
     "category", "prompt", "fixture_id", "must_cover", "must_not_claim",
     "evidence_boundary", "format_contract", "scenario_root_id", "scenario_family", "artifact_kind", "decision_focus",
-    "independence_rationale",
+    "independence_rationale", "scenario_facts",
 }
 
 
@@ -41,6 +41,7 @@ def preflight(path: Path, *, expected_suite_version: str) -> dict:
         return {"status": "fail", "errors": ["source_not_json_list"], "private_text_printed": False}
     counts = Counter()
     fixture_ids, prompts, scenario_roots = set(), set(), set()
+    scenario_fact_index: dict[str, str] = {}
     dimensions: dict[str, dict[str, set[str]]] = defaultdict(lambda: defaultdict(set))
     triplets: set[tuple[str, str, str, str]] = set()
     for index, row in enumerate(rows, 1):
@@ -64,6 +65,20 @@ def preflight(path: Path, *, expected_suite_version: str) -> dict:
             if (not isinstance(values, list) or not values
                     or any(not isinstance(value, str) or not value.strip() for value in values)):
                 errors.append(f"row_{index}:invalid_{key}")
+        facts = row["scenario_facts"]
+        if (not isinstance(facts, list) or len(facts) < 2
+                or any(not isinstance(value, str) or not value.strip() for value in facts)):
+            errors.append(f"row_{index}:invalid_scenario_facts")
+        else:
+            normalized_facts = [normalize(value) for value in facts]
+            if len(set(normalized_facts)) != len(normalized_facts):
+                errors.append(f"row_{index}:duplicate_scenario_fact_within_case")
+            for fact in normalized_facts:
+                previous = scenario_fact_index.get(fact)
+                if previous is not None:
+                    errors.append(f"row_{index}:scenario_fact_reused_from_{previous}")
+                else:
+                    scenario_fact_index[fact] = str(row.get("fixture_id", index))
         if isinstance(row.get("fixture_id"), str):
             if row["fixture_id"] in fixture_ids:
                 errors.append(f"row_{index}:duplicate_fixture_id")
@@ -104,6 +119,7 @@ def preflight(path: Path, *, expected_suite_version: str) -> dict:
         "unique_fixture_ids": len(fixture_ids),
         "unique_normalized_prompts": len(prompts),
         "unique_scenario_roots": len(scenario_roots),
+        "unique_scenario_fact_atoms": len(scenario_fact_index),
         "diversity": {category: {name: len(values) for name, values in sorted(dimensions[category].items())}
                       for category in sorted(EXPECTED)},
         "error_count": len(errors),
@@ -112,6 +128,7 @@ def preflight(path: Path, *, expected_suite_version: str) -> dict:
         "limitations": [
             "Structural diversity is not a semantic-duplicate proof.",
             "Scenario-root IDs are author-supplied identifiers; uniqueness does not prove the underlying scenarios are distinct.",
+            "Exact scenario_facts atom reuse is rejected, but authors can still disguise reused facts with paraphrases or dishonest atom labels.",
             "A clean scan cannot prove absence of pretraining contamination.",
             "A passed source remains draft until independent review freezes its hashes.",
         ],

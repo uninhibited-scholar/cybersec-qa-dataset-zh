@@ -62,3 +62,30 @@ independent review and contamination gates above remain mandatory.
 - At this follow-up, the cluster hostname did not resolve and the previously
   recorded controller IP closed SSH. No job status or output could be verified;
   no model or evaluation job was started, and no remote artifact was copied.
+
+## Follow-up: cross-case scenario-fact atom gate — 2026-09-26
+
+Two independent reviewers separately audited the benchmark specification and
+the structural preflight design. Both emphasized that globally unique IDs,
+scenario-root labels, family labels, or category-specific wording can still
+hide a repeated underlying incident. They also identified a multi-turn risk:
+reusing a motif in either turn, or reversing a reused pair, does not create a
+new independent root. Their reviews did not inspect model outputs or scores.
+
+Added a required `scenario_facts` list to proposed source rows. The preflight
+now requires at least two nonblank fact atoms per case and rejects exact
+normalized atom reuse both within a case and across the full suite, including
+across categories. Its aggregate report records the number of unique atoms.
+The rejected v0.3 builder test now explicitly proves that fake category-level
+diversity cannot hide its 40 reused incident motifs from this gate.
+
+This is a narrow exact-atom screen, not semantic validation: paraphrased or
+dishonestly labeled atoms can evade it. A full independent scenario-family
+review and lexical/overlap scans remain mandatory; no existing draft becomes
+eligible because of this change. No prompts were sent to a model, no evaluation
+was scored, and production, adapter weights, rubric, protocol, and permissions
+remain unchanged.
+
+- Regression command: `python3 -m pytest -q training/eval/test_phase108_candidate_suite_preflight.py training/eval/test_build_phase108_private_source.py training/scripts/test_phase108_scale_candidate_preflight.py`
+- Result: 12 passed (Python 3.14 emitted only the existing Pydantic compatibility warning).
+- `git diff --check`: clean.
