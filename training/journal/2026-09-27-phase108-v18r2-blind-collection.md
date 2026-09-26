@@ -90,3 +90,11 @@ to a separate job-specific file and prints a start marker plus a failing line
 number; this is observability-only. The job did not touch model weights,
 production, evaluation standards, or tools. Any retry uses a new job ID and a
 new output directory; the failed job is retained in SLURM accounting.
+
+The next diagnostic attempt (`44797`) also failed immediately with exit `1:0`.
+It wrote the wrapper-start marker but no stdout/stderr after that; its unique
+result directory was absent, confirming no model collection started. Hash
+checks and `bash -n` passed on the controller, so the wrapper now emits each
+successful hash and explicit failure context to distinguish a compute-node
+filesystem/preflight issue from Python/GPU execution. This failure remains
+infrastructure-only evidence.

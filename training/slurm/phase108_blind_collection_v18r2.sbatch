@@ -37,8 +37,20 @@ EXPECTED_LOADER_SHA=00ef5d3b1aaada8285b711a68f47c9e00a4fb9dbbd993e8eaf8eefd7426f
 EXPECTED_TEST_SHA=f3003eaf0d64e0d7a33f4b57407af150acfa839e0c00eaba79598a22924d7161
 
 check_hash() {
-  test -r "$1"
-  test "$(sha256sum "$1" | awk '{print $1}')" = "$2"
+  local path="$1" expected="$2" actual
+  if [[ ! -r "$path" ]]; then
+    echo "preflight_missing_file=$path" >&2
+    return 1
+  fi
+  actual=$(sha256sum "$path" | awk '{print $1}') || {
+    echo "preflight_hash_command_failed=$path" >&2
+    return 1
+  }
+  if [[ "$actual" != "$expected" ]]; then
+    echo "preflight_hash_mismatch=$path expected=$expected actual=$actual" >&2
+    return 1
+  fi
+  echo "preflight_hash_verified=${path##*/}"
 }
 
 check_hash "$CASES" "$EXPECTED_CASES_SHA"
@@ -48,12 +60,17 @@ check_hash "$CANDIDATE" "$EXPECTED_CANDIDATE_SHA"
 check_hash "$SCRIPT" "$EXPECTED_COLLECTOR_SHA"
 check_hash "$LOADER" "$EXPECTED_LOADER_SHA"
 check_hash "$TESTS" "$EXPECTED_TEST_SHA"
-test -r "$BASE/config.json"
-test -r "$BASE/model.safetensors.index.json"
-test -r "$SCRIPT"
-test -r "$LOADER"
-test ! -e "$RUN_DIR"
-mkdir -m 700 "$RUN_DIR"
+for required in "$BASE/config.json" "$BASE/model.safetensors.index.json" "$SCRIPT" "$LOADER"; do
+  if [[ ! -r "$required" ]]; then
+    echo "preflight_missing_file=$required" >&2
+    exit 1
+  fi
+done
+if [[ -e "$RUN_DIR" ]]; then
+  echo "preflight_output_path_exists=$RUN_DIR" >&2
+  exit 1
+fi
+mkdir -m 700 "$RUN_DIR" || { echo "preflight_mkdir_failed=$RUN_DIR" >&2; exit 1; }
 echo "hash_preflight_complete run_dir=$RUN_DIR"
 
 export PYTHONPATH="$ROOT/data/training${PYTHONPATH:+:$PYTHONPATH}"
