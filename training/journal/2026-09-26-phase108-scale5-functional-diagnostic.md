@@ -45,6 +45,14 @@ storing response text.
   its authoritative Slurm ID, elapsed time, and aggregate result here. Do not
   adjust adapter scale or claim specialist capability from this diagnostic.
 
+- Submission `44609` loaded the sandbox but failed before sending any requests:
+  the expected-ID list in the replay client had two adjacent sample IDs in the
+  wrong order. The pinned suite hash was correct, and the selected ID *set*
+  matches the earlier exposed sample. No model output or inference result was
+  produced. The expected ordering is corrected to match the existing
+  44550 metadata; the job will be resubmitted only after the pinned
+  hash-and-ID preflight passes on the compute host.
+
 ## Interpretation boundary
 
 This can establish whether the immediate-empty symptom persists at scale 5

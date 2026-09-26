@@ -30,8 +30,8 @@ EXPECTED_CASE_IDS = [
     "p108v9-multiturn-002",
     "p108v9-detection_remediation-003",
     "p108v9-tool_honesty-025",
-    "p108v9-vulnerability_analysis-005",
     "p108v9-code_review-016",
+    "p108v9-vulnerability_analysis-005",
     "p108v9-code_review-032",
 ]
 
