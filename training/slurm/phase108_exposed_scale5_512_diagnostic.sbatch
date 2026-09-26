@@ -23,6 +23,8 @@ CASES_SHA=9a4d398893034b922cc67582089642c553733c856ab2812088b398a2546fbb6b
 SERVER_SHA=df1484bd0b01ee72e3b41dbb2a7ceda7b384d1e08f99239ffde68357338f83f7
 BASE_CONFIG_SHA=260a51b7a10e45b682d6f4b3535b6fca3a7e42e1e55361c177e2c9f3ade27650
 BASE_INDEX_SHA=5e699a61da09415f33a625885364d3889a80acb6ab88aedaf6e195b2612addf4
+BASE_SHARD1_SHA=25094f7fbaef4769da447cb6ebf4a39d99ccc5043856cce1b4f8fc2f91ed9115
+BASE_SHARD2_SHA=a2fd70328fc4fb518bb40ac806e8c05f21ad12e228648684775f67c28104815d
 REPLAY_SHA=f503bc795cb7ad3dee3d88bf09f7527aec06261ce43a1fb8c966a7f66c59b6f1
 PARENT="$ROOT/models/phase108-step12000-20260920/0012000_adapters.safetensors"
 R2="$ROOT/models/phase108-cuda-recovery-scale20-corrected-20260924-r2/adapters.safetensors"
@@ -30,6 +32,8 @@ PARENT_SHA=3ed1a85e7b021e14198332a525bfa4bb75b336a03579d526f8210f1576317036
 R2_SHA=4e9177c3956aaa0c176929e7d8225b9882a2587b4dadad9cb51c04d905453772
 
 for path in "$BASE/config.json" "$BASE/model.safetensors.index.json" "$SERVER" "$REPLAY" "$CASES" "$PARENT" "$R2"; do test -r "$path"; done
+test "$(sha256sum "$BASE/model-00001-of-00002.safetensors" | awk '{print $1}')" = "$BASE_SHARD1_SHA"
+test "$(sha256sum "$BASE/model-00002-of-00002.safetensors" | awk '{print $1}')" = "$BASE_SHARD2_SHA"
 test "$(sha256sum "$CASES" | awk '{print $1}')" = "$CASES_SHA"
 test "$(sha256sum "$SERVER" | awk '{print $1}')" = "$SERVER_SHA"
 test "$(sha256sum "$REPLAY" | awk '{print $1}')" = "$REPLAY_SHA"
