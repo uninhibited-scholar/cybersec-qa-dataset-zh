@@ -125,6 +125,54 @@ not a hosted API service; no candidate server or production service was
 started, and production API/adapter, rubric, protocol, and permissions remain
 unchanged.
 
+## Same-runtime replay of exposed v0.9 failure cases — 2026-09-26
+
+To distinguish a final-checkpoint/runtime issue from the old intermediate
+formatmix result, replayed the same 16 already-exposed v0.9 diagnostic cases
+against the **final** formatmix and bare-canary adapters in one Slurm job,
+same NVIDIA TITAN V/FP16 node, same scale 20, base, API wrapper, and request
+settings. The v0.9 source SHA was pinned to
+`9a4d398893034b922cc67582089642c553733c856ab2812088b398a2546fbb6b`, and the
+replay runner checked the deterministic selected IDs against the known
+previously exposed sample before inference. This is expressly not blind
+evaluation or a capability score.
+
+Job `44595` completed `COMPLETED`, exit `0`, elapsed `00:03:16`. Both isolated
+servers loaded 28 adapter projections, bound only to loopback, and were
+terminated with the batch job. Final weights matched their pinned hashes:
+
+- formatmix final SHA-256
+  `3c87564c97b003990242b988c72cd8c76a9ccf0f8bfbf1058a106f53e26ef461`:
+  **1/16 non-empty, 15/16 empty**; per-case metadata SHA-256
+  `ef39c8a5296cb6128336ccf7a9c25af2f27acc2e147fc3bd11e9ada172ab50c4`;
+  aggregate summary SHA-256
+  `b21c5d0cf8ed3b37a7aa6c7cf1787f09b53e03d6d72aa3daaa9e49318a43a611`.
+- bare-canary final SHA-256
+  `5686ee98e8ed09cd31f3f0228dd4cfec60fd58907090b5ec71372c83571f7da4`:
+  **0/16 non-empty, 16/16 empty**; per-case metadata SHA-256
+  `3e66d3700274929cdf6881c2188f6efc886a2bd31afc661badf28d97415ac135`;
+  aggregate summary SHA-256
+  `59b475db7e3ad803e7e2ba537f938e020c6bab987eb6f3bfef387327c5b821bb`.
+
+Only aggregate JSON summaries are copied into
+`training/journal/phase108-exposed-replay-44595/`; per-case metadata remains
+on the cluster and contains no answer text, while raw prompts/answers were
+not saved. Client SHA-256 is
+`c4b3744cb951f24c3d51fe087c8fb36b8953e8d7391baf3862967a56508118ea`, server
+SHA-256 is
+`df1484bd0b01ee72e3b41dbb2a7ceda7b384d1e08f99239ffde68357338f83f7`, and
+job-script SHA-256 is
+`30948c7fb49d85a9ea027d3fca2fdf7cf4797d89ff35c68e8068db1c4d934daf`.
+
+This confirms a severe functional failure signal on the previously exposed
+sample for both final artifacts under a matched runtime. It does not prove
+general failure on all inputs, identify the root cause, or substitute for a
+fresh frozen holdout. Neither candidate is eligible for promotion or a
+persistent service on this evidence. Corrected-r2 and production remain
+unchanged; validation/rubric/protocol, tool permissions, and private suite
+were not altered. The separate A100 fixed-validation job `44593` remains
+pending and is still needed for its two final adapter loss/provenance records.
+
 ## Isolated candidate API function smoke — 2026-09-26
 
 The existing candidate-server draft pointed at a stale step-7000 artifact and
