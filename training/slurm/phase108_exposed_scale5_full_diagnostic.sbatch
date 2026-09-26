@@ -15,7 +15,7 @@ umask 077
 ROOT=/data3/ieug25/zj225/cyber-model-migration
 PYTHON=/data3/ieug25/zj225/miniforge3/envs/coevo/bin/python
 BASE="$ROOT/models/base-phase3-dequantized"
-SERVER="$ROOT/data/training/phase108_candidate_sandbox_api.py"
+SERVER="$ROOT/data/training/phase108_candidate_sandbox_api_scale_diag.py"
 REPLAY="$ROOT/data/training/phase108_greedy_exposed_replay.py"
 CASES="$ROOT/data/phase108-eval-private-v09/phase108-private-cases-v0.9.json"
 RUN_DIR="$ROOT/results/phase108-exposed-scale5-$SLURM_JOB_ID"

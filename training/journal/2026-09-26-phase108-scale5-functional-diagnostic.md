@@ -34,10 +34,16 @@ storing response text.
 - Focused unit tests: 3 passed. Python bytecode compilation and `bash -n`
   passed. Remote input ID selection was checked against the exact pinned suite
   hash before dispatch.
-- Job has not yet been submitted as of this entry. After commit and exact
-  remote hash verification, submit once; record its authoritative Slurm ID,
-  elapsed time, and aggregate result here. Do not adjust adapter scale or
-  claim specialist capability from this diagnostic.
+- The initial submission (`44608`) failed closed in one second before model
+  loading. Its pinned server hash was `df1484bd...`, while the existing remote
+  generic server had changed to `fbae10cc...` and now requires BF16/CUDA. Slurm
+  accounting shows no GPU in `AllocTRES`; the output log was empty. This was a
+  server-provenance preflight mismatch, not an inference result. The retry uses
+  a distinct remote filename for the exact locally pinned, hardware-aware
+  server rather than overwriting the newer shared remote server. After exact
+  code/input hash verification, submit one bounded diagnostic job and record
+  its authoritative Slurm ID, elapsed time, and aggregate result here. Do not
+  adjust adapter scale or claim specialist capability from this diagnostic.
 
 ## Interpretation boundary
 
