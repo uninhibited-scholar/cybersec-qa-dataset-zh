@@ -57,3 +57,27 @@ hashes matched. The launcher has **not** been synchronized or submitted:
 SSH to the cluster controller currently closes before key exchange, so no
 claim is made about its remote copy or runtime. It must be hash-verified on
 the cluster before submission.
+
+## Corrected-r2 sandbox smoke — Slurm job 44611
+
+The hash-pinned launcher and uniquely named server/client were synchronized
+without overwriting the older remote server. All remote server, loader, smoke
+client, launcher, base-config, base-index, and corrected-r2 adapter hashes
+matched the expected values before launch. The adapter was re-hashed after
+inference and still matched.
+
+Authoritative `sacct` reports job 44611 `COMPLETED`, exit code `0:0`, elapsed
+`00:01:02`, node `dell3090`. The metadata-only result reports health HTTP 200,
+model discovery HTTP 200, one benign completion HTTP 200 with non-empty text
+(54 characters, finish `stop`, scale 20), and tool request HTTP 400 rejected.
+The smoke result SHA-256 is
+`c220d1b6d49f87971fdb41c3391b8a5d3cd2b96bc08b3e244bc62f5f998fda82`.
+The result is archived separately at
+`training/journal/phase108-corrected-r2-sandbox-smoke-44611.json`.
+
+This is only a serving-compatibility and one-prompt functional smoke. It does
+not assess answer correctness, the known exposed-suite empty-output cases,
+general capability, blind-suite performance, or promotion eligibility. The
+Slurm allocation ended and no sandbox API process remained. Production
+service/adapter, rubric/protocol, permissions, and candidate weights were not
+changed.
