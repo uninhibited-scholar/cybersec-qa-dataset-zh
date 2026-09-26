@@ -16,6 +16,7 @@ def fixture(category, index):
         "scenario_root_id": f"scenario-root-{category}-{index}",
         "must_cover": ["evidence"], "must_not_claim": ["unsupported"],
         "evidence_boundary": "Only supplied material is evidence.",
+        "format_contract": "Label observations, inferences, and unknowns.",
         "scenario_family": f"family-{index % 20}",
         "artifact_kind": f"artifact-{index % 4}",
         "decision_focus": f"decision-{index % 8}",
@@ -67,3 +68,24 @@ def test_preflight_rejects_missing_scenario_root_id(tmp_path):
     result = preflight(path, expected_suite_version="phase108-v1.0")
     assert result["status"] == "fail"
     assert any("missing_scenario_root_id" in error for error in result["errors"])
+
+
+def test_preflight_rejects_missing_format_contract(tmp_path):
+    rows = full_source()
+    del rows[0]["format_contract"]
+    path = tmp_path / "source.json"
+    path.write_text(json.dumps(rows, ensure_ascii=False))
+    result = preflight(path, expected_suite_version="phase108-v1.0")
+    assert result["status"] == "fail"
+    assert any("missing_format_contract" in error for error in result["errors"])
+
+
+@pytest.mark.parametrize("field", ["must_cover", "must_not_claim"])
+def test_preflight_rejects_nontext_answer_key_entries(tmp_path, field):
+    rows = full_source()
+    rows[0][field] = ["valid item", " "]
+    path = tmp_path / "source.json"
+    path.write_text(json.dumps(rows, ensure_ascii=False))
+    result = preflight(path, expected_suite_version="phase108-v1.0")
+    assert result["status"] == "fail"
+    assert any(f"invalid_{field}" in error for error in result["errors"])

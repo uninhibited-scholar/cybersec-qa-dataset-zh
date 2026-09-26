@@ -24,7 +24,7 @@ EXPECTED = {
 }
 REQUIRED = {
     "category", "prompt", "fixture_id", "must_cover", "must_not_claim",
-    "evidence_boundary", "scenario_root_id", "scenario_family", "artifact_kind", "decision_focus",
+    "evidence_boundary", "format_contract", "scenario_root_id", "scenario_family", "artifact_kind", "decision_focus",
     "independence_rationale",
 }
 
@@ -56,11 +56,14 @@ def preflight(path: Path, *, expected_suite_version: str) -> dict:
             errors.append(f"row_{index}:unknown_category")
             continue
         counts[category] += 1
-        for key in ("fixture_id", "prompt", "scenario_root_id", "scenario_family", "artifact_kind", "decision_focus", "independence_rationale"):
+        for key in ("fixture_id", "prompt", "evidence_boundary", "format_contract", "scenario_root_id", "scenario_family", "artifact_kind", "decision_focus", "independence_rationale"):
             if not isinstance(row[key], str) or not row[key].strip():
                 errors.append(f"row_{index}:invalid_{key}")
-        if not all(isinstance(row[key], list) and row[key] for key in ("must_cover", "must_not_claim")):
-            errors.append(f"row_{index}:invalid_answer_key_lists")
+        for key in ("must_cover", "must_not_claim"):
+            values = row[key]
+            if (not isinstance(values, list) or not values
+                    or any(not isinstance(value, str) or not value.strip() for value in values)):
+                errors.append(f"row_{index}:invalid_{key}")
         if isinstance(row.get("fixture_id"), str):
             if row["fixture_id"] in fixture_ids:
                 errors.append(f"row_{index}:duplicate_fixture_id")

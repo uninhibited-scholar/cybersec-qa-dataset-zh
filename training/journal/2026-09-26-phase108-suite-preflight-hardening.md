@@ -46,3 +46,19 @@ builder's output, as intended. The v0.3 draft already has a separate rejection
 record for semantic near-duplicates. Do not patch it with per-row IDs: a
 replacement authoring pipeline must derive root identity from the underlying
 scenario and fail when the same scenario is reused across categories.
+
+## Follow-up: answer-key contract validation
+
+An additional schema audit found that the v0.3 benchmark specification
+requires a per-case `format_contract`, but this structural preflight did not
+require or validate that field. It also accepted non-string/blank entries in
+`must_cover` and `must_not_claim`. The preflight now rejects those omissions
+and malformed entries. This does not establish semantic freshness; the
+independent review and contamination gates above remain mandatory.
+
+- Regression command: `python3 -m pytest -q training/eval/test_build_phase108_private_source.py training/eval/test_phase108_candidate_suite_preflight.py training/scripts/test_phase108_scale_candidate_preflight.py`
+- Result: 10 passed.
+- `git diff --check`: clean.
+- At this follow-up, the cluster hostname did not resolve and the previously
+  recorded controller IP closed SSH. No job status or output could be verified;
+  no model or evaluation job was started, and no remote artifact was copied.
