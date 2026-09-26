@@ -83,24 +83,48 @@ Phase108 API. Do not promote or replace the generic endpoint: fixed validation
 later SSH retry experienced a banner-exchange timeout; the successful live
 allocation health check above is the most recent authoritative service probe.
 
+## Fixed-validation target mismatch found before using the queued result
+
+At 2026-09-26 21:49 HKT, the scheduler still showed `44615` pending on
+`GPU-LARGE`, estimated start 2026-09-28 09:05. Code inspection found that the
+local source corresponding to its remote script name
+(`phase108_followup_fixed_validation_19ad85d.sbatch`) evaluates the
+`phase108-formatmix-20260925` and `phase108-bare-canary-20260925` candidates;
+it does not evaluate the scale-corrected r2 adapter. The remote script hash has
+not yet been freshly checked, so treat this as a target-mismatch warning until
+connectivity permits that comparison.
+
+The exact corrected-r2 final adapter is pinned elsewhere as SHA-256
+`4e9177c3956aaa0c176929e7d8225b9882a2587b4dadad9cb51c04d905453772`. The
+existing local `phase108_corrected_r2_validation_sweep.sbatch` covers its
+numbered checkpoints and final adapter, checks the frozen validation hash,
+scale provenance, and candidate hashes, and does not read train/test splits.
+Its local SHA-256 is `f36576bf1711121ca81de6f6ce25e2f8b49de15870de1ee4e1c41662151a62c0`;
+`bash -n` and six focused scale/preflight/API-wrapper unit tests passed locally.
+
+SSH then failed first at name resolution and then by connection close to the
+known controller IP. No cluster job was cancelled or submitted as a result.
+Next step: re-check `44615` authoritatively; if still pending, verify the
+remote script/assets, cancel only that obsolete pending job, and submit the
+hash-pinned corrected-r2 validation sweep if scheduler/quota policy permits.
+Do not mistake `44615`'s eventual completion for corrected-r2 validation.
+
 ## Private v1.1 suite source preflight
 
-The two private source banks remain gitignored. Aggregate structural inspection
-confirmed 320 rows and 40 rows in each of the eight target categories. The
-packer correctly rejected the suite before creating cases or keys: 153/160
-prompts in source bank A are shorter than its 60-character minimum (33
-vulnerability-analysis rows and all 40 rows in each of the other three A
-categories); source bank B has zero short prompts. Fact-set cardinality,
-multiturn role pattern, and the category/family/artifact/decision uniqueness
-check did not show violations in this inspection. The builder created no
-partial output. This is a draft-quality failure, not a benchmark result; source
-A is being revised and independently reviewed. No model was queried.
+The two private v1.1 source banks remain gitignored; no generated cases/keys
+exist and no model has seen the latest banks. Current source A SHA-256 is
+`eb36aceb11eb473160083bb67139f5d34b0a3995335d699d492c52efb047fb5c`; source B
+SHA-256 is `233e746e16902d6898275095320cb93243ebea7155945e5295e9006e05673570`.
+Aggregate counts are 320 rows total, 40 in each of the eight target categories.
 
-The independent semantic review of source A rejected all 160 rows: 160 were
-underspecified and shared templated framing, despite the minimum-length fix.
-Therefore source A is being replaced with case-specific scenarios rather than
-accepted by length alone. Source B was structurally normalized by removing the
-`messages` field from its 120 non-multiturn rows; its structural checks now
-pass (40/category, required fields and IDs present, prompt minimum met), but it
-still awaits independent semantic review. Neither bank is frozen and no model
-has seen these cases.
+The latest independent review of A passed 160/160 rows: prompts and scenario
+roots are unique, all 480 fact atoms are represented, and the reviewer found
+no copy artefacts, near-duplicates, underspecification, or safety failures. A
+visible shared frame remains but was assessed as non-disqualifying given the
+case-specific permutations. The independent review of B found 0
+underspecified rows, 0 safety failures, and 0 confirmed cross-stratum
+duplicates, but flagged repeated category scaffolding, four near-duplicate
+tool-honesty pairs, and three evidence-boundary prompt/fact alignment checks.
+Those B issues remain unresolved; neither bank is frozen. The previous
+short-prompt rejection applied to a superseded A draft and must not be reported
+as the status of the current A file.
