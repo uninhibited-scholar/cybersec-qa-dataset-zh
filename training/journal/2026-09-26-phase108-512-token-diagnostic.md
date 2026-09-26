@@ -49,8 +49,15 @@ selection, or promotion gate.
   (280G / 479G, 58.5%) were checked. It started on `titanv1` at 22:50:48 HKT
   with a two-hour limit. The remote copy of the script has the exact SHA above;
   `bash -n` and the remote sample-hash preflight passed. At 22:52 HKT it had
-  loaded the base and started its first arm; no aggregate output was complete
-  yet. Slurm log path:
+  loaded the base and started its first arm. By 23:00:37 HKT, the base-control
+  arm had completed all 16 requests: 0 empty, 15 ended at the 512-token limit,
+  and 1 ended naturally. Aggregate summary SHA-256:
+  `0a39b422161cfcebd1240e285a339d9735b41538ee975668109dd74e56374793`.
+  It pins the exposed fixture, base metadata, adapter, server, client, and job
+  script hashes and states `blind=false`, `capability_score=false`, and
+  `promotion_eligible=false`. This only shows that the unadapted baseline is
+  mostly still generating at 512 tokens on these exposed cases; it says
+  nothing about answer correctness or candidate quality. Slurm log path:
   `logs/phase108-scale5-512diag-44624.log`; unique output directory:
   `results/phase108-exposed-scale5-512diag-44624/`.
 - A manual attempt to hash base shards on the login node was stopped as soon
