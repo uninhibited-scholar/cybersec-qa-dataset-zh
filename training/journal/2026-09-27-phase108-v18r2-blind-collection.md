@@ -62,12 +62,12 @@ Git after the job is verified.
 - Collector: `training/scripts/phase108_blind_collection_v18r2.py`.
 - SLURM wrapper: `training/slurm/phase108_blind_collection_v18r2.sbatch`.
 - Unit tests cover recent-window repetition handling, hiding unclosed
-  reasoning, and tool-marker detection; run in the cluster `coevo` environment
-  before dispatch.
+  reasoning, tool-marker detection, and safe output-directory lifecycle; run
+  in the cluster `coevo` environment before dispatch.
 - Chosen resource: an idle `GPU-TITANX` compute node through SLURM; no model
   inference runs on the login node. Output path is unique per job ID and mode
   0700. The active general Qwen service job is not modified.
-- Cluster copies matched local hashes: collector
+- Cluster copies matched local hashes (before the output-dir fix below): collector
   `8ce85906bd41c097ca9c8a2296bdb73f43ee2a468640a54be1506a66c5788c6e`, tests
   `f3003eaf0d64e0d7a33f4b57407af150acfa839e0c00eaba79598a22924d7161`, SLURM
   wrapper `45f45edd874d5c8b7fdbb27acf13787a26063a8f0fbc01e1e596d5dcc438c0ca`,
@@ -86,10 +86,17 @@ result exists yet.
 
 Correction verified; the exact pinned inputs and three synthetic-token unit
 tests passed on the cluster. SLURM job `44799` started on `titanv1` at
-2026-09-27 02:18:40 HKT. All seven content/script hashes passed in the compute
-wrapper; its mode-0700 result directory is
-`results/phase108-v18r2-blind-44799`. At the latest check it was still
-`RUNNING`; no response collection aggregate exists yet.
+2026-09-27 02:18:40 HKT. All seven content/script hashes passed, but the job
+then failed before model loading because the wrapper created the unique output
+directory before invoking a collector that correctly refuses to reuse any
+existing directory. No inference was performed and the failure is not model
+behavior. The wrapper no longer pre-creates that directory; the collector
+atomically creates it with mode 0700. A fourth unit test now covers private
+directory creation and refusal to reuse a path. Updated hashes are collector
+`9a1efefb3f02080e459ffbf6ec8f9052129b4595f0061e104ea6cc007f9d2a64`, tests
+`47b1ecd859e14627801f7e7a7120005be9d2d8af946961a60df07b52c135c80b`, and
+SLURM wrapper `9599873ebaaf53b44d2d850ff49170f2de3950c574f6d38a4864d966ddc4fe30`.
+They need cluster-side re-verification before a fresh submission.
 
 ## Dispatch failures and corrected hash pin
 

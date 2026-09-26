@@ -59,6 +59,11 @@ def sha256_file(path: Path) -> str:
     return h.hexdigest()
 
 
+def create_private_output_dir(path: Path) -> None:
+    """Atomically claim a new private directory; never reuse partial output."""
+    path.mkdir(mode=0o700, parents=True, exist_ok=False)
+
+
 class RecentWindowRepetitionPenalty(LogitsProcessor):
     def __init__(self, prompt_length: int, window: int, penalty: float):
         self.prompt_length = prompt_length
@@ -119,9 +124,7 @@ def main() -> None:
     parser.add_argument("--output-dir", type=Path, required=True)
     args = parser.parse_args()
 
-    if args.output_dir.exists():
-        raise SystemExit("output directory must be new; refusing overwrite")
-    args.output_dir.mkdir(mode=0o700, parents=True)
+    create_private_output_dir(args.output_dir)
     cases_raw = args.cases.read_bytes()
     freeze_raw = args.freeze.read_bytes()
     parent_sha = sha256_file(args.parent_adapter)

@@ -1,10 +1,14 @@
 from __future__ import annotations
 
 import unittest
+from pathlib import Path
+import tempfile
 
 import torch
 
-from phase108_blind_collection_v18r2 import RecentWindowRepetitionPenalty, visible_answer
+from phase108_blind_collection_v18r2 import (
+    RecentWindowRepetitionPenalty, create_private_output_dir, visible_answer,
+)
 
 
 class DummyTokenizer:
@@ -19,6 +23,14 @@ class DummyTokenizer:
 
 
 class BlindCollectionTests(unittest.TestCase):
+    def test_output_directory_is_private_and_not_reused(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            target = Path(temp_dir) / "run"
+            create_private_output_dir(target)
+            self.assertEqual(target.stat().st_mode & 0o777, 0o700)
+            with self.assertRaises(FileExistsError):
+                create_private_output_dir(target)
+
     def test_repetition_penalty_uses_only_recent_generated_window(self):
         processor = RecentWindowRepetitionPenalty(prompt_length=2, window=1, penalty=1.12)
         input_ids = torch.tensor([[7, 8, 21, 22]])

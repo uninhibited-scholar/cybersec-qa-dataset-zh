@@ -32,9 +32,9 @@ EXPECTED_CASES_SHA=c028b564d2273fc6779f248918511fa2bff0fe73abc4c7bb4ab6051ecc3b9
 EXPECTED_FREEZE_SHA=1dd603084fe3f026954ead8cb55004514b1c5b43a3b3219b0b10b0489ac0d5bf
 EXPECTED_PARENT_SHA=3ed1a85e7b021e14198332a525bfa4bb75b336a03579d526f8210f1576317036
 EXPECTED_CANDIDATE_SHA=4e9177c3956aaa0c176929e7d8225b9882a2587b4dadad9cb51c04d905453772
-EXPECTED_COLLECTOR_SHA=8ce85906bd41c097ca9c8a2296bdb73f43ee2a468640a54be1506a66c5788c6e
+EXPECTED_COLLECTOR_SHA=9a1efefb3f02080e459ffbf6ec8f9052129b4595f0061e104ea6cc007f9d2a64
 EXPECTED_LOADER_SHA=00ef5d3b1aaada8285b711a68f47c9e00a4fb9dbbd993e8eaf8eefd7426fa371
-EXPECTED_TEST_SHA=f3003eaf0d64e0d7a33f4b57407af150acfa839e0c00eaba79598a22924d7161
+EXPECTED_TEST_SHA=47b1ecd859e14627801f7e7a7120005be9d2d8af946961a60df07b52c135c80b
 
 check_hash() {
   local path="$1" expected="$2" actual
@@ -70,8 +70,7 @@ if [[ -e "$RUN_DIR" ]]; then
   echo "preflight_output_path_exists=$RUN_DIR" >&2
   exit 1
 fi
-mkdir -m 700 "$RUN_DIR" || { echo "preflight_mkdir_failed=$RUN_DIR" >&2; exit 1; }
-echo "hash_preflight_complete run_dir=$RUN_DIR"
+echo "hash_preflight_complete; output directory will be created privately by collector: $RUN_DIR"
 
 export PYTHONPATH="$ROOT/data/training${PYTHONPATH:+:$PYTHONPATH}"
 cd "$ROOT/data/training"
