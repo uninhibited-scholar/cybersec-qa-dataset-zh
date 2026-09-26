@@ -51,6 +51,13 @@ Phase108 fixed-validation job was present before submission. The existing local
 heartbeat was updated to monitor job `44615` and verify provenance/results;
 no blind evaluation or deployment was launched.
 
+At the next scheduler check, job `44615` remained `PENDING (Priority)` with no
+allocation; `squeue --start` estimated `2026-09-28T09:05:00` (cluster-reported
+time). The 2-hour A100 request is not misconfigured; the delay is scheduler
+priority/resource availability. A lightweight process check after reconnect
+found no `sha256sum` worker from the interrupted login-node command (the only
+matching `pgrep` line was the inspection shell itself).
+
 ## Private v1.1 suite source preflight
 
 The two private source banks remain gitignored. Aggregate structural inspection
