@@ -120,3 +120,22 @@ The historical candidate manifest does not include a training-script hash,
 so it is not fully reproducible from that manifest alone. The run-start log
 and source file do verify the source path/hash; the provenance gap is retained
 as a limitation rather than silently repaired retroactively.
+
+## Revalidation before fresh dispatch (2026-09-27)
+
+The local working tree still has unrelated user changes and untracked Phase108
+artifacts; this journal entry and the already-committed collector changes are
+kept separate from them. Current local checks reconfirmed the collector, test,
+and SLURM wrapper hashes listed above, and `bash -n` passed on the wrapper.
+The local macOS Python 3.14 environment lacks PyTorch, so its unit-test run
+could not import `torch`; this is an environment limitation, not a test result.
+The updated four-test suite therefore still needs to run in the cluster's
+`coevo` environment before a new SLURM submission.
+
+Cluster access could not be re-established from this session: the configured
+cluster hostname did not resolve, and the previously known internal address
+accepted TCP but closed the SSH connection during key exchange, before account
+authentication. No authoritative current SLURM queue/accounting state was
+obtained. No files were synchronized and no job was submitted in this check;
+the next action is to restore the laptop's campus VPN/DNS path, then verify
+cluster-side hashes/tests and queue state before submitting one fresh run.
