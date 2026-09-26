@@ -22,7 +22,10 @@ class BlindCollectionTests(unittest.TestCase):
     def test_repetition_penalty_uses_only_recent_generated_window(self):
         processor = RecentWindowRepetitionPenalty(prompt_length=2, window=1, penalty=1.12)
         input_ids = torch.tensor([[7, 8, 21, 22]])
-        scores = torch.tensor([[0.0, -2.0, 2.0, 3.0, -4.0]])
+        scores = torch.zeros((1, 32), dtype=torch.float32)
+        scores[0, 8] = -2.0
+        scores[0, 21] = 2.0
+        scores[0, 22] = 2.0
         result = processor(input_ids, scores.clone())
         self.assertAlmostEqual(float(result[0, 22]), 2.0 / 1.12, places=5)
         self.assertAlmostEqual(float(result[0, 21]), 2.0, places=5)

@@ -28,6 +28,9 @@ protocol; its SHA is `8ece8f47d1fcdca21bdcc8174539ad29182bbaaaf3eb7b303d5536aaaf
 - Candidate trained for 7,621 steps from the parent adapter; frozen validation
   on 1,089 rows reported loss 1.7062584871 vs parent 1.7362299831. This is
   loss/checkpoint-selection evidence only, not a user-visible capability claim.
+- Candidate manifest SHA `e60ae88a3f491ed94b13f9e26ef0892e5986c838f69dff2fcbf8714185a29636`
+  records 19,621 train rows, 7,621 steps, LR `5e-6`, rank 8, MLX scale 20,
+  PEFT alpha/effective scale 160/20, and `test_split_read=false`.
 - Train-only exact contamination scan: 19,621 training rows, 0 exact overlaps,
   0 parse errors/unrecognized rows; audit SHA
   `f9b9b8d8d3032dae0b6471da54cc86a076fd8c76b4107d5abdcc4ff4a5cf3c44`.
@@ -64,6 +67,13 @@ Git after the job is verified.
 - Chosen resource: an idle `GPU-TITANX` compute node through SLURM; no model
   inference runs on the login node. Output path is unique per job ID and mode
   0700. The active general Qwen service job is not modified.
+- Cluster copies matched local hashes: collector
+  `d053e15a08bafa5673892daf3ae861a9bdccad2441d8e0c62c5ba6050c71282d`, tests
+  `f3003eaf0d64e0d7a33f4b57407af150acfa839e0c00eaba79598a22924d7161`, SLURM
+  wrapper `9c3c08c46d665ced01795300a114c4434ee86fdd0392c98e1f72e5ee36f0a9d7`,
+  and adapter loader `00ef5d3b1aaada8285b711a68f47c9e00a4fb9dbbd993e8eaf8eefd7426fa371`.
+- Cluster-side `bash -n`, `py_compile`, and the three collector unit tests
+  passed before scheduling; the tests exercised only synthetic tokens/tensors.
 
 ## Dispatch and results
 
