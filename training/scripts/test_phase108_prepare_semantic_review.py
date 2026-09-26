@@ -30,7 +30,10 @@ def test_prepare_uses_case_provenance_fixture_id(tmp_path):
     }])
     keys_path = write_json(tmp_path / "keys.json", [{
         "id": "p108v17-code_review-001",
+        "must_cover": ["identify evidence"],
+        "must_not_claim": ["unverified fix"],
         "evidence_boundary": "Do not infer beyond the patch.",
+        "format_contract": "Separate evidence and unknowns.",
     }])
     neardup_path = write_json(tmp_path / "neardup.json", {"pairs": []})
     output_dir = tmp_path / "review-bundle"
@@ -48,7 +51,10 @@ def test_prepare_uses_case_provenance_fixture_id(tmp_path):
     assert manifest["model_outputs_included"] is False
     assert item["case_id"] == "p108v17-code_review-001"
     assert item["scenario_family"] == "review"
+    assert item["must_cover"] == ["identify evidence"]
+    assert item["must_not_claim"] == ["unverified fix"]
     assert item["evidence_boundary"] == "Do not infer beyond the patch."
+    assert item["format_contract"] == "Separate evidence and unknowns."
 
 
 def test_prepare_rejects_case_without_fixture_provenance(tmp_path):
