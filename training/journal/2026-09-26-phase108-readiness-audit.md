@@ -39,3 +39,21 @@ corrected-r2 candidate path. Next steps are to restore reliable scheduler
 access, finish the pending isolated fixed-validation work, and prepare a
 separate hash-pinned candidate sandbox launcher only after the required
 candidate/scale is selected. No automatic deployment is authorized.
+
+## Isolated launcher follow-up
+
+Prepared `training/slurm/phase108_corrected_r2_sandbox_smoke.sbatch` as a
+separate, non-production launcher pinned to corrected-r2 adapter SHA
+`4e9177c3956aaa0c176929e7d8225b9882a2587b4dadad9cb51c04d905453772`, the
+existing sandbox server/loader/smoke-script hashes, the base config/index
+hashes, and the training-time scale 20. It binds only through the existing
+loopback-only server and records metadata-only smoke results in a unique,
+permission-restricted run directory. The smoke checks API health, one benign
+non-empty response, and rejection of tool requests; it is explicitly not a
+capability score or a promotion gate.
+
+Local `bash -n` and `git diff --check` passed, and all pinned local script
+hashes matched. The launcher has **not** been synchronized or submitted:
+SSH to the cluster controller currently closes before key exchange, so no
+claim is made about its remote copy or runtime. It must be hash-verified on
+the cluster before submission.
