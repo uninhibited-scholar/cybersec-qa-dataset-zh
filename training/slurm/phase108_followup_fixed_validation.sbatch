@@ -19,7 +19,7 @@ RUNNER="$ROOT/data/training/scripts/phase108_cuda_full_validation.py"
 SCALE_UTIL="$ROOT/data/training/scripts/phase108_scale_utils.py"
 RUN_DIR="$ROOT/results/phase108-followup-fixed-validation-$SLURM_JOB_ID"
 
-readonly PARENT_SHA=3ed1a85e7b021e1498332a525bfa4bb75b336a03579d526f8210f1576317036
+readonly PARENT_SHA=3ed1a85e7b021e14198332a525bfa4bb75b336a03579d526f8210f1576317036
 readonly VALIDATION_SHA=44f46f44b6a3653d0acd799d24b4c6d331a13030eaa4f3e6849a84141b18a365
 readonly BASE_CONFIG_SHA=260a51b7a10e45b682d6f4b3535b6fca3a7e42e1e55361c177e2c9f3ade27650
 readonly BASE_INDEX_SHA=5e699a61da09415f33a625885364d3889a80acb6ab88aedaf6e195b2612addf4
