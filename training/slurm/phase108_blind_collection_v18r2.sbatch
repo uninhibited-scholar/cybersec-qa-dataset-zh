@@ -8,9 +8,13 @@
 #SBATCH --mem=32G
 #SBATCH --time=1-00:00:00
 #SBATCH --output=/data3/ieug25/zj225/cyber-model-migration/logs/phase108-v18r2-blind-%j.log
+#SBATCH --error=/data3/ieug25/zj225/cyber-model-migration/logs/phase108-v18r2-blind-%j.err
 
 set -euo pipefail
 umask 077
+on_err() { status=$?; echo "wrapper_error status=$status line=$LINENO"; exit "$status"; }
+trap on_err ERR
+echo "wrapper_started job_id=${SLURM_JOB_ID:-unknown} node=${SLURM_NODELIST:-unknown}"
 
 ROOT=/data3/ieug25/zj225/cyber-model-migration
 PYTHON=/data3/ieug25/zj225/miniforge3/envs/coevo/bin/python
@@ -50,11 +54,13 @@ test -r "$SCRIPT"
 test -r "$LOADER"
 test ! -e "$RUN_DIR"
 mkdir -m 700 "$RUN_DIR"
+echo "hash_preflight_complete run_dir=$RUN_DIR"
 
 export PYTHONPATH="$ROOT/data/training${PYTHONPATH:+:$PYTHONPATH}"
 cd "$ROOT/data/training"
 "$PYTHON" -m unittest test_phase108_blind_collection_v18r2 -v
 cd "$ROOT"
+echo "unit_tests_complete; starting isolated inference"
 "$PYTHON" -u "$SCRIPT" \
   --base "$BASE" \
   --parent-adapter "$PARENT" \

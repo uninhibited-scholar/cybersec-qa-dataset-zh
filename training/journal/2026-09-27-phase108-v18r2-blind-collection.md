@@ -79,3 +79,14 @@ Git after the job is verified.
 
 Pending pre-dispatch test, synchronized-file hash verification, job ID,
 terminal status, result hashes, and alias-blind aggregate findings.
+
+## First dispatch failure and diagnostic correction
+
+The first collection dispatch (`44796`) failed immediately with exit `1:0`
+before producing a result. Its SLURM stdout file was empty and `scontrol`
+reported no explicit stderr path, so the failure was not a model result and
+the cause could not be observed from that job. The wrapper now directs stderr
+to a separate job-specific file and prints a start marker plus a failing line
+number; this is observability-only. The job did not touch model weights,
+production, evaluation standards, or tools. Any retry uses a new job ID and a
+new output directory; the failed job is retained in SLURM accounting.
