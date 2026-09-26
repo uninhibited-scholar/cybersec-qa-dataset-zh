@@ -11,8 +11,12 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.metadata
 import json
+import os
+import platform
 import random
+import subprocess
 from pathlib import Path
 from typing import Iterable
 
@@ -23,6 +27,7 @@ from torch.utils.data import DataLoader
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import LoraConfig, get_peft_model
 from phase108_scale_utils import mlx_scale_to_peft_alpha
+from phase108_run_provenance import model_files_manifest, stable_file_manifest
 
 
 TARGET_MODULES = ("q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj")
@@ -144,6 +149,8 @@ def main() -> None:
     parser.add_argument("--adapter", required=True, type=Path)
     parser.add_argument("--data", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--job-script", required=True, type=Path,
+                        help="exact submitted Slurm script, retained for run provenance")
     parser.add_argument("--max-steps", type=int, default=7621)
     parser.add_argument("--batch-size", type=int, default=1)
     parser.add_argument("--grad-accumulation", type=int, default=2)
@@ -154,6 +161,20 @@ def main() -> None:
     args = parser.parse_args()
     if not torch.cuda.is_available():
         raise SystemExit("CUDA is required; run this only inside a Slurm GPU allocation")
+    job_script = stable_file_manifest(args.job_script)
+    runner_script = stable_file_manifest(Path(__file__))
+    scale_utility = stable_file_manifest(Path(__file__).with_name("phase108_scale_utils.py"))
+    provenance_utility = stable_file_manifest(Path(__file__).with_name("phase108_run_provenance.py"))
+    train_file = stable_file_manifest(args.data / "train.jsonl")
+    valid_file = stable_file_manifest(args.data / "valid.jsonl")
+    model_manifest = model_files_manifest(args.base)
+    try:
+        code_commit = subprocess.run(
+            ["git", "-C", str(Path(__file__).resolve().parents[2]), "rev-parse", "HEAD"],
+            check=True, capture_output=True, text=True,
+        ).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        code_commit = None
     if (args.data / "test.jsonl").exists():
         # An explicit invariant: no code path below opens it.
         print("test_split=present_not_read", flush=True)
@@ -167,6 +188,12 @@ def main() -> None:
         tokenizer.pad_token = tokenizer.eos_token
     train_rows = read_split(args.data / "train.jsonl")
     valid_rows = read_split(args.data / "valid.jsonl")
+    # Fail closed if a shared-filesystem input changed between fingerprinting
+    # and parsing; otherwise the manifest would not describe the bytes trained.
+    if train_file != stable_file_manifest(args.data / "train.jsonl"):
+        raise RuntimeError("training split changed after provenance hashing")
+    if valid_file != stable_file_manifest(args.data / "valid.jsonl"):
+        raise RuntimeError("validation split changed after provenance hashing")
     rng = random.Random(args.seed)
     validation_rows = rng.sample(valid_rows, min(32, len(valid_rows)))
     train_rows = [encode_row(row, tokenizer, args.max_length) for row in train_rows]
@@ -200,11 +227,34 @@ def main() -> None:
     args.output.mkdir(parents=True, exist_ok=False)
     manifest = {
         "kind": "phase108_cuda_recovery_candidate",
-        "base": str(args.base), "base_config_sha256": sha256(args.base / "config.json"),
+        "base": model_manifest,
         "input_mlx_adapter": str(args.adapter), "input_mlx_adapter_sha256": sha256(args.adapter),
-        "data": str(args.data), "train_rows": len(train_rows), "validation_rows_sampled": len(validation_rows),
+        "data": {
+            "path": str(args.data.resolve()),
+            "train": train_file,
+            "valid": valid_file,
+            "test_split_present_not_read": (args.data / "test.jsonl").exists(),
+        },
+        "train_rows": len(train_rows), "validation_rows_sampled": len(validation_rows),
         "test_split_read": False, "seed": args.seed, "learning_rate": args.learning_rate,
         "max_steps": args.max_steps, "max_length": args.max_length,
+        "batch_size": args.batch_size, "grad_accumulation": args.grad_accumulation,
+        "save_every": args.save_every,
+        "provenance": {
+            "runner": runner_script,
+            "scale_utility": scale_utility,
+            "provenance_utility": provenance_utility,
+            "slurm_job_script": job_script,
+            "slurm_job_id": os.environ.get("SLURM_JOB_ID"),
+            "git_commit": code_commit,
+            "python": platform.python_version(),
+            "packages": {
+                name: importlib.metadata.version(name)
+                for name in ("torch", "transformers", "peft", "safetensors")
+            },
+            "cuda_device": torch.cuda.get_device_name(0),
+            "cuda_runtime": torch.version.cuda,
+        },
         "lora": {
             "rank": lora_rank,
             "mlx_scale": mlx_lora_scale,

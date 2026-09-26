@@ -27,12 +27,15 @@ test ! -e "$OUTPUT"
 test "$(sha256sum "$INPUT_ADAPTER" | awk '{print $1}')" = "$EXPECTED_INPUT_SHA256"
 # Refuse to train if the invoked remote runner is the stale alpha=20 version.
 RUNNER="$ROOT/data/training/scripts/phase108_cuda_resume_train.py"
+JOB_SCRIPT="$ROOT/data/training/slurm/phase108_cuda_scale_corrected.sbatch"
 test -r "$RUNNER"
+test -r "$JOB_SCRIPT"
 grep -q 'peft_lora_alpha = mlx_scale_to_peft_alpha' "$RUNNER"
 grep -q '"peft_effective_scale"' "$RUNNER"
 export TOKENIZERS_PARALLELISM=false
 export PYTHONDONTWRITEBYTECODE=1
 "$PYTHON" "$RUNNER" \
   --base "$BASE" --adapter "$INPUT_ADAPTER" --data "$DATA" --output "$OUTPUT" \
+  --job-script "$JOB_SCRIPT" \
   --max-steps 7621 --batch-size 1 --grad-accumulation 2 --learning-rate 5e-6 \
   --max-length 2304 --save-every 1000 --seed 20260920
