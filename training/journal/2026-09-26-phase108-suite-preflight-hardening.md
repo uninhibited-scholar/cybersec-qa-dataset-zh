@@ -214,3 +214,35 @@ other prompts, or eligibility for blind evaluation/promotion. The separate
 scale-20 immediate-EOS issue on the previously exposed 16-prompt diagnostic
 remains unresolved. No persistent endpoint, SSH tunnel, production setting,
 adapter weight, rubric, protocol, permission, or blind-suite content changed.
+
+## Fixed validation queued for final formatmix and bare-canary adapters — 2026-09-26
+
+The only existing full fixed-validation result for formatmix was for its
+step-7000 checkpoint (adapter SHA
+`182322b1f7f8c0426674fad6d44ebadbd44f47376f2af37f44d7a9ce8608f539`), not the
+current final adapter. The final bare-canary adapter already has an exposed
+v0.9 diagnostic result of 0/16 non-empty at scale 20; this is not blind
+evidence, but it is a blocking functional signal. A same-job public functional
+screen confirms both final artifacts can return non-empty output on four
+different benign prompts, which does not resolve that signal.
+
+Submitted job `44593` to run the current final formatmix and bare-canary
+adapters through the existing frozen `valid.jsonl`-only evaluator. The job
+pins adapter and manifest hashes, the sealed parent adapter SHA, base config
+and index hashes, validation SHA
+`44f46f44b6a3653d0acd799d24b4c6d331a13030eaa4f3e6849a84141b18a365`, evaluator
+and scale-utility hashes, and the rank/scale/layer/data provenance. It reads
+1,089 fixed validation rows and explicitly does not read train/test splits.
+No prompt, completion, or blind case is emitted; only aggregate validation
+JSONL is written. The initially submitted 3090 job `44590` was cancelled while
+pending after Slurm estimated a later start; no GPU time was used. The same
+validation was resubmitted on A100 as `44593`; at submission, Slurm estimated
+start `2026-09-28T07:14:26`. This is pending, not training or a completed
+validation result. The pinned job script SHA-256 is
+`2b3fcd87b2471eb01af0caa5e2adad3dff770bec5e5c3cb4fcdabd4ba95ed0e8`.
+
+The queue delay does not justify changing compute precision or validation
+protocol. Until job 44593 completes and its output hashes/row metadata are
+verified, no final-candidate validation result is claimed. Production API,
+adapter, rubric, protocol, tool permissions, and blind-suite contents remain
+unchanged.
