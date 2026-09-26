@@ -2,8 +2,8 @@
 # Fixed valid-split-only comparison for existing isolated follow-up candidates.
 # No training/test split, blind suite, API, deployment, or model writes.
 #SBATCH --job-name=p108-follow-val
-#SBATCH --partition=GPU-MEDIUM
-#SBATCH --gres=gpu:RTX-3090:1
+#SBATCH --partition=GPU-LARGE
+#SBATCH --gres=gpu:A100-40G:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
 #SBATCH --time=02:00:00
