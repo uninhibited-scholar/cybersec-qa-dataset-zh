@@ -50,3 +50,16 @@ was submitted as Slurm job `44615`; the first authoritative status check showed
 Phase108 fixed-validation job was present before submission. The existing local
 heartbeat was updated to monitor job `44615` and verify provenance/results;
 no blind evaluation or deployment was launched.
+
+## Private v1.1 suite source preflight
+
+The two private source banks remain gitignored. Aggregate structural inspection
+confirmed 320 rows and 40 rows in each of the eight target categories. The
+packer correctly rejected the suite before creating cases or keys: 153/160
+prompts in source bank A are shorter than its 60-character minimum (33
+vulnerability-analysis rows and all 40 rows in each of the other three A
+categories); source bank B has zero short prompts. Fact-set cardinality,
+multiturn role pattern, and the category/family/artifact/decision uniqueness
+check did not show violations in this inspection. The builder created no
+partial output. This is a draft-quality failure, not a benchmark result; source
+A is being revised and independently reviewed. No model was queried.
