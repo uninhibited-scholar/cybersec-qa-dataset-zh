@@ -58,6 +58,28 @@ and verified remotely:
   base, validator, and data hashes before inference.
 - `/data3` quota was 280G / 479G (58.5%), below the 95% stop threshold.
 
+## Local-to-compute network path probe
+
+A short-lived, non-model HTTP probe on `a100-3`'s private address
+`172.16.5.184:49081` was reachable from the Mac through an SSH local forward
+terminating at the controller (`127.0.0.1:19081 -> 172.16.5.184:49081`). It
+returned the expected fixed `tunnel-probe-ok` body. The probe was run as a
+90-second CPU-only Slurm step inside allocation `44601`; Slurm recorded only
+that test step (`44601.5`) as cancelled at its timeout, while parent service
+job `44601` remained `RUNNING`. The local tunnel process was closed and the
+test port was confirmed closed afterward.
+
+This establishes that controller-to-compute private-IP forwarding works; it
+does **not** make the current model API reachable, because the Qwen router is
+bound to `127.0.0.1` on the compute node. Direct SSH authentication to
+`a100-3` remains denied. Next transport step must be a narrowly bound,
+authenticated gateway on the compute node plus this tested SSH local-forward
+pattern; do not expose the current unauthenticated router directly.
+
+At 22:24 HKT, job `44617` remained `PENDING (Resources)`, job `44601` remained
+`RUNNING`, and `/data3` remained 280G / 479G (58.5%). Another user-owned job
+`44619` was running on `dell3090`; it was not touched.
+
 The fixed validation is loss/checkpoint-selection evidence only. It does not
 repair empty-output behavior or establish specialist capability. Candidate
 API behavior, independent blind evaluation, regression gates, rollback, and
