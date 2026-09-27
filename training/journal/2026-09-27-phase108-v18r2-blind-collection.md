@@ -320,3 +320,18 @@ bytes through that interface. No output file was created. This confirms the
 previous limitation: accounting plus the pre-job Git runner hash are available,
 but the exact historical batch-script bytes cannot be cryptographically
 recovered from Slurm. The active blind collection remains unaffected.
+
+Additional cross-check of the corrected-r2 artifact confirms the executed
+configuration independently of that missing wrapper snapshot. `sacct` records
+job 44306 as COMPLETED/0:0 (submit 11:53:37, run 11:55:07–12:56:32 HKT).
+Its training log's start event records the parent SHA, base config SHA, 19,621
+training rows, `test_split_read=false`, seed 20260920, 7,621 steps, LR 5e-6,
+max length 2304, rank 8, MLX scale 20, PEFT alpha 160/effective scale 20, and
+layers 32–35. The `-r2` directory manifest SHA is
+`e60ae88a3f491ed94b13f9e26ef0892e5986c838f69dff2fcbf8714185a29636`; its
+adapter SHA `4e9177c3956aaa0c176929e7d8225b9882a2587b4dadad9cb51c04d905453772`
+matches the job's completion record. The manifest's scale fields agree with
+the executed start record. This supports the actual run configuration and
+artifact lineage, but does not substitute for the unavailable submitted
+batch-script bytes. The older non-`r2` directory has a distinct manifest with
+alpha 20 and is not the candidate under current blind evaluation.
