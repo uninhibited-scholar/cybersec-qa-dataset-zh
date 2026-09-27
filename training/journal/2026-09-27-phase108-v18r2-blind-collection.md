@@ -195,3 +195,52 @@ submitted script bytes or their hash. Thus the full training recipe is
 recoverable from Git and the run log, while cryptographic attestation of the
 exact batch-script bytes actually submitted remains unavailable; this
 limitation is retained rather than overstated.
+
+## Independent post-collection verifier prepared
+
+Added `training/scripts/phase108_verify_blind_collection_v18r2.py` and its
+synthetic-fixture tests. The verifier first requires authoritative `sacct`
+`COMPLETED/0:0`, then checks the frozen suite and pinned model/script hashes,
+private file modes, exactly 320 unique case IDs in each of aliases A/B/C,
+response-file and per-answer hashes, response metadata, and aggregate counts.
+It reports aggregate metadata by alias only, verifies that the identity map
+exists and is private, but does not read or reveal the map or answer text. Four
+synthetic tests pass locally, including rejection of a running job, a
+corrupted arm, and deliberate proof that an invalid map is not parsed. These
+tests do not inspect the active private outputs; the verifier has not yet been
+run against job 44803.
+
+One provenance limitation remains: the collector did not record the
+identity-map SHA in its initial run manifest. The integrity verifier therefore
+does not read or hash that map; after independent blind scoring is frozen, a
+separate unblinding step can record its then-current SHA but cannot prove it is
+byte-identical to its original creation state. The private 0700 output
+directory/0600 map reduce exposure but are not a cryptographic
+pre-commitment. Do not overstate arm attribution when reporting this run.
+
+The verifier is paired with
+`training/slurm/phase108_verify_blind_collection_v18r2.sbatch`, a 1-CPU/1-GB,
+10-minute CPU-only post-job check on `GPU-TITANX` with no GPU requested, submitted
+with an `afterany:44803` dependency. (The cluster `test` partition currently
+has only 1 MB of configured memory on its one idle CPU, so it cannot run even
+this small Python check.) The verifier job uses an available TitanX node's CPU
+and memory only. It runs synthetic tests and then invokes
+the verifier, which rejects any 44803 state other than `COMPLETED/0:0`. It
+does not use a GPU, score, print answers, or reveal the map. This avoids doing
+even small data-processing jobs on the login node. The verifier, test, and
+batch-script hashes were checked against the local files after synchronization.
+Slurm job `44837` is queued with the intended `afterany:44803` dependency and
+requests only 1 CPU and 1 GB RAM; its report path is private under the run
+directory. The verifier, test, and batch-script SHA-256 values on the cluster
+match the local copies. The changes are committed locally; pushing the branch
+to GitHub twice stalled without a ref update, and `ls-remote` confirms that
+this branch is not yet present upstream. Do not claim GitHub backup until a
+push is verified.
+
+At this recheck, job 44803 is still running; alias C remains 320/320 and the
+latest B progress marker is 80/320 (89 response records had been flushed).
+No alias mapping was opened and no response text was
+read for interpretation. The separate Qwen3-14B serving job 44601 remains
+healthy per its in-job smoke results, but is not the Phase108 adapter and its
+compute-node SSH tunnel from the laptop is still blocked by compute-node key
+authorization. The verifier work does not change that service.
