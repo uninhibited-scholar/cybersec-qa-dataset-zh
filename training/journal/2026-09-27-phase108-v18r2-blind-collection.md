@@ -301,3 +301,10 @@ The delayed B arm is still advancing, so it was neither cancelled nor
 restarted. No raw response text or identity mapping was read. The pre-staged
 post-integrity packer has not been submitted and the answer key remains
 unstaged remotely.
+
+The packer wrapper now also hard-fails unless the response directory and
+staging directory are mode 0700 and both the integrity report and staged
+answer-key file are mode 0600. The revised wrapper passed local and remote
+`bash -n`; its remote SHA-256 matches commit `b743988`. These checks are in
+addition to the Python packer's frozen-artifact hash validation and do not
+change the evaluation protocol.
