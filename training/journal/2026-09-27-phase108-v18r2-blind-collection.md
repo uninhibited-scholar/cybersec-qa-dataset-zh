@@ -381,3 +381,23 @@ were left untouched. At the follow-up cluster poll, job `44803` remained
 `RUNNING` and the sealed B response file had advanced to 231 rows (C=320; A
 not yet started); verifier job `44837` remained dependency-pending. No raw
 response or identity mapping was opened.
+
+## Scope audit: intermediate ablation, not the complete capability gate
+
+The collector source confirms its three randomized arms are the frozen base,
+Phase108 parent adapter, and corrected-r2 candidate, all loaded through one
+base/tokenizer/template/runtime. This is an appropriate raw-weight ablation
+for attributing changes to the adapters, but it does not contain the unchanged
+Phase91 end-to-end service or either reference model, and its own journal
+explicitly disclaims Phase91 runtime/template parity.
+
+Therefore, even a favorable reviewer result from this collection cannot by
+itself satisfy `training/phase108-posttrain-gates.md` items 2–4 or support a
+claim of top-reference parity. The previously written candidate benchmark
+v0.3 also describes four sealed arms, but remains a draft and is not silently
+treated as frozen. Before any promotion recommendation, a separate
+reviewer-frozen, contamination-audited holdout must exercise the actual
+Phase91 endpoint and at least two pinned reference runtimes alongside the
+candidate, using the already-frozen Phase107 rubric and inference protocol;
+the existing three-arm collection remains a separate adapter-ablation result.
+No rubric or protocol has been changed by this scope audit.
