@@ -77,6 +77,19 @@ def read_jsonl(path: Path) -> list[dict]:
     return rows
 
 
+def read_blinded_response_files(run_dir: Path) -> list[dict]:
+    """Attach the blind alias from each verified filename to its response rows."""
+    rows = []
+    for alias in sorted(ALIASES):
+        for row in read_jsonl(run_dir / f"responses-{alias}.jsonl"):
+            embedded_alias = row.get("alias")
+            if embedded_alias is not None and embedded_alias != alias:
+                raise ValueError("response alias conflicts with its blinded filename")
+            row["alias"] = alias
+            rows.append(row)
+    return rows
+
+
 def private_dir(path: Path) -> None:
     path.mkdir(mode=0o700, parents=True, exist_ok=False)
     os.chmod(path, 0o700)
@@ -232,9 +245,7 @@ def prepare(run_dir: Path, cases_path: Path, freeze_path: Path, keys_path: Path,
             raise ValueError(f"pinned {label} hash mismatch")
 
     cases, keys = read_json(cases_path), read_json(keys_path)
-    response_rows = []
-    for alias in sorted(ALIASES):
-        response_rows.extend(read_jsonl(run_dir / f"responses-{alias}.jsonl"))
+    response_rows = read_blinded_response_files(run_dir)
     bundle = build_review_bundle(cases, keys, response_rows, seed)
 
     metadata = {

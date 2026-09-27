@@ -1,4 +1,7 @@
 import hashlib
+import json
+from pathlib import Path
+import tempfile
 import unittest
 
 import phase108_prepare_blind_review_v18r2 as packer
@@ -40,6 +43,33 @@ def synthetic_inputs():
 
 
 class BlindReviewBundleTests(unittest.TestCase):
+    def test_reads_blind_alias_from_verified_filename(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            run_dir = Path(temporary)
+            for alias in sorted(packer.ALIASES):
+                (run_dir / f"responses-{alias}.jsonl").write_text(
+                    json.dumps({"case_id": "synthetic", "response": "opaque"}) + "\n",
+                    encoding="utf-8",
+                )
+            rows = packer.read_blinded_response_files(run_dir)
+        self.assertEqual({row["alias"] for row in rows}, packer.ALIASES)
+        self.assertTrue(all(row["response"] == "opaque" for row in rows))
+
+    def test_rejects_row_alias_that_conflicts_with_verified_filename(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            run_dir = Path(temporary)
+            alias = sorted(packer.ALIASES)[0]
+            other_alias = sorted(packer.ALIASES - {alias})[0]
+            (run_dir / f"responses-{alias}.jsonl").write_text(
+                json.dumps({"case_id": "synthetic", "alias": other_alias,
+                            "response": "opaque"}) + "\n",
+                encoding="utf-8",
+            )
+            for remaining_alias in packer.ALIASES - {alias}:
+                (run_dir / f"responses-{remaining_alias}.jsonl").write_text("", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "conflicts with its blinded filename"):
+                packer.read_blinded_response_files(run_dir)
+
     def test_builds_complete_deterministic_blinded_matrix(self):
         cases, keys, responses = synthetic_inputs()
         first = packer.build_review_bundle(cases, keys, responses, seed=41)

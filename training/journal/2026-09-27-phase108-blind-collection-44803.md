@@ -63,10 +63,11 @@ mode `0600`, 1,647 bytes, SHA-256
 login-node `sacct` snapshot for 44803 was observed at
 `2026-09-27T15:44:03+0800` and recorded `COMPLETED`/`0:0`.
 
-The answer key and identity map remain unopened. The packer was adjusted to
-consume the integrity report's verified collection snapshot plus an explicit,
-fresh login-node `sacct` snapshot for the verifier job; it still reruns all
-collection hash/schema checks and never reads the identity map.
+Before blind-review preparation, the answer key and identity map were
+unopened. The packer was adjusted to consume the integrity report's verified
+collection snapshot plus an explicit, fresh login-node `sacct` snapshot for
+the verifier job; it still reruns all collection hash/schema checks and never
+reads the identity map.
 
 The first packer submission (`44916`) exited during a path precondition,
 before unit tests or bundle generation: its answer-key path incorrectly pointed
@@ -82,3 +83,15 @@ completed verifier job was no longer queryable through `scontrol`. The wrapper
 still checks both freshly supplied login-node snapshots and the successful
 private integrity report; use `afterany:44803` as the scheduler dependency,
 then rely on those in-job checks to refuse any unsuccessful verifier state.
+
+The next packer run (`44920`) reached the preparation code after all five
+packer tests passed, revalidated the collection, and checked the sealed key
+hash. It then rejected the response matrix because the collector encodes each
+arm in its filename, not in each JSONL row. The answer key and response rows
+were read in memory only after integrity verification; no identity map was
+read, no review bundle was written, and no raw content was transferred or
+committed. The packer now derives each blind alias from the already-verified
+filename and rejects any conflicting embedded alias; two synthetic tests
+cover this behavior. Re-run the seven packer and six verifier tests, then
+submit a fresh packer job only after syncing and hash-checking the updated
+files.
