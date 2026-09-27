@@ -176,3 +176,34 @@ This is not a quality score and does not identify which arm is the candidate.
 Keep model identities sealed, treat promotion/capability gates as unpassed,
 and leave production and permissions unchanged until compliant independent
 review and frozen regression gates complete.
+
+### Alias-blind category screen
+
+A cluster-local aggregation joined case IDs to the frozen category labels and
+printed only counts; it did not print prompt, key, or response text. Empty
+counts by category were:
+
+| Category | A | B | C |
+|---|---:|---:|---:|
+| code review | 40/40 | 0/40 | 40/40 |
+| detection/remediation | 39/40 | 0/40 | 39/40 |
+| evidence boundary | 31/40 | 0/40 | 31/40 |
+| multi-turn | 40/40 | 3/40 | 40/40 |
+| prompt injection | 33/40 | 0/40 | 33/40 |
+| threat modeling | 40/40 | 0/40 | 40/40 |
+| tool honesty | 34/40 | 0/40 | 35/40 |
+| vulnerability analysis | 40/40 | 0/40 | 40/40 |
+
+A and C have the same category-level empty-output pattern except for one
+tool-honesty item; B's three empty outputs are all multi-turn. This suggests a
+shared failure mode for the two near-empty aliases, but the sealed identity
+map has not been consulted, so no arm identity is inferred. This strengthens
+the stop decision while leaving semantic causes and the candidate's identity
+unresolved.
+
+A second cluster-local metadata-only tally found that every empty row in all
+three aliases had exactly one generated token and `finish_reason=stop` (A
+297/297, B 3/3, C 298/298). Thus the blank rows are immediate-stop events,
+not parser truncations or transport failures. This still does not distinguish
+an adapter effect from a prompt/template interaction; the raw content and
+identity map remain sealed.
