@@ -51,7 +51,7 @@ The guard worked as intended: no model inference occurred and no output file
 was created. Fix only the expected digest, retain this failed attempt, and
 retry under another fresh job ID after syncing and checking the wrapper hash.
 
-## Retry 45030 — running, scales 1 and 2.5 complete
+## Retry 45030 — running, scales 1, 2.5, and 5 complete
 
 After correcting the Python namespace and exact parent-source SHA, the wrapper
 passed remote syntax and provenance preflight. The no-inference checker
@@ -67,11 +67,12 @@ At the current checkpoint the private aggregate contains two completed rows:
 | ---: | ---: | ---: | --- | --- |
 | 1.0 | 2.0980716427 | 1,089 | `44f46f44b6a3653d0acd799d24b4c6d331a13030eaa4f3e6849a84141b18a365` | neither |
 | 2.5 | 2.0298910662 | 1,089 | `44f46f44b6a3653d0acd799d24b4c6d331a13030eaa4f3e6849a84141b18a365` | neither |
+| 5.0 | 1.9416260420 | 1,089 | `44f46f44b6a3653d0acd799d24b4c6d331a13030eaa4f3e6849a84141b18a365` | neither |
 
 Both rows record the same immutable adapter SHA-256
 `4e9177c3956aaa0c176929e7d8225b9882a2587b4dadad9cb51c04d905453772`, rank 8,
-and the expected PEFT alpha/effective scales (8/1 and 20/2.5). The wrapper
-will continue at scales 5, 10, and 20. These are validation-loss sensitivity
+and the expected PEFT alpha/effective scales (8/1, 20/2.5, and 40/5). The wrapper
+will continue at scales 10 and 20. These are validation-loss sensitivity
 measurements only; in particular, the worse loss at small scale does not
 prove that the model is more or less capable or safe. The final JSONL and
 job-log hashes, all five rows, and terminal Slurm state remain to be verified
