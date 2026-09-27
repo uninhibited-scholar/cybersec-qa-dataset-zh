@@ -76,4 +76,9 @@ is mode `0600`, and its SHA-256 matches the frozen pin
 `f79828a550fb80cd84aba7faa593cd84a4f47e08ee8afc358957726de17a4015`.
 No key content or identity map was opened by the failed attempt. The tracked
 packer wrapper now points to this sealed artifact; rerun only after syncing
-and hash-checking that wrapper.
+and hash-checking that wrapper. Submission `44916` was rejected by Slurm as a
+dependency problem before the wrapper ran because controller state for the
+completed verifier job was no longer queryable through `scontrol`. The wrapper
+still checks both freshly supplied login-node snapshots and the successful
+private integrity report; use `afterany:44803` as the scheduler dependency,
+then rely on those in-job checks to refuse any unsuccessful verifier state.

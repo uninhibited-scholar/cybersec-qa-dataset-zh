@@ -1,7 +1,8 @@
 #!/bin/bash
 # CPU-only, post-integrity blind-review bundle preparation.
 # Submit only after login-node sacct reports the integrity verifier as
-# COMPLETED/0:0, with the verified snapshot exported and afterok dependency.
+# COMPLETED/0:0. Use afterany:<collection-job-id> plus both verified snapshots;
+# the packer itself refuses a non-successful integrity state/report.
 # No GPU, model inference, scoring, identity-map read, or label reveal occurs.
 #SBATCH --job-name=p108-review-pack
 #SBATCH --partition=GPU-TITANX
