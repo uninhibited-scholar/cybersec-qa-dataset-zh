@@ -147,3 +147,29 @@ the known cluster subnet exists through a tunnel interface, yet SSH to the
 known internal address is still closed during key exchange. These observations
 do not establish a healthy campus VPN/SSH session; no authentication or
 SLURM command ran. PanGPS produced no matching recent system-log records.
+
+## Campus VPN restored and fresh blind collection dispatched
+
+The GlobalProtect UI was inspected directly and showed “disconnected” with the
+CUHK portal selected. After using the user's established campus-VPN workflow,
+the UI showed “connected” to gateway `IENet_GW`; cluster DNS and SSH then
+worked. No credentials were read or handled.
+
+Before dispatch, the stale remote copies were confirmed to match the earlier
+committed versions, and prior jobs `44796`–`44799` were confirmed terminal
+`FAILED` with no result directory other than the empty/private directory from
+44799. The updated collector, four-test suite, adapter loader, and SLURM wrapper
+were synchronized. Their remote hashes match the pinned local hashes; wrapper
+`bash -n` passed. Current cluster status showed the unrelated Qwen API job
+44601 still running on `a100-3`, `titanv1` idle, and disk usage 287G/479G.
+
+Fresh job `44803` was submitted to `GPU-TITANX` and started on `titanv1`. Its
+log confirms all seven content/script hashes, all four cluster unit tests
+passing, and creation of a private mode-0700 output directory. The collector
+is now performing model inference. One randomized blinded arm has completed
+320/320 responses; its aggregate reports 298 empty answers and the private
+response file is mode 0600. This is recorded only as a blinded diagnostic
+signal: the identity map and keys have not been opened, and no model is named
+or selected from this partial observation. A second arm is in progress. A
+quiet five-minute heartbeat monitors job 44803; production API/adapters,
+candidate weights, protocol, rubric, and permissions remain unchanged.
