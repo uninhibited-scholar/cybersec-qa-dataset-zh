@@ -93,15 +93,15 @@ class GatewayTests(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertEqual(body["path"], "/health")
 
-    def test_tool_calls_rejected_explicitly(self):
+    def test_tool_metadata_is_stripped_without_claiming_execution(self):
         status, body = self.request(
             "/v1/chat/completions",
             {"messages": [{"role": "user", "content": "hello"}],
              "tools": [{"type": "function", "function": {"name": "x"}}]},
             f"Bearer {TOKEN}",
         )
-        self.assertEqual(status, 400)
-        self.assertEqual(body["error"], "tool_calling_not_supported_by_this_model_endpoint")
+        self.assertEqual(status, 200)
+        self.assertEqual(body["received"].get("tools"), None)
 
     def test_authorized_chat_proxies_without_forwarding_credentials(self):
         payload = {"messages": [{"role": "user", "content": "hello"}], "max_tokens": 8}

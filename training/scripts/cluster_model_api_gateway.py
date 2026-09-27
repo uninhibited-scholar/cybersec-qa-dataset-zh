@@ -147,8 +147,14 @@ class Handler(BaseHTTPRequestHandler):
             return self._json(400, {"error": "invalid_json"})
         if not isinstance(payload, dict):
             return self._json(400, {"error": "invalid_request"})
+        # Kimi Code always includes its tool catalog. This endpoint has no
+        # tool executor, so remove tool metadata before forwarding instead of
+        # claiming support or failing an otherwise valid text completion.
         if payload.get("tools") not in (None, []) or payload.get("functions") not in (None, []):
-            return self._json(400, {"error": "tool_calling_not_supported_by_this_model_endpoint"})
+            payload = dict(payload)
+            for key in ("tools", "functions", "tool_choice", "function_call", "parallel_tool_calls"):
+                payload.pop(key, None)
+            body = json.dumps(payload, separators=(",", ":")).encode()
         self._proxy(body)
 
 
