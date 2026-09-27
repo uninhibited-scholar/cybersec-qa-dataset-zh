@@ -114,3 +114,8 @@ router is kept alive by the user-level LaunchAgent
 the mode-600 Desktop token file). `launchctl print` shows it active, and the
 router remained healthy after a Kimi process exited. Unified SSE was also
 verified with a real `SSE_OK` response.
+
+The local Kimi configuration now declares `tool_use` for the verified 14B
+alias and adds a non-default `cluster/qwen3-32b-fp8` candidate alias. The
+candidate alias does not change routing until the isolated GPU and tool-call
+regressions pass; `kimi doctor` remains green.
