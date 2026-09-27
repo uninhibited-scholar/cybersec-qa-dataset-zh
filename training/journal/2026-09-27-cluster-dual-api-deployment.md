@@ -77,3 +77,14 @@ backends available, allocation `44601 RUNNING` on `a100-3`, and quota
 was submitted and no production adapter or Phase108 rubric was changed. The
 deployment phase is operationally verified; model training/evaluation remains
 a later, separate phase.
+
+## CPU fallback allocation check
+
+The current cluster partition inventory was checked read-only. The `test`
+partition exposes only 1 CPU and 1 GB, which cannot host the selected
+Qwen3-1.7B fallback. `GPU-LARGE` permits CPU requests and has 32 CPUs with
+192/250 GB node memory, but no separate large-memory CPU partition was
+advertised. Therefore the currently running in-allocation fallback remains
+the verified path; a standalone CPU fallback should only be submitted after
+the cluster policy for a no-GPU request on `GPU-LARGE` is confirmed. No such
+job was submitted during this check.
