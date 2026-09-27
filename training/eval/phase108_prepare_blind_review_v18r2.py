@@ -179,7 +179,9 @@ def build_review_bundle(cases: list[dict], keys: list[dict], responses: list[dic
 def prepare(run_dir: Path, cases_path: Path, freeze_path: Path, keys_path: Path,
             rubric_path: Path, protocol_path: Path, corrigendum_path: Path,
             outdir: Path, repo_root: Path, job_id: str, integrity_job_id: str,
-            seed: int, slurm_runner=None) -> dict:
+            seed: int, slurm_runner=None, *, integrity_slurm_state: str | None = None,
+            integrity_slurm_exit_code: str | None = None,
+            integrity_slurm_observed_at: str | None = None) -> dict:
     outdir = outdir.expanduser().resolve()
     repo_root = repo_root.expanduser().resolve()
     if outdir == repo_root or repo_root in outdir.parents:
@@ -192,16 +194,28 @@ def prepare(run_dir: Path, cases_path: Path, freeze_path: Path, keys_path: Path,
     if stat.S_IMODE(report_stat.st_mode) & 0o077:
         raise ValueError("integrity report is not private")
     report = read_json(report_path)
+    run_slurm = report.get("slurm")
     if (report.get("status") != "verified_blind_collection_integrity"
             or report.get("identity_map_read") is not False
-            or report.get("labels_revealed") is not False):
+            or report.get("labels_revealed") is not False
+            or not isinstance(run_slurm, dict)
+            or run_slurm.get("job_id") != job_id):
         raise ValueError("required verified-but-blind integrity report is missing")
 
     current_collection = verify_collection(
         run_dir, cases_path, freeze_path, job_id,
         slurm_runner if slurm_runner is not None else __import__("subprocess").run,
+        slurm_state=run_slurm.get("state"),
+        slurm_exit_code=run_slurm.get("exit_code"),
+        slurm_observed_at=run_slurm.get("observed_at"),
     )
-    verify_slurm(integrity_job_id, slurm_runner if slurm_runner is not None else __import__("subprocess").run)
+    verify_slurm(
+        integrity_job_id,
+        slurm_runner if slurm_runner is not None else __import__("subprocess").run,
+        state=integrity_slurm_state,
+        exit_code=integrity_slurm_exit_code,
+        observed_at=integrity_slurm_observed_at,
+    )
     if report.get("summaries_by_blind_alias") != current_collection.get("summaries_by_blind_alias"):
         raise ValueError("saved integrity report differs from re-verified response summaries")
 
@@ -279,6 +293,9 @@ def main() -> int:
     parser.add_argument("--repo-root", type=Path, required=True)
     parser.add_argument("--job-id", required=True)
     parser.add_argument("--integrity-job-id", required=True)
+    parser.add_argument("--integrity-slurm-state", required=True)
+    parser.add_argument("--integrity-slurm-exit-code", required=True)
+    parser.add_argument("--integrity-slurm-observed-at", required=True)
     parser.add_argument("--seed", type=int, default=20260927)
     args = parser.parse_args()
     try:
@@ -286,6 +303,9 @@ def main() -> int:
             args.run_dir, args.cases, args.freeze, args.keys, args.rubric,
             args.protocol, args.corrigendum, args.outdir, args.repo_root,
             args.job_id, args.integrity_job_id, args.seed,
+            integrity_slurm_state=args.integrity_slurm_state,
+            integrity_slurm_exit_code=args.integrity_slurm_exit_code,
+            integrity_slurm_observed_at=args.integrity_slurm_observed_at,
         )
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         print(json.dumps({"status": "rejected", "reason": str(exc)}, sort_keys=True), file=sys.stderr)

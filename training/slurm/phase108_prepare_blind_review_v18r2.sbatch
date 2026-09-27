@@ -1,7 +1,7 @@
 #!/bin/bash
 # CPU-only, post-integrity blind-review bundle preparation.
-# Submit only after the integrity verifier succeeds, with
-# --export=ALL,INTEGRITY_JOB_ID=<id> --dependency=afterok:<id>.
+# Submit only after login-node sacct reports the integrity verifier as
+# COMPLETED/0:0, with the verified snapshot exported and afterok dependency.
 # No GPU, model inference, scoring, identity-map read, or label reveal occurs.
 #SBATCH --job-name=p108-review-pack
 #SBATCH --partition=GPU-TITANX
@@ -24,6 +24,9 @@ PACKER_DIR="$ROOT/data/training/phase108-review-pack-v18r2"
 PACKER="$PACKER_DIR/phase108_prepare_blind_review_v18r2.py"
 OUTDIR="/data3/ieug25/zj225/phase108-v18r2-blind-review-44803"
 INTEGRITY_JOB_ID="${INTEGRITY_JOB_ID:?submit with INTEGRITY_JOB_ID set to the successful verifier job}"
+INTEGRITY_JOB_STATE="${INTEGRITY_JOB_STATE:?submit with a fresh login-node sacct snapshot}"
+INTEGRITY_JOB_EXIT_CODE="${INTEGRITY_JOB_EXIT_CODE:?submit with a fresh login-node sacct snapshot}"
+INTEGRITY_JOB_STATUS_OBSERVED_AT="${INTEGRITY_JOB_STATUS_OBSERVED_AT:?submit with a fresh login-node sacct snapshot}"
 
 test -x "$PYTHON"
 test -d "$RUN_DIR"
@@ -49,6 +52,9 @@ cd "$PACKER_DIR"
   --outdir "$OUTDIR" \
   --repo-root "$ROOT" \
   --job-id 44803 \
-  --integrity-job-id "$INTEGRITY_JOB_ID"
+  --integrity-job-id "$INTEGRITY_JOB_ID" \
+  --integrity-slurm-state "$INTEGRITY_JOB_STATE" \
+  --integrity-slurm-exit-code "$INTEGRITY_JOB_EXIT_CODE" \
+  --integrity-slurm-observed-at "$INTEGRITY_JOB_STATUS_OBSERVED_AT"
 
 echo "BLIND_REVIEW_BUNDLE_READY output=$OUTDIR"

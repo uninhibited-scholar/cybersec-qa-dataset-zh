@@ -52,7 +52,20 @@ success. The blind-review wrapper requires an explicit `INTEGRITY_JOB_ID`
 rather than carrying a stale hard-coded dependency. Shell syntax passed; local
 synthetic tests passed 6/6 for the integrity verifier and 5/5 for the review
 packer. Failed job `44909` left a zero-byte mode-0600 report placeholder; it
-must be preserved as a failed artifact, not mistaken for a successful report.
-The answer key and identity map remain unopened. Submit a fresh verifier using
-a newly observed login-node `sacct` snapshot and `afterany:44803`; do not run
-the review packer until that verifier succeeds.
+was preserved as `integrity-report.failed-44909.empty` and is not treated as a
+successful report. Verifier job `44915` then completed `0:0`; all six
+synthetic tests passed and the output reports
+`verified_blind_collection_integrity`, 320 rows per arm, the pinned
+parent/candidate/freeze/cases hashes, `identity_map_read=false`,
+`labels_revealed=false`, and `deployment_approval=false`. The private report is
+mode `0600`, 1,647 bytes, SHA-256
+`523ded4587c7c6301f1b6ddd5c92d7dc1cf896fdec113c59ad1412a092ddcd54`. Its
+login-node `sacct` snapshot for 44803 was observed at
+`2026-09-27T15:44:03+0800` and recorded `COMPLETED`/`0:0`.
+
+The answer key and identity map remain unopened. The packer was adjusted to
+consume the integrity report's verified collection snapshot plus an explicit,
+fresh login-node `sacct` snapshot for the verifier job; it still reruns all
+collection hash/schema checks and never reads the identity map. Run its tests,
+then submit it only with a fresh `sacct` observation for the successful
+integrity job and an `afterok` dependency.
