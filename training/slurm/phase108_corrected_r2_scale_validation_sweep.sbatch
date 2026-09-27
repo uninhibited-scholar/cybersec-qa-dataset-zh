@@ -18,6 +18,7 @@ export TRANSFORMERS_OFFLINE=1
 
 ROOT=/data3/ieug25/zj225/cyber-model-migration
 PYTHON=/data3/ieug25/zj225/miniforge3/envs/coevo/bin/python
+export PYTHONPATH="$ROOT/data${PYTHONPATH:+:$PYTHONPATH}"
 BASE="$ROOT/models/base-phase3-dequantized"
 ADAPTER="$ROOT/models/phase108-cuda-recovery-scale20-corrected-20260924-r2/adapters.safetensors"
 VALIDATION="$ROOT/data/phase108-clean-v2/valid.jsonl"
