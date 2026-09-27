@@ -66,3 +66,14 @@ the successor starts. The helper was syntax-checked and passed its local fake
 `sbatch`/`squeue` test. It has not been submitted, so the current production
 allocation remains unchanged. A future handoff still requires refreshing the
 local SSH tunnel only after the successor's readiness record is verified.
+
+## Final deployment-gate recheck
+
+On 2026-09-27 the read-only checker again reported API health with both
+backends available, allocation `44601 RUNNING` on `a100-3`, and quota
+`292G/479G`. The gateway test suite passed 5/5 with
+`PYTHONPATH=training/scripts`. Kimi Code 2.0.2 made a live request through
+`cluster/qwen3-14b-bf16` and returned the expected sentinel. No new allocation
+was submitted and no production adapter or Phase108 rubric was changed. The
+deployment phase is operationally verified; model training/evaluation remains
+a later, separate phase.
