@@ -139,3 +139,11 @@ authentication. No authoritative current SLURM queue/accounting state was
 obtained. No files were synchronized and no job was submitted in this check;
 the next action is to restore the laptop's campus VPN/DNS path, then verify
 cluster-side hashes/tests and queue state before submitting one fresh run.
+
+A second local network inspection found Tailscale connected and the
+GlobalProtect app process present, but the active DNS resolver list contains
+no CUHK resolver and the cluster hostname still does not resolve. A route to
+the known cluster subnet exists through a tunnel interface, yet SSH to the
+known internal address is still closed during key exchange. These observations
+do not establish a healthy campus VPN/SSH session; no authentication or
+SLURM command ran. PanGPS produced no matching recent system-log records.
