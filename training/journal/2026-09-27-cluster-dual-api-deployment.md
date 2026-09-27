@@ -88,3 +88,22 @@ advertised. Therefore the currently running in-allocation fallback remains
 the verified path; a standalone CPU fallback should only be submitted after
 the cluster policy for a no-GPU request on `GPU-LARGE` is confirmed. No such
 job was submitted during this check.
+
+## Independent CPU fallback and local failover
+
+The no-GPU Slurm allocation was first validated with `sbatch --test-only` and
+then launched transparently as job `45198` on `GPU-LARGE` with 8 CPUs and 32G
+memory, no `--gres` request. It reached `RUNNING` and exposed the CPU model
+through a bearer-authenticated gateway on compute node `172.16.5.184:30199`.
+The laptop tunnel `127.0.0.1:19004` passed health, model-list, and a real
+non-streaming response (`small_fallback`). The two short-lived earlier attempts
+failed before model startup due to missing/script-path errors and released
+their allocations; they did not affect `44601`.
+
+Added `training/scripts/local_cluster_failover.py`, a localhost-only router
+that tries the primary tunnel `19002` and falls back to the independent CPU
+tunnel `19004`, preserving `X-Model-Route` and supporting JSON and SSE paths.
+The Kimi launcher now starts/checks this router on `19003`; Kimi's cluster
+provider points to `http://127.0.0.1:19003/v1`. A forced-primary-failure test
+returned a real CPU response with route `small_fallback`, and a normal Kimi
+request returned `FAILOVER_PRIMARY_OK` through the unified entrypoint.
