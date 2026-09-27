@@ -29,6 +29,10 @@ test -d "$RUN_DIR"
 test -f "$RUN_DIR/integrity-report.json"
 test -f "$KEYS"
 test ! -e "$OUTDIR"
+test "$(stat -c '%a' "$RUN_DIR")" = 700
+test "$(stat -c '%a' "$RUN_DIR/integrity-report.json")" = 600
+test "$(stat -c '%a' "$KEYS")" = 600
+test "$(stat -c '%a' "$PACKER_DIR")" = 700
 
 cd "$PACKER_DIR"
 "$PYTHON" -m unittest -v test_phase108_prepare_blind_review_v18r2
