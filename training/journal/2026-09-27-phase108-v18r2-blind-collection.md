@@ -335,3 +335,30 @@ the executed start record. This supports the actual run configuration and
 artifact lineage, but does not substitute for the unavailable submitted
 batch-script bytes. The older non-`r2` directory has a distinct manifest with
 alpha 20 and is not the candidate under current blind evaluation.
+
+## Serving-path and collection recheck (11:05 HKT)
+
+Rechecked the live cluster state after distinguishing general API availability
+from Phase108 deployment. Service job `44601` is still `RUNNING` on `a100-3`,
+with its 48-hour allocation ending 2026-09-28 20:45:33 HKT. Its service
+metadata and startup smoke records identify Qwen3-14B-BF16 as the primary and
+Qwen3-1.7B as CPU fallback, with `phase108_adapter_loaded=false`; it is not the
+trained Phase108 specialist. The in-allocation `/health` reports both routes
+healthy, `/v1/models` reports `qwen3-14b-bf16`, and startup JSON/SSE smoke
+checks recorded non-empty responses for both primary and fallback routes.
+
+From the Mac, direct access to the compute gateway returned HTTP 403
+`source_not_allowed`. An SSH local forward through the cluster login node to
+the gateway reached the API but returned HTTP 401 without an authorization
+credential. Thus the transport path is established, but an authenticated
+client request was not verified in this check. No source allowlist, key,
+production adapter, or service configuration was changed.
+
+Phase108 blind collection job `44803` remains `RUNNING` on `titanv1`; the
+CPU-only integrity job `44837` remains dependency-pending. At this poll the
+sealed response files contain 207 rows for alias B and 320 for alias C; alias
+A has not yet produced a response file. Only row counts and aggregate progress
+markers were inspected—no response text or identity mapping was opened. Do
+not interpret or attribute per-arm aggregates before the prescribed blind
+review/scoring freeze. No candidate was deployed and no evaluation criteria
+were changed.
