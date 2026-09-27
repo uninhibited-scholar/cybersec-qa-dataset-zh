@@ -19,6 +19,7 @@ PYTHON=/data3/ieug25/zj225/miniforge3/envs/coevo/bin/python
 BASE="$ROOT/models/base-phase3-dequantized"
 SERVER="$ROOT/data/training/phase108_candidate_sandbox_api_scale_diag.py"
 REPLAY="$ROOT/data/training/phase108_greedy_exposed_replay.py"
+TESTS="$ROOT/data/training/test_phase108_greedy_exposed_replay.py"
 CASES="$ROOT/data/phase108-eval-private-v09/phase108-private-cases-v0.9.json"
 PARENT="$ROOT/models/phase108-step12000-20260920/0012000_adapters.safetensors"
 CANDIDATE="$ROOT/models/phase108-cuda-recovery-scale20-corrected-20260924-r2/adapters.safetensors"
@@ -27,6 +28,7 @@ RUN_DIR="$ROOT/results/phase108-exposed-scale-grid-700-$SLURM_JOB_ID"
 readonly CASES_SHA=9a4d398893034b922cc67582089642c553733c856ab2812088b398a2546fbb6b
 readonly SERVER_SHA=df1484bd0b01ee72e3b41dbb2a7ceda7b384d1e08f99239ffde68357338f83f7
 readonly REPLAY_SHA=f503bc795cb7ad3dee3d88bf09f7527aec06261ce43a1fb8c966a7f66c59b6f1
+readonly TESTS_SHA=f2896e5789d99fced1cc5b22ad4be1faba1871488e9e191ae50bedae2ced7862
 readonly BASE_CONFIG_SHA=260a51b7a10e45b682d6f4b3535b6fca3a7e42e1e55361c177e2c9f3ade27650
 readonly BASE_INDEX_SHA=5e699a61da09415f33a625885364d3889a80acb6ab88aedaf6e195b2612addf4
 readonly BASE_SHARD1_SHA=25094f7fbaef4769da447cb6ebf4a39d99ccc5043856cce1b4f8fc2f91ed9115
@@ -44,6 +46,7 @@ check_hash() {
 check_hash "$CASES" "$CASES_SHA"
 check_hash "$SERVER" "$SERVER_SHA"
 check_hash "$REPLAY" "$REPLAY_SHA"
+check_hash "$TESTS" "$TESTS_SHA"
 check_hash "$BASE/config.json" "$BASE_CONFIG_SHA"
 check_hash "$BASE/model.safetensors.index.json" "$BASE_INDEX_SHA"
 check_hash "$BASE/model-00001-of-00002.safetensors" "$BASE_SHARD1_SHA"

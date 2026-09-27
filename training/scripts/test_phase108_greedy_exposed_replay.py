@@ -4,11 +4,18 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from training.scripts.phase108_greedy_exposed_replay import (
-    EXPECTED_CASE_IDS,
-    select_cases,
-    summarize,
-)
+try:
+    from phase108_greedy_exposed_replay import (
+        EXPECTED_CASE_IDS,
+        select_cases,
+        summarize,
+    )
+except ModuleNotFoundError:
+    from training.scripts.phase108_greedy_exposed_replay import (
+        EXPECTED_CASE_IDS,
+        select_cases,
+        summarize,
+    )
 
 
 class GreedyExposedReplayTest(unittest.TestCase):
