@@ -195,3 +195,30 @@ submitted script bytes or their hash. Thus the full training recipe is
 recoverable from Git and the run log, while cryptographic attestation of the
 exact batch-script bytes actually submitted remains unavailable; this
 limitation is retained rather than overstated.
+
+## Independent post-collection verifier prepared
+
+Added `training/scripts/phase108_verify_blind_collection_v18r2.py` and its
+synthetic-fixture tests. The verifier first requires authoritative `sacct`
+`COMPLETED/0:0`, then checks the frozen suite and pinned model/script hashes,
+private file modes, exactly 320 unique case IDs in each of aliases A/B/C,
+response-file and per-answer hashes, response metadata, and aggregate counts.
+It opens the randomized identity map only after all three arms pass those
+checks, and emits aggregate metadata only (never answer text). Three synthetic
+tests pass locally, including rejection of a running job and a corrupted arm
+before identity-map access. These tests do not inspect the active private
+outputs; the verifier has not yet been run against job 44803.
+
+One provenance limitation remains: the collector did not record the
+identity-map SHA in its initial run manifest, so the final verifier can report
+the map's current SHA but cannot prove it is byte-identical to its original
+creation state. The private 0700 output directory/0600 map reduce exposure but
+are not a cryptographic pre-commitment. Do not overstate this property when
+reporting the blind comparison.
+
+At this recheck, job 44803 is still running; alias C remains 320/320 and alias
+B has advanced to 58/320. No alias mapping was opened and no response text was
+read for interpretation. The separate Qwen3-14B serving job 44601 remains
+healthy per its in-job smoke results, but is not the Phase108 adapter and its
+compute-node SSH tunnel from the laptop is still blocked by compute-node key
+authorization. The verifier work does not change that service.
