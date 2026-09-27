@@ -56,6 +56,11 @@ JOB_SHA=$(sha256sum "$0" | awk '{print $1}')
 REPLAY_LOCAL_SHA=$(sha256sum "$REPLAY" | awk '{print $1}')
 test "$REPLAY_LOCAL_SHA" = "$REPLAY_SHA"
 
+export PYTHONPATH="$ROOT/data/training${PYTHONPATH:+:$PYTHONPATH}"
+cd "$ROOT/data/training"
+"$PYTHON" -m unittest test_phase108_greedy_exposed_replay -v
+cd "$ROOT"
+
 run_arm() {
   local name="$1" adapter="$2" adapter_sha="$3" scale="$4" port="$5"
   local server_log="$RUN_DIR/server-$name.log"
