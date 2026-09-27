@@ -66,6 +66,14 @@ login-node `sacct` snapshot for 44803 was observed at
 The answer key and identity map remain unopened. The packer was adjusted to
 consume the integrity report's verified collection snapshot plus an explicit,
 fresh login-node `sacct` snapshot for the verifier job; it still reruns all
-collection hash/schema checks and never reads the identity map. Run its tests,
-then submit it only with a fresh `sacct` observation for the successful
-integrity job and an `afterok` dependency.
+collection hash/schema checks and never reads the identity map.
+
+The first packer submission (`44916`) exited during a path precondition,
+before unit tests or bundle generation: its answer-key path incorrectly pointed
+under `data/`. The key was located by filename only at
+`results/phase108-train-leak-scan-v18r2/`; its parent is mode `0700`, the file
+is mode `0600`, and its SHA-256 matches the frozen pin
+`f79828a550fb80cd84aba7faa593cd84a4f47e08ee8afc358957726de17a4015`.
+No key content or identity map was opened by the failed attempt. The tracked
+packer wrapper now points to this sealed artifact; rerun only after syncing
+and hash-checking that wrapper.
