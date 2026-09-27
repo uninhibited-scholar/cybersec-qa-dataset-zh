@@ -308,3 +308,15 @@ answer-key file are mode 0600. The revised wrapper passed local and remote
 `bash -n`; its remote SHA-256 matches commit `b743988`. These checks are in
 addition to the Python packer's frozen-artifact hash validation and do not
 change the evaluation protocol.
+
+## Historical training-script retrieval attempt
+
+To strengthen reproducibility provenance for the corrected-r2 training job,
+queried `sacct` again for job 44306: it remains recorded as COMPLETED/0:0 with
+its submission path `data/training/slurm/phase108_cuda_scale_corrected.sbatch`
+and timestamps. `scontrol write batch_script 44306 ...` returned
+`Invalid job id specified`, so Slurm no longer exposes the submitted script
+bytes through that interface. No output file was created. This confirms the
+previous limitation: accounting plus the pre-job Git runner hash are available,
+but the exact historical batch-script bytes cannot be cryptographically
+recovered from Slurm. The active blind collection remains unaffected.
