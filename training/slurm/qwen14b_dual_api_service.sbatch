@@ -127,8 +127,8 @@ fi
   --base-url "http://127.0.0.1:$ROUTER_PORT" \
   --expected-route big --output "$RUN_DIR/big-smoke.json"
 
-printf '{"status":"ready","job_id":"%s","node":"%s","bind":"127.0.0.1","router_port":%s,"primary_model":"qwen3-14b-bf16","fallback_model":"qwen3-1.7b-cpu","primary_config_sha256":"%s","primary_index_sha256":"%s","phase108_adapter_loaded":false,"tools":[],"expires_after":"Slurm allocation time limit"}\n' \
-  "$SLURM_JOB_ID" "$NODE" "$ROUTER_PORT" "$MODEL_CONFIG_SHA256" "$MODEL_INDEX_SHA256" \
+printf '{"status":"ready","job_id":"%s","handoff_from_job":"%s","node":"%s","bind":"127.0.0.1","router_port":%s,"primary_model":"qwen3-14b-bf16","fallback_model":"qwen3-1.7b-cpu","primary_config_sha256":"%s","primary_index_sha256":"%s","phase108_adapter_loaded":false,"tools":[],"expires_after":"Slurm allocation time limit"}\n' \
+  "$SLURM_JOB_ID" "${HANDOFF_FROM_JOB:-}" "$NODE" "$ROUTER_PORT" "$MODEL_CONFIG_SHA256" "$MODEL_INDEX_SHA256" \
   >"$RUN_DIR/ready.json"
 chmod 600 "$RUN_DIR/ready.json" "$RUN_DIR/fallback-smoke.json" "$RUN_DIR/big-smoke.json"
 printf 'QWEN14B_API_READY=true node=%s router_port=%s run_dir=%s\n' "$NODE" "$ROUTER_PORT" "$RUN_DIR"

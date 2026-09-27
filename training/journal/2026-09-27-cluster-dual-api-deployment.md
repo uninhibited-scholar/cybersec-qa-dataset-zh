@@ -52,3 +52,17 @@ The read-only desktop checker `check-qwen-cluster-api.sh` verifies the local
 tunnel health, job `44601` state, and cluster quota in one command. It does not
 submit, cancel, or renew a Slurm job. The current check reports `44601`
 `RUNNING` at about 1 day 2 hours and quota 292G/479G.
+
+## Transparent successor handoff
+
+Added `training/scripts/submit_qwen14b_successor.sh`. Given an owned current
+job ID, it performs an ownership check and submits exactly one
+`qwen14b_dual_api_service.sbatch` successor with
+`--dependency=afterany:<current-job-id>`. It does not cancel or renew the
+current job, does not create an overlapping GPU allocation, and does not
+disguise the job type. The helper passes `HANDOFF_FROM_JOB` for provenance;
+the service still publishes a new readiness record and tunnel template when
+the successor starts. The helper was syntax-checked and passed its local fake
+`sbatch`/`squeue` test. It has not been submitted, so the current production
+allocation remains unchanged. A future handoff still requires refreshing the
+local SSH tunnel only after the successor's readiness record is verified.
