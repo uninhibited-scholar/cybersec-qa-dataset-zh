@@ -24,6 +24,7 @@ from phase108_cuda_full_validation import adapter_layers, install_mlx_adapter
 
 TARGET_MODULES = ("q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj")
 GENERIC_PROMPT = "Say hello in one word."
+EXPOSED_CASE_SHA = "9a4d398893034b922cc67582089642c553733c856ab2812088b398a2546fbb6b"
 
 
 def sha256(path: Path) -> str:
@@ -35,10 +36,12 @@ def sha256(path: Path) -> str:
 
 
 def load_base(base: Path) -> tuple[torch.nn.Module, AutoTokenizer]:
-    tokenizer = AutoTokenizer.from_pretrained(str(base), trust_remote_code=False)
+    tokenizer = AutoTokenizer.from_pretrained(
+        str(base), local_files_only=True, trust_remote_code=False
+    )
     model = AutoModelForCausalLM.from_pretrained(
         str(base), torch_dtype=torch.float16, device_map="cuda:0",
-        low_cpu_mem_usage=True, trust_remote_code=False,
+        low_cpu_mem_usage=True, local_files_only=True, trust_remote_code=False,
     )
     model.eval()
     return model, tokenizer
@@ -83,6 +86,10 @@ def main() -> None:
     parser.add_argument("--adapter", type=Path, required=True)
     parser.add_argument("--expected-adapter-sha256", required=True)
     parser.add_argument("--expected-base-config-sha256", required=True)
+    parser.add_argument("--case-source", type=Path,
+                        help="optional already-exposed v0.9 cases file for a failing-case probe")
+    parser.add_argument("--case-id", help="case ID from the already-exposed diagnostic sample")
+    parser.add_argument("--expected-case-source-sha256")
     args = parser.parse_args()
     if not torch.cuda.is_available():
         raise SystemExit("CUDA allocation required; do not run on the login node")
@@ -93,13 +100,38 @@ def main() -> None:
     if base_config_sha != args.expected_base_config_sha256:
         raise ValueError("base config SHA-256 mismatch")
 
-    tokenizer_for_eos = AutoTokenizer.from_pretrained(str(args.base), trust_remote_code=False)
+    if bool(args.case_source) != bool(args.case_id):
+        raise ValueError("--case-source and --case-id must be provided together")
+    if args.case_source:
+        expected_case_sha = args.expected_case_source_sha256 or EXPOSED_CASE_SHA
+        if expected_case_sha != EXPOSED_CASE_SHA or sha256(args.case_source) != EXPOSED_CASE_SHA:
+            raise ValueError("only the already-exposed v0.9 diagnostic source is allowed")
+        rows = json.loads(args.case_source.read_text(encoding="utf-8"))
+        selected = next((row for row in rows if row.get("id") == args.case_id), None)
+        if selected is None or not isinstance(selected.get("messages"), list):
+            raise ValueError("requested exposed case is missing or malformed")
+        messages = selected["messages"]
+        case_source_sha = EXPOSED_CASE_SHA
+    else:
+        messages = [{"role": "user", "content": GENERIC_PROMPT}]
+        case_source_sha = None
+
+    tokenizer_for_eos = AutoTokenizer.from_pretrained(
+        str(args.base), local_files_only=True, trust_remote_code=False
+    )
     eos_id = int(tokenizer_for_eos.eos_token_id)
     del tokenizer_for_eos
 
     # First, measure the base and custom manual MLX-layout wrapper in one load.
     manual_model, tokenizer = load_base(args.base)
-    input_ids, attention_mask = make_inputs(manual_model, tokenizer)
+    if case_source_sha:
+        rendered = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+        encoded = tokenizer(rendered, return_tensors="pt", add_special_tokens=False)
+        input_device = manual_model.get_input_embeddings().weight.device
+        input_ids = encoded["input_ids"].to(input_device)
+        attention_mask = encoded["attention_mask"].to(input_device)
+    else:
+        input_ids, attention_mask = make_inputs(manual_model, tokenizer)
     base_logits = last_logits(manual_model, input_ids, attention_mask)
     installed = attach_adapter(manual_model, args.adapter, scale=20.0)
     manual20_logits = last_logits(manual_model, input_ids, attention_mask)
@@ -122,7 +154,14 @@ def main() -> None:
     ))
     install_mlx_adapter(peft_model, args.adapter)
     peft_model.eval()
-    input_ids, attention_mask = make_inputs(peft_model, tokenizer)
+    if case_source_sha:
+        rendered = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+        encoded = tokenizer(rendered, return_tensors="pt", add_special_tokens=False)
+        input_device = peft_model.get_input_embeddings().weight.device
+        input_ids = encoded["input_ids"].to(input_device)
+        attention_mask = encoded["attention_mask"].to(input_device)
+    else:
+        input_ids, attention_mask = make_inputs(peft_model, tokenizer)
     peft20_logits = last_logits(peft_model, input_ids, attention_mask)
 
     difference = manual20_logits - peft20_logits
@@ -135,6 +174,8 @@ def main() -> None:
         "blind": False,
         "generation_performed": False,
         "raw_prompt_or_response_saved": False,
+        "case_id": args.case_id,
+        "case_source_sha256": case_source_sha,
         "adapter_sha256": adapter_sha,
         "base_config_sha256": base_config_sha,
         "lora_rank": 8,
