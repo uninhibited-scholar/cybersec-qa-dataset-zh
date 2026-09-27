@@ -29,3 +29,20 @@ Collection elapsed time in the log: `13468.474` seconds. The large empty-output 
 ## Scope
 
 Only sanitized aggregate metadata is recorded here. Raw prompts/responses, alias map, answer key, and model weights remain on the cluster and are not committed. Production API/adapters, rubric/protocol, permissions, validation data, and candidate weights were not changed.
+
+## Integrity-verifier follow-up
+
+The first post-collection integrity job (`44837`) was terminal `FAILED` with
+Slurm reason `Dependency`; it produced no report. A resubmission (`44907`) also
+exited before running its verifier. Its silent shell precondition failure was
+traced to the wrapper looking for Python under the project directory, while
+the installed environment is `$HOME/miniforge3/envs/coevo`.
+
+Corrected both tracked CPU wrappers to resolve that established environment
+path. The blind-review wrapper now requires an explicit
+`INTEGRITY_JOB_ID` rather than carrying a stale hard-coded dependency. Shell
+syntax passed; local synthetic tests passed 4/4 for the integrity verifier and
+5/5 for the review packer. No integrity report was created by the failed
+attempts, and the answer key and identity map remain unopened. Rerun the
+unchanged integrity verifier with `afterany:44803`; do not run the review
+packer until that verifier succeeds.

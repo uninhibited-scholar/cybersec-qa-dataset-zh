@@ -14,7 +14,7 @@ set -euo pipefail
 umask 077
 
 ROOT=/data3/ieug25/zj225/cyber-model-migration
-PYTHON="$ROOT/miniforge3/envs/coevo/bin/python"
+PYTHON="$HOME/miniforge3/envs/coevo/bin/python"
 RUN_DIR="$ROOT/results/phase108-v18r2-blind-44803"
 CASES="$ROOT/data/phase108-eval-private-v18r2/phase108-private-cases-v1.8-rev2.json"
 FREEZE="$ROOT/data/phase108-eval-private-v18r2/freeze-v1.8-rev2.json"
