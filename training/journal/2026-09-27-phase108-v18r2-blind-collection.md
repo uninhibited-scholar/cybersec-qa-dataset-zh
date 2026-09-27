@@ -183,9 +183,15 @@ training-start log records the source adapter hash, train-row count, optimizer
 settings, seed, and `test_split_read=false`; the final adapter hash matches
 the pinned corrected-r2 artifact. The remote training runner currently has
 SHA-256 `e69ea919024fe45cce9f39a1d6e38bec18282eb8a07c488f61f6aa8d9a5df728`
-and a modification time before job 44306, but the training-start manifest did
-not record that code hash. The submitted batch script currently has SHA-256
-`83131366f5e362ca64914be354f4b2077d712885cdaff4a31134815c2120d6c8` and was
-modified after job 44306. Therefore configuration/provenance is substantially
-documented, but the exact historical training-code snapshot is not
-cryptographically tied to the completed run; this limitation remains open.
+and exactly matches the runner in repository commit `6f35428` (2026-09-24
+11:54:01 HKT), which predates the job start. The submitted batch-script path
+exists in that same commit with SHA-256
+`4fe393a7b33f3eaffec6d7f6974d46619f6316c3fc886194a2e4f62d8570eb3f`.
+Commit `04c4388` changed that script at 11:55:28 HKT, after the job had
+started, and the present remote copy was later modified again. This timeline
+and the matching runner hash strongly identify the repository recipe used,
+but Slurm's retained accounting stores only the submission path, not the
+submitted script bytes or their hash. Thus the full training recipe is
+recoverable from Git and the run log, while cryptographic attestation of the
+exact batch-script bytes actually submitted remains unavailable; this
+limitation is retained rather than overstated.
