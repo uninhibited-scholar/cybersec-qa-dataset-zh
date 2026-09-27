@@ -51,29 +51,43 @@ The guard worked as intended: no model inference occurred and no output file
 was created. Fix only the expected digest, retain this failed attempt, and
 retry under another fresh job ID after syncing and checking the wrapper hash.
 
-## Retry 45030 — running, scales 1, 2.5, and 5 complete
+## Retry 45030 — completed successfully
 
 After correcting the Python namespace and exact parent-source SHA, the wrapper
 passed remote syntax and provenance preflight. The no-inference checker
 reported the pinned candidate SHA, rank 8, MLX scale 20, PEFT alpha 160,
 effective scale 20, and `test_split_read=false`. Seven adapter/scale unit tests
-passed inside the scheduled job before model loading. Job `45030` is running
-on idle `titanv1`; wrapper SHA-256 is
+passed inside the scheduled job before model loading. Job `45030` completed
+successfully on `titanv1` with exit code `0:0` after 1:23:53; wrapper SHA-256 is
 `5102e49130e9c6668aa7badf87be2597f0a37c9ea8deb9fac8d0569eb888ee0e`.
 
-At the current checkpoint the private aggregate contains two completed rows:
+The final aggregate contains exactly five rows, all `status=complete`, all
+with 1,089 validation rows, frozen validation SHA
+`44f46f44b6a3653d0acd799d24b4c6d331a13030eaa4f3e6849a84141b18a365`, candidate
+adapter SHA `4e9177c3956aaa0c176929e7d8225b9882a2587b4dadad9cb51c04d905453772`,
+and `train_split_read=false`, `test_split_read=false`,
+`production_approval=false`:
 
 | Diagnostic scale | Validation loss | Rows | Frozen validation SHA | Train/test read |
 | ---: | ---: | ---: | --- | --- |
 | 1.0 | 2.0980716427 | 1,089 | `44f46f44b6a3653d0acd799d24b4c6d331a13030eaa4f3e6849a84141b18a365` | neither |
 | 2.5 | 2.0298910662 | 1,089 | `44f46f44b6a3653d0acd799d24b4c6d331a13030eaa4f3e6849a84141b18a365` | neither |
 | 5.0 | 1.9416260420 | 1,089 | `44f46f44b6a3653d0acd799d24b4c6d331a13030eaa4f3e6849a84141b18a365` | neither |
+| 10.0 | 1.8159374347 | 1,089 | `44f46f44b6a3653d0acd799d24b4c6d331a13030eaa4f3e6849a84141b18a365` | neither |
+| 20.0 | 1.7063122642 | 1,089 | `44f46f44b6a3653d0acd799d24b4c6d331a13030eaa4f3e6849a84141b18a365` | neither |
 
-Both rows record the same immutable adapter SHA-256
+All five rows record the same immutable adapter SHA-256
 `4e9177c3956aaa0c176929e7d8225b9882a2587b4dadad9cb51c04d905453772`, rank 8,
-and the expected PEFT alpha/effective scales (8/1, 20/2.5, and 40/5). The wrapper
-will continue at scales 10 and 20. These are validation-loss sensitivity
-measurements only; in particular, the worse loss at small scale does not
-prove that the model is more or less capable or safe. The final JSONL and
-job-log hashes, all five rows, and terminal Slurm state remain to be verified
-before treating this sweep as complete.
+and the expected PEFT alpha/effective scales (8/1, 20/2.5, 40/5, 80/10, and
+160/20). The aggregate JSONL SHA-256 is
+`b47d979d473435f1320a7b8d6173232bf46b48f5019aba95d6fa34ee5202adeb`; the
+copy in `training/eval/phase108-r2-valid-scale-sweep-45030.jsonl` matches the
+remote file hash. The terminal log contains
+`PHASE108_SCALE_VALIDATION_SWEEP=PASS scales=1,2.5,5,10,20 rows_per_scale=1089`
+and the expected output hash. The retry wrapper hash matches the pinned value.
+
+These are validation-loss sensitivity measurements only, not a capability or
+safety comparison and not an inference-scale or deployment selection. Lower
+loss at larger scales does not establish better behavior. The stage is now
+complete and is paused at the user's request; no further training, blind
+evaluation, production change, or promotion was initiated.
