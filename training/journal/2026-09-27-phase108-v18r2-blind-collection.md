@@ -362,3 +362,22 @@ markers were inspected—no response text or identity mapping was opened. Do
 not interpret or attribute per-arm aggregates before the prescribed blind
 review/scoring freeze. No candidate was deployed and no evaluation criteria
 were changed.
+
+## Repository divergence handled without revealing blind labels
+
+The original branch push was rejected because upstream contains commit
+`1549fae` while local work contains ten branch-only commits. A merge preview
+showed substantive conflicts in the integrity verifier and journal: the
+upstream verifier reads and returns the blind identity map after collection
+integrity checks, while the local verifier deliberately checks only that the
+map is private and keeps its contents sealed until independent reviewers have
+frozen their scores. Merging the upstream variant now would undermine the
+blind-review ordering. No merge, force-push, or overwrite was performed.
+
+Instead, the verified local state at commit `5385aaf` was pushed to a new
+branch, `codex/phase108-blind-v18r2-safe-sync-20260927`; `git ls-remote`
+confirmed the branch points to that exact commit. Other dirty worktree files
+were left untouched. At the follow-up cluster poll, job `44803` remained
+`RUNNING` and the sealed B response file had advanced to 231 rows (C=320; A
+not yet started); verifier job `44837` remained dependency-pending. No raw
+response or identity mapping was opened.
