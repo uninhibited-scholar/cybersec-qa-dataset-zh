@@ -147,14 +147,9 @@ class Handler(BaseHTTPRequestHandler):
             return self._json(400, {"error": "invalid_json"})
         if not isinstance(payload, dict):
             return self._json(400, {"error": "invalid_request"})
-        # Kimi Code always includes its tool catalog. This endpoint has no
-        # tool executor, so remove tool metadata before forwarding instead of
-        # claiming support or failing an otherwise valid text completion.
-        if payload.get("tools") not in (None, []) or payload.get("functions") not in (None, []):
-            payload = dict(payload)
-            for key in ("tools", "functions", "tool_choice", "function_call", "parallel_tool_calls"):
-                payload.pop(key, None)
-            body = json.dumps(payload, separators=(",", ":")).encode()
+        # Preserve OpenAI tool metadata. The model backend returns validated
+        # tool_calls; this gateway only authenticates and proxies, and never
+        # executes tools itself.
         self._proxy(body)
 
 
@@ -183,7 +178,7 @@ def main() -> None:
     print(json.dumps({"gateway_ready": True, "bind_ip": str(bind_ip),
                       "port": args.port, "allowed_source": str(source_ip),
                       "upstream": args.upstream, "auth": "bearer_required",
-                      "tools_supported": False}), flush=True)
+                      "tools_supported": True, "tool_execution": "client_or_harness"}), flush=True)
     server.serve_forever(poll_interval=0.5)
 
 

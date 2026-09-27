@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import threading
 import time
 import uuid
@@ -28,6 +29,25 @@ MODEL = AutoModelForCausalLM.from_pretrained(
 )
 MODEL.eval()
 GENERATION_LOCK = threading.Lock()
+TOOL_CALL_RE = re.compile(r"<tool_call>\s*(\{.*?\})\s*</tool_call>", re.DOTALL)
+
+
+def parse_tool_calls(answer: str) -> list[dict]:
+    calls = []
+    for index, match in enumerate(TOOL_CALL_RE.finditer(answer)):
+        try:
+            obj = json.loads(match.group(1))
+            name = obj["name"]
+            arguments = obj.get("arguments", {})
+            if isinstance(arguments, str):
+                arguments = json.loads(arguments)
+            if not isinstance(name, str) or not isinstance(arguments, dict):
+                continue
+            calls.append({"id": "call_" + uuid.uuid4().hex[:12], "type": "function",
+                          "function": {"name": name, "arguments": json.dumps(arguments, ensure_ascii=False)}})
+        except (ValueError, TypeError, KeyError):
+            continue
+    return calls
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -69,6 +89,7 @@ class Handler(BaseHTTPRequestHandler):
                 tokenize=False,
                 add_generation_prompt=True,
                 enable_thinking=False,
+                tools=request.get("tools") or None,
             )
             inputs = TOKENIZER(prompt, return_tensors="pt").to("cuda:0")
             temperature = float(request.get("temperature", 0.0))
@@ -78,6 +99,9 @@ class Handler(BaseHTTPRequestHandler):
                 generation["top_p"] = float(request.get("top_p", 1.0))
             started = time.monotonic()
             if request.get("stream") is True:
+                if request.get("tools"):
+                    self._tool_stream(inputs, generation)
+                    return
                 self._stream(request, inputs, generation)
                 return
             with GENERATION_LOCK, torch.inference_mode():
@@ -85,12 +109,16 @@ class Handler(BaseHTTPRequestHandler):
             elapsed = time.monotonic() - started
             token_count = int(output.shape[1] - inputs["input_ids"].shape[1])
             answer = TOKENIZER.decode(output[0, inputs["input_ids"].shape[1]:], skip_special_tokens=True).strip()
+            tool_calls = parse_tool_calls(answer)
+            message = {"role": "assistant", "content": None if tool_calls else answer}
+            if tool_calls:
+                message["tool_calls"] = tool_calls
             self.send_json(200, {
                 "id": "chatcmpl-" + uuid.uuid4().hex[:16],
                 "object": "chat.completion",
                 "created": int(time.time()),
                 "model": MODEL_ID,
-                "choices": [{"index": 0, "message": {"role": "assistant", "content": answer}, "finish_reason": "length" if token_count >= max_tokens else "stop"}],
+                "choices": [{"index": 0, "message": message, "finish_reason": "tool_calls" if tool_calls else ("length" if token_count >= max_tokens else "stop")}],
                 "usage": {"prompt_tokens": int(inputs["input_ids"].shape[1]), "completion_tokens": token_count, "total_tokens": int(inputs["input_ids"].shape[1]) + token_count, "elapsed_seconds": elapsed},
             })
         except (ValueError, TypeError, json.JSONDecodeError) as exc:
@@ -143,6 +171,41 @@ class Handler(BaseHTTPRequestHandler):
         if errors:
             emit({"error": {"message": type(errors[0]).__name__, "type": "server_error"}})
         emit({"id": response_id, "object": "chat.completion.chunk", "created": created, "model": MODEL_ID, "choices": [{"index": 0, "delta": {}, "finish_reason": "stop"}]})
+        emit("[DONE]")
+
+    def _tool_stream(self, inputs: dict, generation: dict) -> None:
+        """Emit a valid OpenAI tool-call delta after tool-aware generation.
+
+        Tool requests are intentionally buffered so malformed partial XML is
+        never exposed as an apparent tool call. Normal text requests retain
+        token streaming in ``_stream``.
+        """
+        with GENERATION_LOCK, torch.inference_mode():
+            output = MODEL.generate(**inputs, **generation)
+        answer = TOKENIZER.decode(output[0, inputs["input_ids"].shape[1]:], skip_special_tokens=True).strip()
+        calls = parse_tool_calls(answer)
+        response_id = "chatcmpl-" + uuid.uuid4().hex[:16]
+        created = int(time.time())
+        self.send_response(200)
+        self.send_header("Content-Type", "text/event-stream; charset=utf-8")
+        self.send_header("Cache-Control", "no-cache")
+        self.send_header("Connection", "close")
+        self.end_headers(); self.close_connection = True
+        def emit(data: dict | str) -> None:
+            body = data if isinstance(data, str) else json.dumps(data, ensure_ascii=False)
+            self.wfile.write(("data: " + body + "\n\n").encode()); self.wfile.flush()
+        emit({"id": response_id, "object": "chat.completion.chunk", "created": created,
+              "model": MODEL_ID, "choices": [{"index": 0, "delta": {"role": "assistant"}, "finish_reason": None}]})
+        if calls:
+            emit({"id": response_id, "object": "chat.completion.chunk", "created": created,
+                  "model": MODEL_ID, "choices": [{"index": 0, "delta": {"tool_calls": calls}, "finish_reason": None}]})
+            finish = "tool_calls"
+        else:
+            emit({"id": response_id, "object": "chat.completion.chunk", "created": created,
+                  "model": MODEL_ID, "choices": [{"index": 0, "delta": {"content": answer}, "finish_reason": None}]})
+            finish = "stop"
+        emit({"id": response_id, "object": "chat.completion.chunk", "created": created,
+              "model": MODEL_ID, "choices": [{"index": 0, "delta": {}, "finish_reason": finish}]})
         emit("[DONE]")
 
     def log_message(self, *_args: object) -> None:

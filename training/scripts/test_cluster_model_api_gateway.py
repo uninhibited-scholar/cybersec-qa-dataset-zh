@@ -93,7 +93,7 @@ class GatewayTests(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertEqual(body["path"], "/health")
 
-    def test_tool_metadata_is_stripped_without_claiming_execution(self):
+    def test_tool_metadata_is_forwarded_without_gateway_execution(self):
         status, body = self.request(
             "/v1/chat/completions",
             {"messages": [{"role": "user", "content": "hello"}],
@@ -101,7 +101,7 @@ class GatewayTests(unittest.TestCase):
             f"Bearer {TOKEN}",
         )
         self.assertEqual(status, 200)
-        self.assertEqual(body["received"].get("tools"), None)
+        self.assertEqual(body["received"].get("tools")[0]["function"]["name"], "x")
 
     def test_authorized_chat_proxies_without_forwarding_credentials(self):
         payload = {"messages": [{"role": "user", "content": "hello"}], "max_tokens": 8}
