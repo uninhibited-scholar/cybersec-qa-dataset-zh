@@ -60,7 +60,7 @@ test "$(sha256sum "$MANIFEST" | awk '{print $1}')" = e60ae88a3f491ed94b13f9e26ef
 cd "$ROOT/data/training/scripts"
 "$PYTHON" -m unittest -v test_phase108_hf_adapter_smoke test_phase108_lora_scale
 "$PYTHON" "$PREFLIGHT" --candidate "$(dirname "$MANIFEST")" \
-  --expected-input-sha256 3ed1a85e7b021e1498332a525bfa4bb75b336a03579d526f8210f1576317036
+  --expected-input-sha256 3ed1a85e7b021e14198332a525bfa4bb75b336a03579d526f8210f1576317036
 
 echo "PHASE108_SCALE_VALIDATION_DIAGNOSTIC=true blind=false scored=false promotion=false train_split_read=false test_split_read=false adapter_sha256=$ADAPTER_SHA256 validation_sha256=$VALIDATION_SHA256 wrapper_sha256=$(sha256sum "$0" | awk '{print $1}')"
 mkdir -p "$ROOT/results"
