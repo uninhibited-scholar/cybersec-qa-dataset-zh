@@ -95,3 +95,23 @@ filename and rejects any conflicting embedded alias; two synthetic tests
 cover this behavior. Re-run the seven packer and six verifier tests, then
 submit a fresh packer job only after syncing and hash-checking the updated
 files.
+
+Updated packer and tests were synchronized with matching SHA-256 values. The
+seven packer tests and six verifier tests passed locally. Packer job `44921`
+completed `0:0` in two seconds, created a private 320-case/960-response blind
+review bundle with alias order shuffled per case, and reported
+`identity_map_opened=false`, `labels_revealed=false`, `scored=false`, and
+`deployment_eligible=false`. The directory is mode `0700`; bundle and metadata
+are mode `0600`. Bundle SHA-256 is
+`dad61351203486e4c8d8a34359333f6cd4321e90d857d7fe5528f9106f7b783e`.
+The bundle, which includes keys and responses for the authorized blind
+reviewer, remains only in the private cluster directory
+`/data3/ieug25/zj225/phase108-v18r2-blind-review-44803`; it was not copied to
+the Mac or Git. No semantic judgments or capability scores have yet been
+recorded. The identity map remains sealed pending independent blinded review.
+
+A fresh login-node `sacct` query confirms jobs `44617`, `44624`, `44803`,
+`44915`, and `44921` are all `COMPLETED`/`0:0`. This updates earlier
+connectivity-interrupted status notes; 44624 remains diagnostic-only and
+44803 remains a raw-weight three-arm collection, not a full Phase91-plus-two-
+reference comparison.
