@@ -244,3 +244,16 @@ read for interpretation. The separate Qwen3-14B serving job 44601 remains
 healthy per its in-job smoke results, but is not the Phase108 adapter and its
 compute-node SSH tunnel from the laptop is still blocked by compute-node key
 authorization. The verifier work does not change that service.
+
+## Blind-review handoff compatibility check
+
+The local Phase107 review-bundle builder is hard-bound to suite version
+`phase107-v0.2`, its own response schema, and its prompt-parity fields; it is
+not safe to point it directly at the v1.8-rev2 collection. The v1.8-rev2
+answer-key file is present only in the ignored local evaluation directory; the
+cluster suite directory currently contains the frozen cases and freeze record
+but no answer-key file. No key contents were opened or transferred. After
+44803 completes and 44837 verifies integrity, create a separate versioned
+v1.8-rev2 blind-review packer that preserves the existing rubric/protocol,
+validates all pinned hashes and all three 320-row arms, and leaves the identity
+map sealed until reviewers freeze scores and critical-failure adjudications.
