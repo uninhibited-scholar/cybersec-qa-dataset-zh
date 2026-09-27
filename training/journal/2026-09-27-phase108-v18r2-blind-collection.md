@@ -290,3 +290,14 @@ transferred, and the packer job was not submitted while 44803/44837 remain
 incomplete. Latest authoritative poll: 44803 RUNNING (1:31 elapsed), C=320,
 B response file=118 rows, A not started; 44837 PENDING on dependency. No raw
 responses or identity map were opened.
+
+## Collection progress recheck
+
+Later authoritative polls still show 44803 `RUNNING` on `titanv1` with exit
+code not yet set; its Slurm time limit is 1 day. B has advanced to 121/320
+flushed records, C remains 320/320, and A has not started because the runner
+processes arms sequentially. 44837 remains `PENDING` on its declared dependency.
+The delayed B arm is still advancing, so it was neither cancelled nor
+restarted. No raw response text or identity mapping was read. The pre-staged
+post-integrity packer has not been submitted and the answer key remains
+unstaged remotely.
