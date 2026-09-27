@@ -278,3 +278,15 @@ packer has not been run on the live collection: job 44803 was still RUNNING at
 the latest poll (1:23 elapsed), with alias C complete and alias B at 80/320;
 integrity job 44837 remained dependency-pending. Production, rubric/protocol,
 permissions, and candidate artifacts remain unchanged.
+
+The CPU-only post-integrity packer job wrapper is also prepared at
+`training/slurm/phase108_prepare_blind_review_v18r2.sbatch`; `bash -n` passes.
+It requires successful integrity job 44837, the private answer-key file, and
+creates the blinded review bundle outside the repository with restrictive
+permissions. The packer, verifier, their tests, the wrapper, and the pinned
+rubric/protocol/corrigendum were staged in a new mode-0700 cluster directory;
+remote SHA-256 values match local files. The answer key was deliberately not
+transferred, and the packer job was not submitted while 44803/44837 remain
+incomplete. Latest authoritative poll: 44803 RUNNING (1:31 elapsed), C=320,
+B response file=118 rows, A not started; 44837 PENDING on dependency. No raw
+responses or identity map were opened.
