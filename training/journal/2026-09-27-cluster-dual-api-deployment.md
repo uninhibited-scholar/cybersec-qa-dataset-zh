@@ -107,3 +107,10 @@ The Kimi launcher now starts/checks this router on `19003`; Kimi's cluster
 provider points to `http://127.0.0.1:19003/v1`. A forced-primary-failure test
 returned a real CPU response with route `small_fallback`, and a normal Kimi
 request returned `FAILOVER_PRIMARY_OK` through the unified entrypoint.
+
+Because Kimi can terminate descendants of its launcher, the local failover
+router is kept alive by the user-level LaunchAgent
+`com.uninhibited-scholar.qwen-cluster-failover` (token is read at runtime from
+the mode-600 Desktop token file). `launchctl print` shows it active, and the
+router remained healthy after a Kimi process exited. Unified SSE was also
+verified with a real `SSE_OK` response.
