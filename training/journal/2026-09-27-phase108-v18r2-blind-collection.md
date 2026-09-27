@@ -173,3 +173,19 @@ signal: the identity map and keys have not been opened, and no model is named
 or selected from this partial observation. A second arm is in progress. A
 quiet five-minute heartbeat monitors job 44803; production API/adapters,
 candidate weights, protocol, rubric, and permissions remain unchanged.
+
+## Candidate training-source audit follow-up
+
+Read-only Slurm accounting confirms training job `44306` completed with exit
+0 on `a100-1` in 1:01:25, and its `SubmitLine` identifies
+`sbatch data/training/slurm/phase108_cuda_scale_corrected.sbatch`. The
+training-start log records the source adapter hash, train-row count, optimizer
+settings, seed, and `test_split_read=false`; the final adapter hash matches
+the pinned corrected-r2 artifact. The remote training runner currently has
+SHA-256 `e69ea919024fe45cce9f39a1d6e38bec18282eb8a07c488f61f6aa8d9a5df728`
+and a modification time before job 44306, but the training-start manifest did
+not record that code hash. The submitted batch script currently has SHA-256
+`83131366f5e362ca64914be354f4b2077d712885cdaff4a31134815c2120d6c8` and was
+modified after job 44306. Therefore configuration/provenance is substantially
+documented, but the exact historical training-code snapshot is not
+cryptographically tied to the completed run; this limitation remains open.
