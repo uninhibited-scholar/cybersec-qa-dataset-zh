@@ -257,3 +257,24 @@ but no answer-key file. No key contents were opened or transferred. After
 v1.8-rev2 blind-review packer that preserves the existing rubric/protocol,
 validates all pinned hashes and all three 320-row arms, and leaves the identity
 map sealed until reviewers freeze scores and critical-failure adjudications.
+
+## v1.8-rev2 blinded review packer implemented
+
+Added `training/eval/phase108_prepare_blind_review_v18r2.py`, a separate
+versioned handoff adapter. It imports the existing integrity verifier from
+`training/scripts`, requires its private verified report, rechecks the
+collection's authoritative Slurm state and pinned cases/freeze/key/rubric/
+protocol/corrigendum hashes, checks all 960 response records and digests,
+shuffles case and response order, and writes answer-key-backed reviewer
+materials only into a new mode-0700 directory with mode-0600 files outside the
+Git repository. It never reads the sealed identity map or emits model labels;
+the bundle remains explicitly unscored and ineligible for deployment.
+
+Five synthetic tests pass locally: complete deterministic bundle construction,
+rejection of an incomplete matrix, response-digest tampering, missing rubric
+key field, and incorrect stratum counts. Python compilation also passes. No
+real prompts, answer keys, or model responses were used by these tests. The
+packer has not been run on the live collection: job 44803 was still RUNNING at
+the latest poll (1:23 elapsed), with alias C complete and alias B at 80/320;
+integrity job 44837 remained dependency-pending. Production, rubric/protocol,
+permissions, and candidate artifacts remain unchanged.
