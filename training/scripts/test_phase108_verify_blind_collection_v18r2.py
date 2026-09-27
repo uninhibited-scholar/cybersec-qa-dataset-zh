@@ -152,6 +152,23 @@ class BlindCollectionVerifierTests(unittest.TestCase):
                 missing_dir, self.cases_path, self.freeze_path, "44803", self.sacct_runner
             )
 
+    def test_accepts_explicit_login_node_sacct_snapshot(self):
+        report = verifier.verify_collection(
+            self.run_dir, self.cases_path, self.freeze_path, "44803",
+            lambda *_args, **_kwargs: self.fail("compute-node sacct must not be called"),
+            slurm_state="COMPLETED",
+            slurm_exit_code="0:0",
+            slurm_observed_at="2026-09-27T15:00:00+0800",
+        )
+        self.assertEqual(report["slurm"]["source"], "caller_supplied_login_node_sacct_snapshot")
+        self.assertEqual(report["slurm"]["observed_at"], "2026-09-27T15:00:00+0800")
+
+    def test_rejects_failed_login_node_sacct_snapshot(self):
+        with self.assertRaisesRegex(ValueError, "not COMPLETED"):
+            verifier.verify_slurm(
+                "44803", state="FAILED", exit_code="2:0", observed_at="now"
+            )
+
     def test_rejects_response_hash_mismatch_without_opening_identity_map(self):
         (self.run_dir / "identity-map.json").unlink()
         path = self.run_dir / "responses-A.jsonl"

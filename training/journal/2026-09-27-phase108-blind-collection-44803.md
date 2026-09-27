@@ -36,13 +36,23 @@ The first post-collection integrity job (`44837`) was terminal `FAILED` with
 Slurm reason `Dependency`; it produced no report. A resubmission (`44907`) also
 exited before running its verifier. Its silent shell precondition failure was
 traced to the wrapper looking for Python under the project directory, while
-the installed environment is `$HOME/miniforge3/envs/coevo`.
+the installed environment is `$HOME/miniforge3/envs/coevo`. After correcting
+that path, verifier job `44909` ran its four unit tests but rejected the
+collection because compute nodes cannot connect to SlurmDBD (`localhost:6819`
+connection refused), so `sacct` cannot be queried from the compute allocation.
+The authoritative login-node `sacct` query succeeds and reports `44803` as
+`COMPLETED`, `0:0`.
 
 Corrected both tracked CPU wrappers to resolve that established environment
-path. The blind-review wrapper now requires an explicit
-`INTEGRITY_JOB_ID` rather than carrying a stale hard-coded dependency. Shell
-syntax passed; local synthetic tests passed 4/4 for the integrity verifier and
-5/5 for the review packer. No integrity report was created by the failed
-attempts, and the answer key and identity map remain unopened. Rerun the
-unchanged integrity verifier with `afterany:44803`; do not run the review
-packer until that verifier succeeds.
+path. The verifier now accepts a fresh, explicit login-node `sacct` snapshot,
+records its source and observation time, and still rejects any state other
+than `COMPLETED`/`0:0`; its normal direct-`sacct` path remains available. The
+output is written to a job-specific temporary file and renamed only on
+success. The blind-review wrapper requires an explicit `INTEGRITY_JOB_ID`
+rather than carrying a stale hard-coded dependency. Shell syntax passed; local
+synthetic tests passed 6/6 for the integrity verifier and 5/5 for the review
+packer. Failed job `44909` left a zero-byte mode-0600 report placeholder; it
+must be preserved as a failed artifact, not mistaken for a successful report.
+The answer key and identity map remain unopened. Submit a fresh verifier using
+a newly observed login-node `sacct` snapshot and `afterany:44803`; do not run
+the review packer until that verifier succeeds.

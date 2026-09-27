@@ -1,7 +1,9 @@
 #!/bin/bash
 # CPU-only integrity check, scheduled after the blinded collector terminates.
 # It does not perform inference, scoring, or identity-map unblinding.
-# Submit with: sbatch --dependency=afterany:44803 this-file
+# The compute node cannot reach slurmdbd; supply a freshly queried login-node
+# sacct snapshot via COLLECTION_STATE, COLLECTION_EXIT_CODE, and
+# COLLECTION_STATUS_OBSERVED_AT when submitting with afterany:44803.
 #SBATCH --job-name=p108-blind-verify
 #SBATCH --partition=GPU-TITANX
 #SBATCH --cpus-per-task=1
@@ -20,10 +22,15 @@ CASES="$ROOT/data/phase108-eval-private-v18r2/phase108-private-cases-v1.8-rev2.j
 FREEZE="$ROOT/data/phase108-eval-private-v18r2/freeze-v1.8-rev2.json"
 VERIFIER="$ROOT/data/training/phase108_verify_blind_collection_v18r2.py"
 RESULT="$RUN_DIR/integrity-report.json"
+RESULT_TMP="$RUN_DIR/integrity-report.json.tmp.$SLURM_JOB_ID"
+COLLECTION_STATE="${COLLECTION_STATE:?submit with a fresh login-node sacct snapshot}"
+COLLECTION_EXIT_CODE="${COLLECTION_EXIT_CODE:?submit with a fresh login-node sacct snapshot}"
+COLLECTION_STATUS_OBSERVED_AT="${COLLECTION_STATUS_OBSERVED_AT:?submit with a fresh login-node sacct snapshot}"
 
 test -x "$PYTHON"
 test -d "$RUN_DIR"
 test ! -e "$RESULT"
+test ! -e "$RESULT_TMP"
 cd "$ROOT/data/training"
 
 # Purely synthetic unit tests; no private evaluation artifacts are opened here.
@@ -35,6 +42,10 @@ cd "$ROOT/data/training"
   --run-dir "$RUN_DIR" \
   --cases "$CASES" \
   --freeze "$FREEZE" \
-  --job-id 44803 > "$RESULT"
-chmod 600 "$RESULT"
+  --job-id 44803 \
+  --slurm-state "$COLLECTION_STATE" \
+  --slurm-exit-code "$COLLECTION_EXIT_CODE" \
+  --slurm-observed-at "$COLLECTION_STATUS_OBSERVED_AT" > "$RESULT_TMP"
+chmod 600 "$RESULT_TMP"
+mv "$RESULT_TMP" "$RESULT"
 echo "BLIND_COLLECTION_INTEGRITY=PASS report=$RESULT"

@@ -72,7 +72,21 @@ def require_private(path: Path, directory: bool = False) -> None:
         raise ValueError("output directory mode must be 0700")
 
 
-def verify_slurm(job_id: str, runner=subprocess.run) -> dict:
+def verify_slurm(job_id: str, runner=subprocess.run, *, state: str | None = None,
+                 exit_code: str | None = None, observed_at: str | None = None) -> dict:
+    supplied = (state is not None, exit_code is not None, observed_at is not None)
+    if any(supplied):
+        if not all(supplied):
+            raise ValueError("a Slurm snapshot requires state, exit code, and observation time")
+        if not state.strip() or state.strip().split()[0] != "COMPLETED" or exit_code != "0:0":
+            raise ValueError("collection Slurm job is not COMPLETED with exit code 0")
+        return {
+            "job_id": job_id,
+            "state": state,
+            "exit_code": exit_code,
+            "source": "caller_supplied_login_node_sacct_snapshot",
+            "observed_at": observed_at,
+        }
     result = runner(
         ["sacct", "-n", "-P", "-j", job_id, "--format=JobIDRaw,State,ExitCode"],
         check=True, capture_output=True, text=True, timeout=15,
@@ -91,8 +105,12 @@ def verify_slurm(job_id: str, runner=subprocess.run) -> dict:
 
 
 def verify_collection(run_dir: Path, cases_path: Path, freeze_path: Path,
-                      job_id: str, slurm_runner=subprocess.run) -> dict:
-    slurm = verify_slurm(job_id, slurm_runner)
+                      job_id: str, slurm_runner=subprocess.run, *,
+                      slurm_state: str | None = None,
+                      slurm_exit_code: str | None = None,
+                      slurm_observed_at: str | None = None) -> dict:
+    slurm = verify_slurm(job_id, slurm_runner, state=slurm_state,
+                         exit_code=slurm_exit_code, observed_at=slurm_observed_at)
     require_private(run_dir, directory=True)
 
     manifest_path = run_dir / "run-manifest.json"
@@ -243,9 +261,17 @@ def main() -> None:
     parser.add_argument("--cases", type=Path, required=True)
     parser.add_argument("--freeze", type=Path, required=True)
     parser.add_argument("--job-id", required=True)
+    parser.add_argument("--slurm-state")
+    parser.add_argument("--slurm-exit-code")
+    parser.add_argument("--slurm-observed-at")
     args = parser.parse_args()
     try:
-        report = verify_collection(args.run_dir, args.cases, args.freeze, args.job_id)
+        report = verify_collection(
+            args.run_dir, args.cases, args.freeze, args.job_id,
+            slurm_state=args.slurm_state,
+            slurm_exit_code=args.slurm_exit_code,
+            slurm_observed_at=args.slurm_observed_at,
+        )
     except (OSError, ValueError, subprocess.SubprocessError, json.JSONDecodeError) as exc:
         print(json.dumps({"status": "rejected", "reason": str(exc)}, sort_keys=True), file=sys.stderr)
         raise SystemExit(2)
