@@ -1,0 +1,55 @@
+{
+  "candidate_sha256": "4e9177c3956aaa0c176929e7d8225b9882a2587b4dadad9cb51c04d905453772",
+  "capability_score": false,
+  "cases_sha256": "c028b564d2273fc6779f248918511fa2bff0fe73abc4c7bb4ab6051ecc3b91c9",
+  "deployment_approval": false,
+  "freeze_sha256": "1dd603084fe3f026954ead8cb55004514b1c5b43a3b3219b0b10b0489ac0d5bf",
+  "identity_map_read": false,
+  "labels_revealed": false,
+  "parent_sha256": "3ed1a85e7b021e14198332a525bfa4bb75b336a03579d526f8210f1576317036",
+  "rows_per_arm": 320,
+  "slurm": {
+    "exit_code": "0:0",
+    "job_id": "44803",
+    "observed_at": "2026-09-27T15:44:03+0800",
+    "source": "caller_supplied_login_node_sacct_snapshot",
+    "state": "COMPLETED"
+  },
+  "status": "verified_blind_collection_integrity",
+  "summaries_by_blind_alias": {
+    "A": {
+      "empty": 297,
+      "finish_reasons": {
+        "length": 1,
+        "stop": 319
+      },
+      "responses_sha256": "9a2dc72766c915501999174db225fc9ceb14d618840829de4e62fe88f55670a5",
+      "rows": 320,
+      "tool_markers": 0,
+      "unclosed_thinking": 0
+    },
+    "B": {
+      "empty": 3,
+      "finish_reasons": {
+        "length": 179,
+        "other_stop": 44,
+        "stop": 97
+      },
+      "responses_sha256": "516582dab87dde4dd6fcb74e0acef9e566982987dba655d1194ca7cc24f8ee27",
+      "rows": 320,
+      "tool_markers": 19,
+      "unclosed_thinking": 0
+    },
+    "C": {
+      "empty": 298,
+      "finish_reasons": {
+        "length": 1,
+        "stop": 319
+      },
+      "responses_sha256": "47be89fbef8a6ef0bff6cbb766c96066e381ee0706e04b66a1ae9fe7061f902f",
+      "rows": 320,
+      "tool_markers": 0,
+      "unclosed_thinking": 0
+    }
+  }
+}

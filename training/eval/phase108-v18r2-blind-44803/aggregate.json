@@ -1,0 +1,81 @@
+{
+  "adapter_loader_sha256": "00ef5d3b1aaada8285b711a68f47c9e00a4fb9dbbd993e8eaf8eefd7426fa371",
+  "answer_keys_sha256": "f79828a550fb80cd84aba7faa593cd84a4f47e08ee8afc358957726de17a4015",
+  "base_config_sha256": "260a51b7a10e45b682d6f4b3535b6fca3a7e42e1e55361c177e2c9f3ade27650",
+  "base_index_sha256": "5e699a61da09415f33a625885364d3889a80acb6ab88aedaf6e195b2612addf4",
+  "blind": true,
+  "candidate_sha256": "4e9177c3956aaa0c176929e7d8225b9882a2587b4dadad9cb51c04d905453772",
+  "cases_sha256": "c028b564d2273fc6779f248918511fa2bff0fe73abc4c7bb4ab6051ecc3b91c9",
+  "chat_template_sha256": "9287fdda1d9257e0bdebaa2eac2db569a6cfc64d3b3ac1b812edd29f583bbc86",
+  "collector_sha256": "9a1efefb3f02080e459ffbf6ec8f9052129b4595f0061e104ea6cc007f9d2a64",
+  "elapsed_seconds": 13468.474,
+  "evaluation": "phase108_v1.8-rev2_blind_raw_weight_collection",
+  "inference": {
+    "adapter_scale": 20.0,
+    "max_new_tokens": 700,
+    "repetition_penalty": 1.12,
+    "repetition_window": 128,
+    "seed": "sha256(case_id) shared across arms",
+    "temperature": 0.12,
+    "tools": [],
+    "top_k": 0,
+    "top_p": 0.9
+  },
+  "job_script_sha256": "9599873ebaaf53b44d2d850ff49170f2de3950c574f6d38a4864d966ddc4fe30",
+  "keys_opened": false,
+  "parent_sha256": "3ed1a85e7b021e14198332a525bfa4bb75b336a03579d526f8210f1576317036",
+  "production_changed": false,
+  "promotion_eligible": false,
+  "runtime": {
+    "capability": [
+      7,
+      0
+    ],
+    "device": "NVIDIA TITAN V",
+    "dtype": "torch.float16",
+    "torch": "2.6.0+cu124",
+    "transformers": "4.55.2"
+  },
+  "scores": false,
+  "suite_freeze_sha256": "1dd603084fe3f026954ead8cb55004514b1c5b43a3b3219b0b10b0489ac0d5bf",
+  "summaries_by_blind_alias": {
+    "A": {
+      "cases": 320,
+      "empty_count": 297,
+      "finish_reasons": {
+        "length": 1,
+        "stop": 319
+      },
+      "median_latency_seconds": 0.0981,
+      "responses_sha256": "9a2dc72766c915501999174db225fc9ceb14d618840829de4e62fe88f55670a5",
+      "tool_marker_count": 0,
+      "unclosed_thinking_count": 0
+    },
+    "B": {
+      "cases": 320,
+      "empty_count": 3,
+      "finish_reasons": {
+        "length": 179,
+        "other_stop": 44,
+        "stop": 97
+      },
+      "median_latency_seconds": 40.6157,
+      "responses_sha256": "516582dab87dde4dd6fcb74e0acef9e566982987dba655d1194ca7cc24f8ee27",
+      "tool_marker_count": 19,
+      "unclosed_thinking_count": 0
+    },
+    "C": {
+      "cases": 320,
+      "empty_count": 298,
+      "finish_reasons": {
+        "length": 1,
+        "stop": 319
+      },
+      "median_latency_seconds": 0.0983,
+      "responses_sha256": "47be89fbef8a6ef0bff6cbb766c96066e381ee0706e04b66a1ae9fe7061f902f",
+      "tool_marker_count": 0,
+      "unclosed_thinking_count": 0
+    }
+  },
+  "system_prompt_sha256": "8ece8f47d1fcdca21bdcc8174539ad29182bbaaaf3eb7b303d5536aaaf53ade5"
+}

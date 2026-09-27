@@ -115,3 +115,64 @@ A fresh login-node `sacct` query confirms jobs `44617`, `44624`, `44803`,
 connectivity-interrupted status notes; 44624 remains diagnostic-only and
 44803 remains a raw-weight three-arm collection, not a full Phase91-plus-two-
 reference comparison.
+
+## Final collection verification (2026-09-27)
+
+The authoritative login-node query confirms Slurm job `44803` is
+`COMPLETED`/`0:0` (elapsed `03:46:09`, on `titanv1`); the bounded job log ends
+with `blind_collection_complete=true`, `scored=false`,
+`promotion_eligible=false`, and `production_changed=false`. The collector's
+stderr reports all four unit tests passing. Its seven preflight pins were
+verified on the compute node before model loading:
+
+| Input | SHA-256 |
+|---|---|
+| Frozen cases | `c028b564d2273fc6779f248918511fa2bff0fe73abc4c7bb4ab6051ecc3b91c9` |
+| Freeze record | `1dd603084fe3f026954ead8cb55004514b1c5b43a3b3219b0b10b0489ac0d5bf` |
+| Parent adapter | `3ed1a85e7b021e1498332a525bfa4bb75b336a03579d526f8210f1576317036` |
+| Corrected-r2 adapter | `4e9177c3956aaa0c176929e7d8225b9882a2587b4dadad9cb51c04d905453772` |
+| Collector | `9a1efefb3f02080e459ffbf6ec8f9052129b4595f0061e104ea6cc007f9d2a64` |
+| Adapter loader | `00ef5d3b1aaada8285b711a68f47c9e00a4fb9dbbd993e8eaf8eefd7426fa371` |
+| Collector tests | `47b1ecd859e14627801f7e7a7120005be9d2d8af946961a60df07b52c135c80b` |
+
+The output directory is mode `0700`; aggregate, manifest, integrity report,
+identity-map, and response files are mode `0600`. Each response file contains
+exactly 320 records. SHA-256 values recomputed on the cluster match the
+collector's completion records and sanitized aggregate:
+
+| Blind alias | Empty | Finish reasons | Tool markers | Median latency (s) | Response SHA-256 |
+|---|---:|---|---:|---:|---|
+| A | 297/320 | stop 319; length 1 | 0 | 0.0981 | `9a2dc72766c915501999174db225fc9ceb14d618840829de4e62fe88f55670a5` |
+| B | 3/320 | stop 97; length 179; other_stop 44 | 19 | 40.6157 | `516582dab87dde4dd6fcb74e0acef9e566982987dba655d1194ca7cc24f8ee27` |
+| C | 298/320 | stop 319; length 1 | 0 | 0.0983 | `47be89fbef8a6ef0bff6cbb766c96066e381ee0706e04b66a1ae9fe7061f902f` |
+
+Metadata file hashes verified against the remote copies and completion log:
+
+- `aggregate.json`: `96f663e515501141be460b87e9b5e0a5bbeacc0d5146a7c61083a8fbcdde8156`
+- `run-manifest.json`: `799a850eb8791592c560f8d588338ca72fa6c7dc49d34ad660f77b952897db0b`
+- `integrity-report.json`: `523ded4587c7c6301f1b6ddd5c92d7dc1cf896fdec113c59ad1412a092ddcd54`
+- Private reviewer bundle (remains on cluster):
+  `dad61351203486e4c8d8a34359333f6cd4321e90d857d7fe5528f9106f7b783e`.
+
+The collection manifest says `keys_opened=false`; the post-collection
+integrity report says `identity_map_read=false` and `labels_revealed=false`.
+The sealed identity map was not read. Answer-key material was accessed only by
+the post-integrity reviewer-bundle preparation step; it remains in the private
+cluster bundle and was not transferred. The bundle and all raw response files
+remain on the cluster. Only `aggregate.json`, `run-manifest.json`, and
+`integrity-report.json` were copied locally; these metadata files are the only
+result artifacts eligible for this Git record.
+
+Two independent semantic-review agents could not access the cluster's private
+`/data3` mount from their execution environment. They did not read the bundle,
+inspect identities, create ledgers, or score responses. No raw bundle was
+copied to make the review possible. Semantic review, critical-failure
+adjudication, and identity unsealing therefore remain pending.
+
+The aggregate empty-output screen is a blocking regression signal: two
+anonymous arms returned nearly all immediate-stop empty outputs, while the
+third was mostly non-empty but had 179 length finishes and 19 tool markers.
+This is not a quality score and does not identify which arm is the candidate.
+Keep model identities sealed, treat promotion/capability gates as unpassed,
+and leave production and permissions unchanged until compliant independent
+review and frozen regression gates complete.
