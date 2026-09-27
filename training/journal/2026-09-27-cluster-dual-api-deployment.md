@@ -34,8 +34,9 @@ outside Git in permission-600 Desktop files; the token is not recorded here.
 - The earlier in-allocation smoke also passed both non-streaming and SSE
   paths for the primary and explicit CPU fallback; fallback responses carry
   `small_fallback` and are not presented as primary output.
-- Gateway unit tests: 5/5 passed. Tool/function-call requests are explicitly
-  rejected because this endpoint has no tool executor.
+- Gateway unit tests: 5/5 passed. Tool/function metadata is stripped before
+  forwarding because this endpoint has no tool executor; it never claims to
+  execute tools.
 
 ## Boundaries and remaining operations
 
@@ -46,3 +47,8 @@ through Slurm, with a health/readiness handoff and no overlapping unauthorized
 GPU use. The service will end when allocation `44601` reaches its time limit
 or a backend exits; the next step is a policy-compliant handoff mechanism,
 then later Phase108 adapter matching and independent evaluation.
+
+The read-only desktop checker `check-qwen-cluster-api.sh` verifies the local
+tunnel health, job `44601` state, and cluster quota in one command. It does not
+submit, cancel, or renew a Slurm job. The current check reports `44601`
+`RUNNING` at about 1 day 2 hours and quota 292G/479G.
