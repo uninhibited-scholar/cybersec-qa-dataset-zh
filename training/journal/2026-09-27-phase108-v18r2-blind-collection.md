@@ -401,3 +401,38 @@ Phase91 endpoint and at least two pinned reference runtimes alongside the
 candidate, using the already-frozen Phase107 rubric and inference protocol;
 the existing three-arm collection remains a separate adapter-ablation result.
 No rubric or protocol has been changed by this scope audit.
+
+## v1.8-rev2 contamination and semantic-review evidence cross-check
+
+Before using the sealed responses for any model-quality claim, cross-checked
+the local audit artifacts against the frozen suite hashes without printing
+suite text. The cases file is SHA-256
+`c028b564d2273fc6779f248918511fa2bff0fe73abc4c7bb4ab6051ecc3b91c9`, the
+answer keys are `f79828a550fb80cd84aba7faa593cd84a4f47e08ee8afc358957726de17a4015`,
+and the freeze record is
+`1dd603084fe3f026954ead8cb55004514b1c5b43a3b3219b0b10b0489ac0d5bf`.
+
+The full local exact-overlap audit report SHA is
+`41e475f0a3fc2c314d50878e5951ebaa9f361b02e920ad2bcb1a475ea0e6fcd5`.
+It reports 320 cases/keys, scans 154 local JSONL files and indexes 21,794
+unique normalized prompts, with zero exact overlaps and no parse errors. Its
+21 unrecognized rows are confined to five fixed-validation result JSONLs; a
+key-only schema check confirms these rows contain validation metrics and no
+prompt/messages/completion/text fields. This resolves the parser-count
+ambiguity for those local JSONL files, not unscanned formats or remote data.
+
+The user-message near-duplicate report SHA
+`fd849a53edabbca4d55298f8c8de760f643d1c16dd5dfeafcfddac800281b6d3` matches
+the freeze record. It surfaced nine pairs above the lexical review threshold;
+none were omitted. The independently authored review materials bind to the
+same source/cases/keys/near-duplicate hashes; the combined 320 decisions are
+all `pass`, with no `revise` or `reject`, and the reviewer attestation records
+that the nine flagged pairs were reviewed and kept distinct. The review was
+completed before model outputs and the freeze explicitly permits collection
+only.
+
+These checks support a clean exact-overlap result within the scanned local
+JSONL scope plus the documented semantic review. They do not prove absence of
+semantic duplicates beyond the reviewed pairs, contamination in non-JSONL or
+remote sources, or pretraining exposure. No answer key or blind response was
+opened in this audit.
