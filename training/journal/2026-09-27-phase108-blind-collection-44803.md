@@ -1,0 +1,31 @@
+# Phase108 v1.8-rev2 blinded collection — Slurm 44803
+
+## Completion and integrity
+
+- Slurm job `44803` on `titanv1`: `COMPLETED`, exit `0:0`, elapsed `03:46:09`.
+- Collection log: `logs/phase108-v18r2-blind-44803.log`; stderr reports all four unit tests passed (`Ran 4 tests ... OK`). The collection log records `unit_tests_complete` before inference.
+- Preflight reported hash verification for all seven pinned inputs/scripts: frozen private-case set, freeze manifest, numbered and final adapters, collector, adapter smoke test, and collector tests.
+- Private result directory mode `0700`; manifest, runtime metadata, aggregate, identity map, and each response file mode `0600`.
+- Three arms each contain 320 JSONL records (960 total). No content rows were opened for this audit.
+- `aggregate.json` SHA-256: `96f663e515501141be460b87e9b5e0a5bbeacc0d5146a7c61083a8fbcdde8156`; matches the completion log.
+- Response-file hashes match the per-arm completion records in the job log:
+  - A: `9a2dc72766c915501999174db225fc9ceb14d618840829de4e62fe88f55670a5`
+  - B: `516582dab87dde4dd6fcb74e0acef9e566982987dba655d1194ca7cc24f8ee27`
+  - C: `47be89fbef8a6ef0bff6cbb766c96066e381ee0706e04b66a1ae9fe7061f902f`
+- Completion metadata says `blind=true`, `scores=false`, `promotion_eligible=false`, `production_changed=false`; no alias map or answer key was opened during collection or this integrity check.
+
+## Blinded aggregate diagnostics only
+
+These are structural generation diagnostics, not quality scores. Arm identities remain blinded.
+
+| Arm | Cases | Empty | Finish reasons | Tool marker | Median latency (s) |
+|---|---:|---:|---|---:|---:|
+| A | 320 | 297 | stop 319, length 1 | 0 | 0.0981 |
+| B | 320 | 3 | stop 97, length 179, other_stop 44 | 19 | 40.6157 |
+| C | 320 | 298 | stop 319, length 1 | 0 | 0.0983 |
+
+Collection elapsed time in the log: `13468.474` seconds. The large empty-output split and B's unusual latency/finish profile are material anomalies. Do not unblind, score, select a candidate, or promote based only on these diagnostics. Preserve the blind key; next work should be an independent, blinded semantic/format/honesty review and the fixed regression gates using the sealed protocol.
+
+## Scope
+
+Only sanitized aggregate metadata is recorded here. Raw prompts/responses, alias map, answer key, and model weights remain on the cluster and are not committed. Production API/adapters, rubric/protocol, permissions, validation data, and candidate weights were not changed.
